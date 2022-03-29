@@ -18,7 +18,7 @@ class GameViewControllerTest {
         }
         String[] blockName = {"IBlock", "JBlock", "LBlock", "OBlock", "SBlock", "TBlock", "ZBlock"};
         System.out.println("Easy Mode: 1억번 실행");
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < fitness.length; i++){
             System.out.println(blockName[i] + ": " + blockCount[i] + "개 " + (double)blockCount[i] / 100000000 * 100.0 + " %");
         }
     }
@@ -33,7 +33,7 @@ class GameViewControllerTest {
         }
         String[] blockName = {"IBlock", "JBlock", "LBlock", "OBlock", "SBlock", "TBlock", "ZBlock"};
         System.out.println("Hard Mode: 1억번 실행");
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < fitness.length; i++){
             System.out.println(blockName[i] + ": " + blockCount[i] + "개 " + (double)blockCount[i] / 100000000 * 100.0 + " %");
         }
     }
