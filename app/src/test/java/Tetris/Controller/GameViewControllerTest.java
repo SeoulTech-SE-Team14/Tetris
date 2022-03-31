@@ -1,14 +1,16 @@
 package Tetris.Controller;
 
-import Tetris.Manager.GameManager;
-import Tetris.Model.Game;
+import Tetris.Model.GameState;
+import Tetris.Model.GameBoard;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class GameViewControllerTest {
-    Game model = new Game(20, 10);
-    GameManager manager = new GameManager();
-    GameViewController gvc = new GameViewController(model, manager);
+    GameState state = new GameState();
+    GameBoard field = new GameBoard(state, 20, 10);
+    GameViewController gvc = new GameViewController(field);
     @Test
+    @DisplayName("")
     void getEasyModeRandomBlock() {
         double[] fitness = {1.2, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         int[] blockCount = new int[7];

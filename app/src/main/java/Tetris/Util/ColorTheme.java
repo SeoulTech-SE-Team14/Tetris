@@ -4,7 +4,11 @@ import java.awt.*;
 
 public class ColorTheme {
     public ColorTheme() { }
-    private Color[] basicColors = {
+
+    /**
+     * 기본모드 컬러 테마
+     */
+    private final Color[] basicColors = {
             Color.CYAN,
             Color.BLUE,
             Color.ORANGE,
@@ -13,7 +17,8 @@ public class ColorTheme {
             Color.MAGENTA,
             Color.RED,
     };
-    private Color[] blindColors = {
+
+    private final Color[] blindColors = {
             Color.PINK,
             Color.MAGENTA,
             Color.YELLOW,
@@ -22,13 +27,13 @@ public class ColorTheme {
             Color.GREEN,
             Color.RED
     };
-    public Color getColor(int num) {
-        return basicColors[num];
+    public Color getColor(int blockNumber) {
+        return basicColors[blockNumber];
     }
-    public Color getColor(int num, int mode){
-        if (mode == 1) {
-            return blindColors[num];
+    public Color getColor(int blockNumber, int colorMode){
+        if (colorMode == 1) {
+            return blindColors[blockNumber];
         }
-        return basicColors[num];
+        return basicColors[blockNumber];
     }
 }
