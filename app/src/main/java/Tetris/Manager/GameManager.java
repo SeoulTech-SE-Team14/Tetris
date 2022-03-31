@@ -73,6 +73,10 @@ public class GameManager extends Observable {
         return Math.max(0, 11 - bonusScore);
     }
 
+    public static int getDeletedLineNumber() {
+        return deletedLineNumber;
+    }
+
     /**
      * Setter Method
      */

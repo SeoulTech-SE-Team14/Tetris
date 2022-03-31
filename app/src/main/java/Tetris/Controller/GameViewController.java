@@ -22,11 +22,10 @@ public class GameViewController implements KeyListener, ActionListener {
 
     /**
      * initInterval: 시작 timer delay
-     * timerDelay: 업데이트 할 timer delay
      */
-    private int timerDelay = 0;
     private static final int initInterval = 1000;
-
+    private static final int BLOCK_COUNT = 7;
+    private static final int ITEM_COUNT = 5;
     /**
      * Constructor
      */
@@ -95,7 +94,7 @@ public class GameViewController implements KeyListener, ActionListener {
         return blockNumber;
     }
     public Block getEasyModeRandomBlock(){
-        /**
+        /*
          * fitness
          * J, L, O, S, T, Z : 10
          * I : 12
@@ -105,7 +104,7 @@ public class GameViewController implements KeyListener, ActionListener {
         return getBlockByNumber(blockNumber);
     }
     public Block getHardModeRandomBlock(){
-        /**
+        /*
          * fitness
          * J, L, O, S, T, Z : 10
          * I : 8
@@ -114,9 +113,18 @@ public class GameViewController implements KeyListener, ActionListener {
         int blockNumber = rouletteWheelSelection(fitness);
         return getBlockByNumber(blockNumber);
     }
-
+    public Block getBasicModeRandomBlock(){
+        Random rnd = new Random(System.nanoTime());
+        int number = rnd.nextInt(BLOCK_COUNT);
+        return getBlockByNumber(number);
+    }
+    public Block getRandomItemBlock() {
+        Random rnd = new Random(System.nanoTime());
+        int number = rnd.nextInt(ITEM_COUNT);
+        return getBlockByNumber(number);
+    }
     /**
-     * 모드에 따른 랜덤 블럭 생성 메서드
+     * 일반모드 난이도에 따른 블럭 생성 메서드
      */
     public void spawnBasicModeBlock(){
         Block curr = null;
@@ -128,9 +136,7 @@ public class GameViewController implements KeyListener, ActionListener {
                 curr = getHardModeRandomBlock();
                 break;
             default:
-                Random rnd = new Random(System.currentTimeMillis());
-                int number = rnd.nextInt(7);
-                curr = getBlockByNumber(number);
+                curr = getBasicModeRandomBlock();
                 break;
         }
 
@@ -139,33 +145,44 @@ public class GameViewController implements KeyListener, ActionListener {
         if(!gameContinues) {
             manager.setEnded(true);
             timer.stop();
+            // 게임 종료 모달 띄우기.
         }
     }
-//    public void spawnItemModeBlock(){ }
 
+    /**
+     * 아이템 모드 블럭 생성 메서드
+     */
+    public void spawnItemModeBlock(){
+        Block curr = null;
+        if(GameManager.getDeletedLineNumber() % 10 == 0){
+            curr = getRandomItemBlock();
+        } else {
+            curr = getBasicModeRandomBlock();
+        }
+        boolean gameContinues = model.spawn(curr);
+        if(!gameContinues) {
+            manager.setEnded(true);
+            timer.stop();
+            // 게임 종료 모달 띄우기.
+        }
+    }
     /**
      * ActionListener 메서드
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()){
-            case "timer":
-                if(model.getCurr() == null) {
-                    // 게임 모드에 따라 분기
-                    switch (manager.getGameMode()){
-                        case 1:
-                            //spawnItemModeBlock();
-                            break;
-                        default:
-                            spawnBasicModeBlock();
-                            break;
-                    }
-                    timerDelay = manager.updateDelay();
-                    timer.setDelay(timerDelay);
+        if ("timer".equals(e.getActionCommand())) {
+            if (model.getCurr() == null) {
+                // 게임 모드에 따라 분기
+                if (manager.getGameMode() == 1) {
+                    spawnItemModeBlock();
                 } else {
-                    model.moveDown();
+                    spawnBasicModeBlock();
                 }
-                break;
+                timer.setDelay(manager.updateDelay());
+            } else {
+                model.moveDown();
+            }
         }
     }
 
