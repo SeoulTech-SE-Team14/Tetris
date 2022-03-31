@@ -255,8 +255,8 @@ public class Game extends Observable {
         int afterY = curr.getY() - dy;
         int afterWidth = curr.height();
         int afterHeight = curr.width();
-        if(afterY < 0 || afterY + afterHeight > HEIGHT) return false;
-        if(afterX < 0 || afterX + afterWidth > WIDTH) return false;
+        if(afterY < 0 || afterY + afterHeight >= HEIGHT) return false;
+        if(afterX < 0 || afterX + afterWidth >= WIDTH) return false;
         for(int row = 0, cy = 0; row < curr.height(); row++, cy++){
             for(int col = 0, cx = 0; col < curr.width(); col++, cx++){
                 if(curr.getShape(cx, cy) != -1 && visited[col + afterY][curr.height() - 1- row + afterX] != -1){
