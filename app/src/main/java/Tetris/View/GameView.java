@@ -1,7 +1,7 @@
 package Tetris.View;
 
 import Tetris.Model.Block;
-import Tetris.Model.Game;
+import Tetris.Model.GameBoard;
 import Tetris.Util.ColorTheme;
 
 import java.awt.*;
@@ -16,7 +16,7 @@ import javax.swing.text.*;
  * 테트리스 게임 View
  * @author 김영균
  */
-public class GameBoard extends JFrame implements Observer {
+public class GameView extends JFrame implements Observer {
     public static final int HEIGHT = 20;
     public static final int WIDTH = 10;
     public static final String BORDER_STRING = "X";
@@ -26,15 +26,16 @@ public class GameBoard extends JFrame implements Observer {
     private JTextPane scoreView;
     private SimpleAttributeSet blockStyleSet;
     private SimpleAttributeSet defaultStyleSet;
-    private Game model;
+    private GameBoard currentGame;
     private ColorTheme colorTheme = new ColorTheme();
+
     /**
      * Constructor
      */
-    public GameBoard(Game model) {
+    public GameView(GameBoard game) {
         super("SeoulTech SE Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.model = model;
+        this.currentGame = game;
         this.getContentPane().setBackground(Color.BLACK);
         this.setResizable(false);
         CompoundBorder border = BorderFactory.createCompoundBorder(
@@ -102,13 +103,13 @@ public class GameBoard extends JFrame implements Observer {
      * 움직이고 있는 블럭 위치 추적 메서드
      */
     public void placeBlock() {
-        Block curr = model.getCurr();
+        Block curr = currentGame.getCurr();
         if(curr == null) return;
         int x = curr.getX();
         int y = curr.getY();
         for(int row = y, cy = 0; row < y + curr.height(); row++, cy++){
             for(int col = x, cx = 0; col < x + curr.width(); col++, cx++){
-                model.setBoard(col, row, cx, cy);
+                currentGame.setBoard(col, row, cx, cy);
             }
         }
     }
@@ -116,7 +117,7 @@ public class GameBoard extends JFrame implements Observer {
      * 스코어 뷰 그리는 메서드
      */
     public void drawScoreView() {
-        String sb = "점수\n" + model.getScore();
+        String sb = "점수\n" + currentGame.getGameState().getScore();
         scoreView.setText(sb);
         StyledDocument doc = scoreView.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), defaultStyleSet, false);
@@ -130,10 +131,10 @@ public class GameBoard extends JFrame implements Observer {
         StyledDocument doc = preview.getStyledDocument();
         try {
             doc.insertString(doc.getLength(), "NEXT\n", defaultStyleSet);
-            for(int y = 0; y < model.getNext().height(); y++){
-                for(int x = 0; x < model.getNext().width(); x++){
-                    if(model.getNext().getShape(x, y) != -1){
-                        StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(model.getNext().getNumber()));
+            for(int y = 0; y < currentGame.getNext().height(); y++){
+                for(int x = 0; x < currentGame.getNext().width(); x++){
+                    if(currentGame.getNext().getShape(x, y) != -1){
+                        StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(currentGame.getNext().getNumber()));
                         doc.insertString(doc.getLength(), "O", blockStyleSet);
                     }
                     else {
@@ -142,7 +143,7 @@ public class GameBoard extends JFrame implements Observer {
                 }
                 doc.insertString(doc.getLength(), "\n", defaultStyleSet);
             }
-            for(int y = 0; y < 3 - model.getNext().height(); y++){
+            for(int y = 0; y < 3 - currentGame.getNext().height(); y++){
                 doc.insertString(doc.getLength(), "\n", defaultStyleSet);
             }
         } catch (BadLocationException e) { }
@@ -153,8 +154,8 @@ public class GameBoard extends JFrame implements Observer {
      * visited: 현재 배치된 블럭의 번호들을 저장
      */
     public void drawBoard() {
-        int[][] board = model.getBoard();
-        int[][] visited = model.getVisited();
+        int[][] board = currentGame.getBoard();
+        int[][] visited = currentGame.getVisited();
         gameView.setText("");
         StyledDocument doc = gameView.getStyledDocument();
         try {

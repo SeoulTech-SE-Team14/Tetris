@@ -2,22 +2,23 @@ package Tetris;
 
 
 import Tetris.Controller.GameViewController;
-import Tetris.Manager.GameManager;
-import Tetris.Model.Game;
-import Tetris.View.GameBoard;
+import Tetris.Model.GameState;
+import Tetris.Model.GameBoard;
+import Tetris.View.GameView;
 
 public class Tetris {
     public static void main(String[] args) {
-        Game model = new Game(20, 10);
-        GameBoard board = new GameBoard(model);
-        GameManager manager = new GameManager();
+        GameState gameState = new GameState();
+        GameBoard field = new GameBoard(gameState,20, 10);
 
-        GameViewController controller = new GameViewController(model, manager);
-        board.addKeyListener(controller);
-        model.addObserver(board);
-        manager.addObserver(board);
+        GameView view = new GameView(field);
 
-        board.setSize(400, 800);
-        board.setVisible(true);
+        GameViewController controller = new GameViewController(field);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        gameState.addObserver(view);
+
+        view.setSize(400, 800);
+        view.setVisible(true);
     }
 }
