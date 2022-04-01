@@ -1,4 +1,4 @@
-package Tetris.Manager;
+package Tetris.Model;
 
 import java.util.Observable;
 
@@ -6,36 +6,54 @@ import java.util.Observable;
  * 현재 진행 중인 게임 상태 관리 클래스
  * @author 김영균
  */
-public class GameManager extends Observable {
-    private final int maxDelay = 1000;
-    private final int minDelay = 200;
+public class GameState extends Observable {
+    private final int MAX_DELAY = 1000;
+    private final int MIN_DELAY = 200;
 
-    private long spawnTime = 0; // 블럭이 생성된 시간
     private static int spawnedBlockNumber = 0; // 생성된 블럭 수
     private static int deletedLineNumber = 0;  // 삭제된 라인 수
-    private int gameMode = 0; // normal 0, item 1
-    private int difficulty = 0; // easy 0, normal 1, hard  2
+
+    private long spawnTime = 0; // 블럭이 생성된 시간
+    private int score = 0;
+    /**
+     * normal: 0
+     * 제1 색이상: 1
+     * 제2 색각이상: 2
+     * 제3 색각이상: 3
+     * 전색약: 4
+     */
+    private int colorMode = 0;
+    private int gameMode = 0; // normal - 0, item - 1
+    private int difficulty = 0; // easy - 0, normal - 1, hard - 2
     private boolean isPaused = false;
     private boolean isEnded = false;
 
     /**
-     * Constructor
-     */
-    public GameManager() { /* 모든 멤버 변수가 값이 정해져 있어서 생성자 필요없음. */ }
-
-    /**
-     * Update Method
+     * 블럭이 생성되는 속도 조절 메서드
      */
     public int updateDelay() {
-        // 여기서 블럭 떨어지는 속도 조절
         int standard1 = spawnedBlockNumber / 5;
         int standard2 = deletedLineNumber / 3;
-        return Math.max(maxDelay - 50 * (standard1 + standard2), minDelay);
+        return Math.max(MAX_DELAY - 50 * (standard1 + standard2), MIN_DELAY);
     }
+
+    /**
+     * 생성된 블럭 +1 하는 메서드
+     */
     public void updateSpawnedBlockNumber() {
         spawnedBlockNumber++;
     }
+
+    /**
+     * 삭제된 라인 +1 하는 메서드
+     */
     public void updateDeletedLineNumber() { deletedLineNumber++; }
+
+    /**
+     * 점수 업데이트 메서드
+     * @param point 추가할 점수
+     */
+    public void updateScore(int point) { this.score += point; }
 
     /**
      * Getter Method
@@ -62,25 +80,38 @@ public class GameManager extends Observable {
     }
 
     /**
-     * 보너스 시간 = max(0, 11 - 10 * 걸린 초)
+     * 보너스 점수 = max(0, 11 - 10 * 걸린 초)
      * @return 보너스 점수
      */
     public int getBonusScore() {
         long placeTime = System.currentTimeMillis();
-        double secondPer10s = ((double)(placeTime - spawnTime)/1000);
+        double secondPer10s = (double)(placeTime - spawnTime) / 1000;
         int bonusScore = (int)(10.0 * secondPer10s);
         spawnTime = 0;
         return Math.max(0, 11 - bonusScore);
     }
 
+    public static int getDeletedLineNumber() {
+        return deletedLineNumber;
+    }
+    public int getScore() {
+        return score;
+    }
+    public int getColorMode() {
+        return colorMode;
+    }
+
+    public void notice(){
+        setChanged();
+        notifyObservers();
+    }
     /**
      * Setter Method
      */
     public void setSpawnTime() { this.spawnTime = System.currentTimeMillis(); }
     public void setPaused(boolean paused) {
         isPaused = paused;
-        setChanged();
-        notifyObservers();
+        notice();
     }
     public void setEnded(boolean ended) {
         isEnded = ended;
@@ -90,5 +121,8 @@ public class GameManager extends Observable {
     }
     public void setGameMode(int gameMode) {
         this.gameMode = gameMode;
+    }
+    public void setColorMode(int colorMode) {
+        this.colorMode = colorMode;
     }
 }

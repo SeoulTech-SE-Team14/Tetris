@@ -14,15 +14,16 @@ public abstract class Block extends Observable {
         this.y = 0;
         this.cx = 1;
         this.cy = 0;
-        init();
-    }
-    private void init() {
         // 0: 빈칸 , 1: 블럭, 2: 블럭 중심
         shape = new int[][]{
                 {1, 1},
                 {1, 1}
         };
     }
+
+    /**
+     * Getter Method
+     */
     public int getX() {
         return x;
     }
@@ -42,6 +43,10 @@ public abstract class Block extends Observable {
     public int getNumber(){
         return 0;
     }
+
+    /**
+     * 블럭 중심 기준 회전 메서드
+     */
     public void rotate() {
         // Rotate the block 90 deg. clockwise.
         int length = shape.length;
