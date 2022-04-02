@@ -49,14 +49,24 @@ public abstract class Block extends Observable {
      */
     public void rotate() {
         // Rotate the block 90 deg. clockwise.
-        int length = shape.length;
+        int height = shape.length;
         int width = shape[0].length;
-        int[][] ret = new int[width][length];
-        for(int row = 0; row < length; row++){
+        int dx = 0;
+        int dy = 0;
+        int[][] ret = new int[width][height];
+        for(int row = 0; row < height; row++){
             for(int col = 0; col < width; col++){
-                ret[col][length - 1 - row] = shape[row][col];
+                ret[col][height - 1 - row] = shape[row][col];
+                if(shape[row][col] == 2){
+                    dx = height - 1 - row - col;
+                    dy = col - row;
+                    cy = col;
+                    cx = height - 1 - row;
+                }
             }
         }
+        this.x -= dx;
+        this.y -= dy;
         shape = ret;
     }
     public int height() {
