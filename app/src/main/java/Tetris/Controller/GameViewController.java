@@ -21,7 +21,6 @@ public class GameViewController implements KeyListener, ActionListener {
 
     /**
      * initInterval: 시작 timer delay
-     *
      */
     private static final int initInterval = 1000;
     private static final int BLOCK_COUNT = 7;
