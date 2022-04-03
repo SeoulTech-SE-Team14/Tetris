@@ -34,10 +34,10 @@ public class GameView extends JFrame implements Observer {
      */
     public GameView(GameBoard game) {
         super("SeoulTech SE Tetris");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(new Dimension(300, 600));
+
         this.currentGame = game;
         this.getContentPane().setBackground(Color.BLACK);
-        this.setResizable(false);
         CompoundBorder border = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 10),
                 BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
@@ -84,17 +84,21 @@ public class GameView extends JFrame implements Observer {
 
         // Document scoreView style.
         defaultStyleSet = new SimpleAttributeSet();
-        StyleConstants.setFontSize(defaultStyleSet, 20);
+        StyleConstants.setFontSize(defaultStyleSet, 16);
         StyleConstants.setFontFamily(defaultStyleSet, "Courier");
         StyleConstants.setBold(defaultStyleSet, true);
         StyleConstants.setForeground(defaultStyleSet, Color.WHITE);
         StyleConstants.setAlignment(defaultStyleSet, StyleConstants.ALIGN_CENTER);
 
         blockStyleSet = new SimpleAttributeSet();
-        StyleConstants.setFontSize(blockStyleSet, 20);
+        StyleConstants.setFontSize(blockStyleSet, 16);
         StyleConstants.setFontFamily(blockStyleSet, "Courier");
         StyleConstants.setBold(blockStyleSet, true);
         StyleConstants.setAlignment(blockStyleSet, StyleConstants.ALIGN_CENTER);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
         setFocusable(true);
         requestFocus();
     }
