@@ -11,17 +11,17 @@ import java.awt.event.KeyListener;
 
 public class StartViewController implements KeyListener {
     private StartBoard model;
-    private StartView view;
+    private StartView startView;
 
     public StartViewController(StartBoard model, StartView view) {
         this.model = model;
-        this.view = view;
+        this.startView = view;
     }
 
     public void navigateGameView(){
         GameState gameState = new GameState();
         GameBoard field = new GameBoard(gameState,20, 10);
-        GameView view = new GameView(field);
+        GameView view = new GameView(startView.getLocation().x, startView.getLocation().y, field);
         GameViewController controller = new GameViewController(field);
         view.addKeyListener(controller);
         field.addObserver(view);
@@ -52,7 +52,7 @@ public class StartViewController implements KeyListener {
                 switch (indicator){
                     case 0:
                         navigateGameView();
-                        view.setVisible(false);
+                        startView.setVisible(false);
                         break;
                     case 1:
                         System.out.println("Setting");

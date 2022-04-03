@@ -1,12 +1,8 @@
 package Tetris;
 
 
-import Tetris.Controller.GameViewController;
 import Tetris.Controller.StartViewController;
-import Tetris.Model.GameState;
-import Tetris.Model.GameBoard;
 import Tetris.Model.StartBoard;
-import Tetris.View.GameView;
 import Tetris.View.StartView;
 
 public class Tetris {

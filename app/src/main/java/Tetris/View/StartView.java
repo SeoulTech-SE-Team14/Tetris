@@ -4,8 +4,6 @@ import Tetris.Model.StartBoard;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,35 +19,73 @@ public class StartView extends JFrame implements Observer {
         setSize(new Dimension(width, height));
         setPreferredSize(new Dimension(width, height));
         setLayout(null);
+        JPanel background = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                setOpaque(false);
+                g.drawImage(model.getBackgroundImage().getImage(), 0, 0, null);
+                super.paintComponent(g);
+            }
+        };
+        setContentPane(background);
 
         Dimension frameSize = getSize();
         int startX = (frameSize.width - model.getButtonWidth()) / 2;
         int startY = frameSize.height / 3;
         int space = model.getButtonHeight() + ((frameSize.height * 2 / 3) - (model.getButtonHeight() * model.getButtonCount())) / model.getButtonCount();
 
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new GridLayout(4, 1));
+
         gameStartBtn.setBounds(startX, startY, model.getButtonWidth(), model.getButtonHeight());
         gameStartBtn.setBorderPainted(false);
         gameStartBtn.setContentAreaFilled(false);
         gameStartBtn.setFocusPainted(false);
-        add(gameStartBtn);
+        gameStartBtn.setOpaque(false);
+        buttons.add(gameStartBtn);
 
         settingBtn.setBounds(startX, gameStartBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         settingBtn.setBorderPainted(false);
         settingBtn.setContentAreaFilled(false);
         settingBtn.setFocusPainted(false);
-        add(settingBtn);
+        settingBtn.setOpaque(false);
+        buttons.add(settingBtn);
 
         scoreboardBtn.setBounds(startX, settingBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         scoreboardBtn.setBorderPainted(false);
         scoreboardBtn.setContentAreaFilled(false);
         scoreboardBtn.setFocusPainted(false);
-        add(scoreboardBtn);
+        scoreboardBtn.setOpaque(false);
+        buttons.add(scoreboardBtn);
 
         exitBtn.setBounds(startX, scoreboardBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         exitBtn.setBorderPainted(false);
         exitBtn.setContentAreaFilled(false);
         exitBtn.setFocusPainted(false);
-        add(exitBtn);
+        exitBtn.setOpaque(false);
+
+        buttons.setBounds(0, height / 3, width, height * 2/ 3);
+        buttons.setOpaque(false);
+        buttons.add(exitBtn);
+
+
+        GridBagConstraints[] gbc = new GridBagConstraints[2];
+        GridBagLayout gbl = new GridBagLayout();
+        for(int i = 0; i < 2; i++){ gbc[i] = new GridBagConstraints(); }
+        background.setLayout(gbl);
+
+        JPanel blank = new JPanel();
+        blank.setPreferredSize(new Dimension(width, height / 5));
+        blank.setOpaque(false);
+        gbc[0].gridx = 0;
+        gbc[0].gridy = 0;
+        add(blank, gbc[0]);
+
+        gbc[1].gridx = 0;
+        gbc[1].gridy = 1;
+        gbc[1].gridheight = 2;
+        gbc[1].fill = GridBagConstraints.BOTH;
+        add(buttons, gbc[1]);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

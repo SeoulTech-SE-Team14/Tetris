@@ -32,10 +32,10 @@ public class GameView extends JFrame implements Observer {
     /**
      * Constructor
      */
-    public GameView(GameBoard game) {
+    public GameView(int x, int y, GameBoard game) {
         super("SeoulTech SE Tetris");
         setSize(new Dimension(300, 600));
-
+        setLocation(x, y);
         this.currentGame = game;
         this.getContentPane().setBackground(Color.BLACK);
         CompoundBorder border = BorderFactory.createCompoundBorder(
@@ -97,7 +97,6 @@ public class GameView extends JFrame implements Observer {
         StyleConstants.setAlignment(blockStyleSet, StyleConstants.ALIGN_CENTER);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setResizable(false);
         setFocusable(true);
         requestFocus();
