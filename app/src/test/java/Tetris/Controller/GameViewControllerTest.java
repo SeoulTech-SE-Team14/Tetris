@@ -6,7 +6,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class GameViewControllerTest {
-    GameState state = new GameState();
+    int colorMode = 0;
+    int gameMode = 0;
+    int difficulty = 1;
+    GameState state = new GameState(colorMode, gameMode, difficulty);
     GameBoard field = new GameBoard(state, 20, 10);
     GameViewController gvc = new GameViewController(field);
     @Test
