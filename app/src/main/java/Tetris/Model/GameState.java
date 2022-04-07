@@ -22,11 +22,17 @@ public class GameState extends Observable {
      * 제3 색각이상: 3
      * 전색약: 4
      */
-    private int colorMode = 0;
+    private int colorMode = 0; // 0 normal. ... +a
     private int gameMode = 0; // normal - 0, item - 1
     private int difficulty = 0; // easy - 0, normal - 1, hard - 2
     private boolean isPaused = false;
     private boolean isEnded = false;
+
+    public GameState(int colorMode, int gameMode, int difficulty) {
+        this.colorMode = colorMode;
+        this.gameMode = gameMode;
+        this.difficulty = difficulty;
+    }
 
     /**
      * 블럭이 생성되는 속도 조절 메서드

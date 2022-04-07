@@ -12,14 +12,14 @@ import java.awt.event.KeyListener;
 public class StartViewController implements KeyListener {
     private StartBoard model;
     private StartView startView;
-
+    // private Setting currentSetting;
     public StartViewController(StartBoard model, StartView view) {
         this.model = model;
         this.startView = view;
     }
 
-    public void navigateGameView(){
-        GameState gameState = new GameState();
+    public void navigateGameView(int colorMode, int gameMode, int difficulty){
+        GameState gameState = new GameState(colorMode,gameMode,difficulty);
         GameBoard field = new GameBoard(gameState,20, 10);
         GameView view = new GameView(startView.getLocation().x, startView.getLocation().y, field);
         GameViewController controller = new GameViewController(field);
@@ -51,16 +51,21 @@ public class StartViewController implements KeyListener {
                 System.out.println("Enter");
                 switch (indicator){
                     case 0:
-                        navigateGameView();
+                        navigateGameView(0,0, 1);
                         startView.setVisible(false);
                         break;
                     case 1:
-                        System.out.println("Setting");
+                        navigateGameView(0,1,1);
+                        startView.setVisible(false);
+                        System.out.println("ItemMode");
                         break;
                     case 2:
-                        System.out.println("ScoreBoard");
+                        System.out.println("Setting");
                         break;
                     case 3:
+                        System.out.println("ScoreBoard");
+                        break;
+                    case 4:
                         System.exit(0);
                         break;
                 }

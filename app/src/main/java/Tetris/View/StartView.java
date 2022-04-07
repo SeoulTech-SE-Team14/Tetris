@@ -9,10 +9,12 @@ import java.util.Observer;
 
 public class StartView extends JFrame implements Observer {
     private StartBoard model = new StartBoard();
-    private JButton gameStartBtn = new JButton(model.getFocusStartBtnImage());
+    private JButton basicModeStartBtn = new JButton(model.getFocusStartBtnImage());
+    private JButton itemModeStartBtn = new JButton(model.getDefaultStartItemBtnImage());
     private JButton settingBtn = new JButton(model.getDefaultSettingBtnImage());
     private JButton scoreboardBtn = new JButton(model.getDefaultScoreboardBtnImage());
     private JButton exitBtn = new JButton(model.getDefaultExitBtnImage());
+    private JLabel keyDescribeLabel;
 
     public StartView(int width, int height){
         super("SeoulTech SE Tetris");
@@ -35,16 +37,23 @@ public class StartView extends JFrame implements Observer {
         int space = model.getButtonHeight() + ((frameSize.height * 2 / 3) - (model.getButtonHeight() * model.getButtonCount())) / model.getButtonCount();
 
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(4, 1));
+        buttons.setLayout(new GridLayout(model.getButtonCount(), 1));
 
-        gameStartBtn.setBounds(startX, startY, model.getButtonWidth(), model.getButtonHeight());
-        gameStartBtn.setBorderPainted(false);
-        gameStartBtn.setContentAreaFilled(false);
-        gameStartBtn.setFocusPainted(false);
-        gameStartBtn.setOpaque(false);
-        buttons.add(gameStartBtn);
+        basicModeStartBtn.setBounds(startX, startY, model.getButtonWidth(), model.getButtonHeight());
+        basicModeStartBtn.setBorderPainted(false);
+        basicModeStartBtn.setContentAreaFilled(false);
+        basicModeStartBtn.setFocusPainted(false);
+        basicModeStartBtn.setOpaque(false);
+        buttons.add(basicModeStartBtn);
 
-        settingBtn.setBounds(startX, gameStartBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
+        itemModeStartBtn.setBounds(startX, basicModeStartBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
+        itemModeStartBtn.setBorderPainted(false);
+        itemModeStartBtn.setContentAreaFilled(false);
+        itemModeStartBtn.setFocusPainted(false);
+        itemModeStartBtn.setOpaque(false);
+        buttons.add(itemModeStartBtn);
+
+        settingBtn.setBounds(startX, itemModeStartBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         settingBtn.setBorderPainted(false);
         settingBtn.setContentAreaFilled(false);
         settingBtn.setFocusPainted(false);
@@ -63,29 +72,45 @@ public class StartView extends JFrame implements Observer {
         exitBtn.setContentAreaFilled(false);
         exitBtn.setFocusPainted(false);
         exitBtn.setOpaque(false);
+        buttons.add(exitBtn);
 
         buttons.setBounds(0, height / 3, width, height * 2/ 3);
         buttons.setOpaque(false);
-        buttons.add(exitBtn);
 
-
-        GridBagConstraints[] gbc = new GridBagConstraints[2];
+        GridBagConstraints[] gbc = new GridBagConstraints[3];
         GridBagLayout gbl = new GridBagLayout();
-        for(int i = 0; i < 2; i++){ gbc[i] = new GridBagConstraints(); }
+        for(int i = 0; i < 3; i++){ gbc[i] = new GridBagConstraints(); }
         background.setLayout(gbl);
 
+        // 빈 공백
         JPanel blank = new JPanel();
-        blank.setPreferredSize(new Dimension(width, height / 5));
+        blank.setPreferredSize(new Dimension(width, height / 4));
         blank.setOpaque(false);
+
         gbc[0].gridx = 0;
         gbc[0].gridy = 0;
         add(blank, gbc[0]);
+
+        //사용가능한 키 표시
+        keyDescribeLabel = new JLabel();
+        keyDescribeLabel.setForeground(Color.WHITE);
+        keyDescribeLabel.setText("current Keysetting");
+        keyDescribeLabel.setFont(keyDescribeLabel.getFont().deriveFont(14.0f));
+        keyDescribeLabel.setVisible(true);
+        keyDescribeLabel.setPreferredSize(new Dimension(260, 35));
+        keyDescribeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         gbc[1].gridx = 0;
         gbc[1].gridy = 1;
         gbc[1].gridheight = 2;
         gbc[1].fill = GridBagConstraints.BOTH;
-        add(buttons, gbc[1]);
+        add(keyDescribeLabel, gbc[1]);
+
+        gbc[2].gridx = 0;
+        gbc[2].gridy = 3;
+        gbc[2].gridheight = 2;
+        gbc[2].fill = GridBagConstraints.BOTH;
+        add(buttons, gbc[2]);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -98,21 +123,26 @@ public class StartView extends JFrame implements Observer {
     public void paint(Graphics g) {
         int indicator = model.getIndicator();
         if(indicator == 0){
-            gameStartBtn.setIcon(model.getFocusStartBtnImage());
+            basicModeStartBtn.setIcon(model.getFocusStartBtnImage());
         } else {
-            gameStartBtn.setIcon(model.getDefaultStartBtnImage());
+            basicModeStartBtn.setIcon(model.getDefaultStartBtnImage());
         }
         if(indicator == 1){
+            itemModeStartBtn.setIcon(model.getFocusStartItemBtnImage());
+        } else {
+            itemModeStartBtn.setIcon(model.getDefaultStartItemBtnImage());
+        }
+        if(indicator == 2){
             settingBtn.setIcon(model.getFocusSettingBtnImage());
         } else {
             settingBtn.setIcon(model.getDefaultSettingBtnImage());
         }
-        if(indicator == 2){
+        if(indicator == 3){
             scoreboardBtn.setIcon(model.getFocusScoreboardBtnImage());
         } else {
             scoreboardBtn.setIcon(model.getDefaultScoreboardBtnImage());
         }
-        if(indicator == 3){
+        if(indicator == 4){
             exitBtn.setIcon(model.getFocusExitBtnImage());
         } else {
             exitBtn.setIcon(model.getDefaultExitBtnImage());
