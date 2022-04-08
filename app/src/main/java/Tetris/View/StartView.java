@@ -16,10 +16,15 @@ public class StartView extends JFrame implements Observer {
     private JButton exitBtn = new JButton(model.getDefaultExitBtnImage());
     private JLabel keyDescribeLabel;
 
-    public StartView(int width, int height){
+    // 설정가져와서 바꿔야함.
+    private int height = 700;
+    private int width = 350;
+
+    public StartView(int x, int y){
         super("SeoulTech SE Tetris");
         setSize(new Dimension(width, height));
         setPreferredSize(new Dimension(width, height));
+        setLocation(x, y);
         setLayout(null);
         JPanel background = new JPanel() {
             @Override
@@ -113,7 +118,6 @@ public class StartView extends JFrame implements Observer {
         add(buttons, gbc[2]);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setFocusable(true);
         pack();
         setVisible(true);

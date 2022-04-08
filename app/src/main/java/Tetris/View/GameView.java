@@ -29,12 +29,14 @@ public class GameView extends JFrame implements Observer {
     private GameBoard currentGame;
     private ColorTheme colorTheme = new ColorTheme();
 
+    private int width = 350;
+    private int height = 700;
     /**
      * Constructor
      */
     public GameView(int x, int y, GameBoard game) {
         super("SeoulTech SE Tetris");
-        setSize(new Dimension(300, 600));
+        setSize(new Dimension(width, height));
         setLocation(x, y);
         this.currentGame = game;
         this.getContentPane().setBackground(Color.BLACK);

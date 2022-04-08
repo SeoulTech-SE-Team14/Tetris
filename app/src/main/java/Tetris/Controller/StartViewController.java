@@ -3,8 +3,10 @@ package Tetris.Controller;
 import Tetris.Model.GameBoard;
 import Tetris.Model.GameState;
 import Tetris.Model.StartBoard;
+import Tetris.Model.SettingBoard;
 import Tetris.View.GameView;
 import Tetris.View.StartView;
+import Tetris.View.SettingView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,7 +14,7 @@ import java.awt.event.KeyListener;
 public class StartViewController implements KeyListener {
     private StartBoard model;
     private StartView startView;
-    // private Setting currentSetting;
+
     public StartViewController(StartBoard model, StartView view) {
         this.model = model;
         this.startView = view;
@@ -28,8 +30,16 @@ public class StartViewController implements KeyListener {
         gameState.addObserver(view);
         view.setVisible(true);
     }
-    public void navigateSettingView(){ }
+    public void navigateSettingView(){
+        SettingBoard field = new SettingBoard();
+        SettingView view = new SettingView(startView.getLocation().x, startView.getLocation().y);
+        SettingViewController controller = new SettingViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        view.setVisible(true);
+    }
     public void navigateScoreboardView(){}
+
     @Override
     public void keyTyped(KeyEvent e) { }
 
@@ -48,7 +58,6 @@ public class StartViewController implements KeyListener {
                 model.setIndicator(indicator);
                 break;
             case KeyEvent.VK_ENTER:
-                System.out.println("Enter");
                 switch (indicator){
                     case 0:
                         navigateGameView(0,0, 1);
@@ -57,13 +66,12 @@ public class StartViewController implements KeyListener {
                     case 1:
                         navigateGameView(0,1,1);
                         startView.setVisible(false);
-                        System.out.println("ItemMode");
                         break;
                     case 2:
-                        System.out.println("Setting");
+                        navigateSettingView();
+                        startView.setVisible(false);
                         break;
                     case 3:
-                        System.out.println("ScoreBoard");
                         break;
                     case 4:
                         System.exit(0);
