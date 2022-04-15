@@ -1,10 +1,15 @@
 package Tetris.Controller;
 
+import Tetris.Model.SettingBoard;
 import Tetris.Model.SizeSettingBoard;
+import Tetris.Util.JsonWriter;
+import Tetris.View.SettingView;
 import Tetris.View.SizeSettingView;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+enum SizeType { SMALL, MEDIUM, LARGE }
 public class SizeSettingViewController implements KeyListener {
     private SizeSettingBoard model;
     private SizeSettingView sizeSettingView;
@@ -14,19 +19,39 @@ public class SizeSettingViewController implements KeyListener {
         this.sizeSettingView = view;
     }
 
-    public void navigateGameView(){
-//        GameState gameState = new GameState();
-//        GameBoard field = new GameBoard(gameState,20, 10);
-//        GameView view = new GameView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y, field);
-//        GameViewController controller = new GameViewController(field);
-//        view.addKeyListener(controller);
-//        field.addObserver(view);
-//        gameState.addObserver(view);
-//        view.setVisible(true);
+    public void navigationPreviousView(){
+        SettingBoard field = new SettingBoard();
+        SettingView view = new SettingView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y);
+        SettingViewController controller = new SettingViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        view.setVisible(true);
+        sizeSettingView.dispose();
     }
-    
-    @Override
-    public void keyTyped(KeyEvent e) { }
+    public void changeScreenSize(SizeType type){
+        switch (type){
+            case SMALL:
+                JsonWriter.setSize(300, 600);
+                break;
+            case MEDIUM:
+                JsonWriter.setSize(350, 700);
+                break;
+            case LARGE:
+                JsonWriter.setSize(400, 800);
+                break;
+        }
+        SizeSettingBoard field = new SizeSettingBoard();
+        SizeSettingView view = new SizeSettingView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y);
+        SizeSettingViewController controller = new SizeSettingViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        view.setVisible(true);
+        sizeSettingView.dispose();
+
+    }
+    public void keyTyped(KeyEvent e) {
+        // default implementation ignored
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -45,19 +70,28 @@ public class SizeSettingViewController implements KeyListener {
             case KeyEvent.VK_ENTER:
                 switch (indicator){
                     case 0:
+                        changeScreenSize(SizeType.SMALL);
                         break;
                     case 1:
+                        changeScreenSize(SizeType.MEDIUM);
                         break;
                     case 2:
+                        changeScreenSize(SizeType.LARGE);
                         break;
                     case 3:
-                        System.exit(0);
+                        navigationPreviousView();
+                        break;
+                    default:
                         break;
                 }
+                break;
+            default:
                 break;
         }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) { }
+    public void keyReleased(KeyEvent e) {
+        // default implementation ignored
+    }
 }
