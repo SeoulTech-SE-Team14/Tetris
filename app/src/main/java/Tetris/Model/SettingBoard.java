@@ -1,10 +1,8 @@
 package Tetris.Model;
 
-import javax.imageio.ImageIO;
+import Tetris.Util.JsonReader;
+
 import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Observable;
 
 public class SettingBoard extends Observable {
@@ -12,6 +10,8 @@ public class SettingBoard extends Observable {
     private final int buttonCount = 6;
     private final int buttonWidth = 260;
     private final int buttonHeight = 60;
+    private final int screenWidth = JsonReader.getWidth();
+    private final int screenHeight = JsonReader.getHeight();
 
     private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/default_background_350_700.png");
     private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/default_background_400_800.png");
@@ -22,7 +22,7 @@ public class SettingBoard extends Observable {
     private final ImageIcon resetSettingBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_reset_setting.png");
     private final ImageIcon resetScoreboardBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_reset_scoreboard.png");
     private final ImageIcon settingKeyBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_setting_key.png");
-    private final ImageIcon defaultBackBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_back.png");
+    private final ImageIcon defaultBackBtnImage = new ImageIcon("app/src/main/resources/image/button_back.png");
 
     // focus image
     private final ImageIcon focusSettingSizeBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_setting_size_focused.png");
@@ -30,8 +30,7 @@ public class SettingBoard extends Observable {
     private final ImageIcon focusResetSettingBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_reset_setting_focused.png");
     private final ImageIcon focusResetScoreboardBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_reset_scoreboard_focused.png");
     private final ImageIcon focusSettingKeyBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_setting_key_focused.png");
-    private final ImageIcon focusDefaultBackBtnImage = new ImageIcon("app/src/main/resources/image/SettingView/button_back_focused.png");
-
+    private final ImageIcon focusDefaultBackBtnImage = new ImageIcon("app/src/main/resources/image/button_back_focused.png");
 
     public void setIndicator(int indicator) {
         SettingBoard.indicator = indicator;
@@ -39,19 +38,32 @@ public class SettingBoard extends Observable {
         notifyObservers();
     }
 
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+    public int getScreenHeight() {
+        return screenHeight;
+    }
     public int getButtonWidth() {
         return buttonWidth;
     }
     public int getButtonHeight() {
         return buttonHeight;
     }
-
     public int getIndicator() { return indicator; }
 
     public ImageIcon getBackgroundImage() {
-        // setting에 따라 분기해야함.
-
-        return backgroundImage350700;
+        int width = JsonReader.getWidth();
+        int height = JsonReader.getHeight();
+        if(width == 300 && height == 600) {
+            return backgroundImage300600;
+        }
+        else if(width == 350 && height == 700) {
+            return backgroundImage350700;
+        }
+        else{
+            return backgroundImage400800;
+        }
     }
 
     public ImageIcon getSettingSizeBtnImage() {
@@ -66,7 +78,7 @@ public class SettingBoard extends Observable {
     public ImageIcon getResetScoreboardBtnImage() {
         return resetScoreboardBtnImage;
     }
-    public ImageIcon getSettingKeyBtnImagee() {
+    public ImageIcon getSettingKeyBtnImage() {
         return settingKeyBtnImage;
     }
     public ImageIcon getDefaultBackBtnImage() {

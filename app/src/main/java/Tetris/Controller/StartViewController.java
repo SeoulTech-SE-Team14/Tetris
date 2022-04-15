@@ -4,6 +4,7 @@ import Tetris.Model.GameBoard;
 import Tetris.Model.GameState;
 import Tetris.Model.StartBoard;
 import Tetris.Model.SettingBoard;
+import Tetris.Util.JsonReader;
 import Tetris.View.GameView;
 import Tetris.View.StartView;
 import Tetris.View.SettingView;
@@ -20,8 +21,8 @@ public class StartViewController implements KeyListener {
         this.startView = view;
     }
 
-    public void navigateGameView(int colorMode, int gameMode, int difficulty){
-        GameState gameState = new GameState(colorMode,gameMode,difficulty);
+    public void navigateGameView(String gameMode){
+        GameState gameState = new GameState(gameMode);
         GameBoard field = new GameBoard(gameState,20, 10);
         GameView view = new GameView(startView.getLocation().x, startView.getLocation().y, field);
         GameViewController controller = new GameViewController(field);
@@ -38,10 +39,14 @@ public class StartViewController implements KeyListener {
         field.addObserver(view);
         view.setVisible(true);
     }
-    public void navigateScoreboardView(){}
+    public void navigateScoreboardView(){
+        // default implementation ignored.
+    }
 
     @Override
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+        // default implementation ignored.
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -60,27 +65,33 @@ public class StartViewController implements KeyListener {
             case KeyEvent.VK_ENTER:
                 switch (indicator){
                     case 0:
-                        navigateGameView(0,0, 1);
-                        startView.setVisible(false);
+                        navigateGameView("normal" );
+                        startView.dispose();
                         break;
                     case 1:
-                        navigateGameView(0,1,1);
-                        startView.setVisible(false);
+                        navigateGameView("item");
+                        startView.dispose();
                         break;
                     case 2:
                         navigateSettingView();
-                        startView.setVisible(false);
+                        startView.dispose();
                         break;
                     case 3:
                         break;
                     case 4:
                         System.exit(0);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
         }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) { }
+    public void keyReleased(KeyEvent e) {
+        // default implementation ignored.
+    }
 }

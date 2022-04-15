@@ -1,5 +1,7 @@
 package Tetris.Model;
 
+import Tetris.Util.JsonReader;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +20,9 @@ public class GameBoard extends Observable {
     private int[][] visited;
     private int height;
     private int width;
-
+    private int screenWidth;
+    private int screenHeight;
+    private int fontSize;
     /**
      * Constructor
      */
@@ -26,6 +30,9 @@ public class GameBoard extends Observable {
         this.gameState = gameState;
         this.height = row;
         this.width = col;
+        this.screenWidth = JsonReader.getWidth();
+        this.screenHeight = JsonReader.getHeight();
+
         board = new int[row][col];
         visited = new int[row][col];
         for(int y = 0; y < row; y++){
@@ -34,7 +41,19 @@ public class GameBoard extends Observable {
         }
     }
 
-
+    public int getFontSize() {
+        if(screenWidth == 300 && screenHeight == 600) {
+            return 15;
+        }
+        else if(screenWidth == 350 && screenHeight == 700) {
+            return 18;
+        }
+        else{
+            return 20;
+        }
+    }
+    public int getScreenWidth() { return screenWidth; }
+    public int getScreenHeight() { return screenHeight; }
     public int[][] getVisited() {
         return visited;
     }
@@ -78,7 +97,7 @@ public class GameBoard extends Observable {
         this.next = cur;
         if(roomExist(cur.x, cur.y)) {
             gameState.setSpawnTime();
-            gameState.updateSpawnedBlockNumber();
+            GameState.updateSpawnedBlockNumber();
             notice();
             return true;
         } else {
@@ -188,7 +207,7 @@ public class GameBoard extends Observable {
         }
         Arrays.fill(visited[0], -1);
         Arrays.fill(board[0], -1);
-        gameState.updateDeletedLineNumber();
+        GameState.updateDeletedLineNumber();
         gameState.updateScore(5);
     }
 

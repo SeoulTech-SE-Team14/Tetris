@@ -2,7 +2,7 @@ package Tetris.View;
 
 import Tetris.Model.Block;
 import Tetris.Model.GameBoard;
-import Tetris.Util.ColorTheme;
+import Tetris.Model.ColorTheme;
 
 import java.awt.*;
 import java.util.Observable;
@@ -17,28 +17,29 @@ import javax.swing.text.*;
  * @author 김영균
  */
 public class GameView extends JFrame implements Observer {
-    public static final int HEIGHT = 20;
-    public static final int WIDTH = 10;
+    public static final int GAME_HEIGHT = 20;
+    public static final int GAME_WIDTH = 10;
     public static final String BORDER_STRING = "X";
+    public static final String BLANK_STRING = " ";
+    public static final String ZERO_WIDTH_SPACE = "​";
+    private final ColorTheme colorTheme = new ColorTheme();
 
-    private JTextPane gameView;
-    private JTextPane preview;
-    private JTextPane scoreView;
+    private JTextPane gamePane;
+    private JTextPane previewPane;
+    private JTextPane scorePane;
     private SimpleAttributeSet blockStyleSet;
     private SimpleAttributeSet defaultStyleSet;
     private GameBoard currentGame;
-    private ColorTheme colorTheme = new ColorTheme();
 
-    private int width = 350;
-    private int height = 700;
     /**
      * Constructor
      */
     public GameView(int x, int y, GameBoard game) {
         super("SeoulTech SE Tetris");
-        setSize(new Dimension(width, height));
-        setLocation(x, y);
         this.currentGame = game;
+
+        setSize(new Dimension(currentGame.getScreenWidth(), currentGame.getScreenHeight()));
+        setLocation(x, y);
         this.getContentPane().setBackground(Color.BLACK);
         CompoundBorder border = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, 10),
@@ -56,44 +57,44 @@ public class GameView extends JFrame implements Observer {
         gbc[0].gridy = 0;
         gbc[0].gridwidth = 2;
         gbc[0].fill = GridBagConstraints.BOTH;
-        scoreView = new JTextPane();
-        scoreView.setEditable(false);
-        scoreView.setBackground(Color.BLACK);
-        scoreView.setBorder(border2);
-        this.getContentPane().add(scoreView, gbc[0]);
+        scorePane = new JTextPane();
+        scorePane.setEditable(false);
+        scorePane.setBackground(Color.BLACK);
+        scorePane.setBorder(border2);
+        this.getContentPane().add(scorePane, gbc[0]);
 
         // preview display setting
         gbc[1].gridx = 2;
         gbc[1].gridy = 0;
         gbc[1].gridwidth = 2;
         gbc[1].fill = GridBagConstraints.BOTH;
-        preview = new JTextPane();
-        preview.setEditable(false);
-        preview.setBackground(Color.BLACK);
-        preview.setBorder(border2);
-        this.getContentPane().add(preview, gbc[1]);
+        previewPane = new JTextPane();
+        previewPane.setEditable(false);
+        previewPane.setBackground(Color.BLACK);
+        previewPane.setBorder(border2);
+        this.getContentPane().add(previewPane, gbc[1]);
 
         // Board display setting.
         gbc[2].gridx = 0;
         gbc[2].gridy = 2;
         gbc[2].gridwidth = 4;
         gbc[2].fill = GridBagConstraints.BOTH;
-        gameView = new JTextPane();
-        gameView.setEditable(false);
-        gameView.setBackground(Color.BLACK);
-        gameView.setBorder(border);
-        this.getContentPane().add(gameView, gbc[2]);
+        gamePane = new JTextPane();
+        gamePane.setEditable(false);
+        gamePane.setBackground(Color.BLACK);
+        gamePane.setBorder(border);
+        this.getContentPane().add(gamePane, gbc[2]);
 
         // Document scoreView style.
         defaultStyleSet = new SimpleAttributeSet();
-        StyleConstants.setFontSize(defaultStyleSet, 16);
+        StyleConstants.setFontSize(defaultStyleSet, currentGame.getFontSize());
         StyleConstants.setFontFamily(defaultStyleSet, "Courier");
         StyleConstants.setBold(defaultStyleSet, true);
         StyleConstants.setForeground(defaultStyleSet, Color.WHITE);
         StyleConstants.setAlignment(defaultStyleSet, StyleConstants.ALIGN_CENTER);
 
         blockStyleSet = new SimpleAttributeSet();
-        StyleConstants.setFontSize(blockStyleSet, 16);
+        StyleConstants.setFontSize(blockStyleSet, currentGame.getFontSize());
         StyleConstants.setFontFamily(blockStyleSet, "Courier");
         StyleConstants.setBold(blockStyleSet, true);
         StyleConstants.setAlignment(blockStyleSet, StyleConstants.ALIGN_CENTER);
@@ -123,17 +124,17 @@ public class GameView extends JFrame implements Observer {
      */
     public void drawScoreView() {
         String sb = "점수\n" + currentGame.getGameState().getScore();
-        scoreView.setText(sb);
-        StyledDocument doc = scoreView.getStyledDocument();
+        scorePane.setText(sb);
+        StyledDocument doc = scorePane.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), defaultStyleSet, false);
-        scoreView.setStyledDocument(doc);
+        scorePane.setStyledDocument(doc);
     }
     /**
      * 블럭 미리보기 뷰 그리는 메서드
      */
     public void drawPreview(){
-        preview.setText("");
-        StyledDocument doc = preview.getStyledDocument();
+        previewPane.setText(ZERO_WIDTH_SPACE);
+        StyledDocument doc = previewPane.getStyledDocument();
         try {
             doc.insertString(doc.getLength(), "NEXT\n", defaultStyleSet);
             for(int y = 0; y < currentGame.getNext().height(); y++){
@@ -143,7 +144,7 @@ public class GameView extends JFrame implements Observer {
                         doc.insertString(doc.getLength(), "O", blockStyleSet);
                     }
                     else {
-                        doc.insertString(doc.getLength(), " ", defaultStyleSet);
+                        doc.insertString(doc.getLength(), BLANK_STRING, defaultStyleSet);
                     }
                 }
                 doc.insertString(doc.getLength(), "\n", defaultStyleSet);
@@ -151,8 +152,10 @@ public class GameView extends JFrame implements Observer {
             for(int y = 0; y < 3 - currentGame.getNext().height(); y++){
                 doc.insertString(doc.getLength(), "\n", defaultStyleSet);
             }
-        } catch (BadLocationException e) { }
-        preview.setStyledDocument(doc);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        previewPane.setStyledDocument(doc);
     }
     /**
      * 뷰 그리는 메서드
@@ -161,10 +164,10 @@ public class GameView extends JFrame implements Observer {
     public void drawBoard() {
         int[][] board = currentGame.getBoard();
         int[][] visited = currentGame.getVisited();
-        gameView.setText("");
-        StyledDocument doc = gameView.getStyledDocument();
+        gamePane.setText(ZERO_WIDTH_SPACE);
+        StyledDocument doc = gamePane.getStyledDocument();
         try {
-            for(int t = 0; t < WIDTH + 2; t++) {
+            for(int t = 0; t < GAME_WIDTH + 2; t++) {
                 doc.insertString(doc.getLength(), BORDER_STRING, defaultStyleSet);
             }
             doc.insertString(doc.getLength(), "\n", defaultStyleSet);
@@ -176,21 +179,20 @@ public class GameView extends JFrame implements Observer {
                         StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(blockNumber));
                         doc.insertString(doc.getLength(), "O", blockStyleSet);
                     } else {
-                        doc.insertString(doc.getLength(), " ", defaultStyleSet);
+                        doc.insertString(doc.getLength(), BLANK_STRING, defaultStyleSet);
                     }
                 }
                 doc.insertString(doc.getLength(), BORDER_STRING, defaultStyleSet);
                 doc.insertString(doc.getLength(), "\n", defaultStyleSet);
             }
-            for(int t = 0; t < WIDTH + 2; t++) {
+            for(int t = 0; t < GAME_WIDTH + 2; t++) {
                 doc.insertString(doc.getLength(), BORDER_STRING, defaultStyleSet);
             }
-        } catch (BadLocationException e) { }
-        gameView.setStyledDocument(doc);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        gamePane.setStyledDocument(doc);
     }
-    /**
-     * Observer Pattern Method
-     */
     @Override
     public void update(Observable o, Object arg) {
         placeBlock();

@@ -1,8 +1,11 @@
 package Tetris.Controller;
 
 import Tetris.Model.SettingBoard;
+import Tetris.Model.SizeSettingBoard;
 import Tetris.Model.StartBoard;
+import Tetris.Util.JsonWriter;
 import Tetris.View.SettingView;
+import Tetris.View.SizeSettingView;
 import Tetris.View.StartView;
 
 import java.awt.event.KeyEvent;
@@ -17,22 +20,32 @@ public class SettingViewController implements KeyListener {
         this.settingView = view;
     }
     public void navigationSizeSettingView(){
-        // navigation code
-        //settingView.setVisible(false);
+        SizeSettingBoard field = new SizeSettingBoard();
+        SizeSettingView view = new SizeSettingView(settingView.getLocation().x, settingView.getLocation().y);
+        SizeSettingViewController controller = new SizeSettingViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        view.setVisible(true);
+        settingView.dispose();
     }
     public void navigationColorSettingView(){
         // navigation code
-        //settingView.setVisible(false);
     }
     public void resetSetting(){
-        // reset code
+        JsonWriter.setDefaultSetting();
+        SettingBoard field = new SettingBoard();
+        SettingView view = new SettingView(settingView.getLocation().x, settingView.getLocation().y);
+        SettingViewController controller = new SettingViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        view.setVisible(true);
+        settingView.dispose();
     }
     public void resetScoreBoard(){
         // reset code
     }
     public void navigationKeySettingView(){
         // navigation code
-        //settingView.setVisible(false);
     }
     public void navigationPreviousView(){
         StartBoard field = new StartBoard();
@@ -41,10 +54,12 @@ public class SettingViewController implements KeyListener {
         field.addObserver(startView);
         startView.addKeyListener(controller);
         startView.setVisible(true);
-        settingView.setVisible(false);
+        settingView.dispose();
     }
     @Override
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+        // default implementation ignored
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -80,11 +95,17 @@ public class SettingViewController implements KeyListener {
                     case 5:
                         navigationPreviousView();
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
         }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) { }
+    public void keyReleased(KeyEvent e) {
+        // default implementation ignored
+    }
 }

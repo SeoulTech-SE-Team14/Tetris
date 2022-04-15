@@ -8,22 +8,19 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class SettingView extends JFrame implements Observer {
-    private SettingBoard model = new SettingBoard();
-    private JButton settingSizeBtn = new JButton(model.getFocusSettingSizeBtnImage());
-    private JButton colorBlindnessBtn = new JButton(model.getFocusColorblindnessBtnImage());
-    private JButton resetSettingBtn = new JButton(model.getFocusResetSettingBtnImage());
-    private JButton resetScoreboardBtn = new JButton(model.getFocusResetScoreboardBtnImage());
-    private JButton settingKeyBtn = new JButton(model.getFocusSettingKeyBtnImage());
-    private JButton backBtn = new JButton(model.getFocusDefaultBackBtnImage());
-
-    // 현재 설정 가져와서 바꾸어야함.
-    private int height = 700;
-    private int width = 350;
+    private final SettingBoard model = new SettingBoard();
+    private final JButton settingSizeBtn = new JButton(model.getFocusSettingSizeBtnImage());
+    private final JButton colorBlindnessBtn = new JButton(model.getFocusColorblindnessBtnImage());
+    private final JButton resetSettingBtn = new JButton(model.getFocusResetSettingBtnImage());
+    private final JButton resetScoreboardBtn = new JButton(model.getFocusResetScoreboardBtnImage());
+    private final JButton settingKeyBtn = new JButton(model.getFocusSettingKeyBtnImage());
+    private final JButton backBtn = new JButton(model.getFocusDefaultBackBtnImage());
 
     public SettingView(int x, int y){
         super("SeoulTech SE Tetris");
-        setSize(new Dimension(width, height));
-        setPreferredSize(new Dimension(width, height));
+
+        setSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
+        setPreferredSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
         setLocation(x, y);
         setLayout(null);
         JPanel background = new JPanel() {
@@ -118,7 +115,7 @@ public class SettingView extends JFrame implements Observer {
         if(indicator == 4){
             settingKeyBtn.setIcon(model.getFocusSettingKeyBtnImage());
         } else {
-            settingKeyBtn.setIcon(model.getSettingKeyBtnImagee());
+            settingKeyBtn.setIcon(model.getSettingKeyBtnImage());
         }
         if(indicator == 5){
             backBtn.setIcon(model.getFocusDefaultBackBtnImage());

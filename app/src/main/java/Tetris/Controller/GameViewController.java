@@ -2,6 +2,8 @@ package Tetris.Controller;
 
 import Tetris.Model.GameState;
 import Tetris.Model.*;
+import Tetris.Util.JsonReader;
+import Tetris.Util.KeyEventType;
 
 import javax.swing.*;
 
@@ -19,10 +21,17 @@ public class GameViewController implements KeyListener, ActionListener {
     private GameBoard currentGame;
     private Timer timer;
 
+    private final int ROTATE_KEY = JsonReader.getKey(KeyEventType.ROTATE);
+    private final int RIGHT_KEY = JsonReader.getKey(KeyEventType.RIGHT);
+    private final int LEFT_KEY = JsonReader.getKey(KeyEventType.LEFT);
+    private final int DOWN_KEY = JsonReader.getKey(KeyEventType.DOWN);
+    private final int FALL_KEY = JsonReader.getKey(KeyEventType.FALL);
+    private final int PAUSE_KEY = JsonReader.getKey(KeyEventType.PAUSE);
+
     /**
-     * initInterval: 시작 timer delay
+     * INIT_INTERVAL: 시작 timer delay
      */
-    private static final int initInterval = 1000;
+    private static final int INIT_INTERVAL = 1000;
     private static final int BLOCK_COUNT = 7;
     private static final int ITEM_COUNT = 5;
     /**
@@ -30,7 +39,7 @@ public class GameViewController implements KeyListener, ActionListener {
      */
     public GameViewController(GameBoard game) {
         this.currentGame = game;
-        timer = new Timer(initInterval, this);
+        timer = new Timer(INIT_INTERVAL, this);
         timer.setActionCommand("timer");
         timer.start();
     }
@@ -79,7 +88,7 @@ public class GameViewController implements KeyListener, ActionListener {
         double totalSum = 0;
         for (double f : fitness) totalSum += f;
         double[] probability = new double[fitness.length];
-        for(int i = 0; i < fitness.length; i++){
+        for(int i = 0; totalSum != 0 && i < fitness.length; i++){
             probability[i] = fitness[i] / totalSum;
         }
         Random rnd = new Random(System.nanoTime());
@@ -137,10 +146,10 @@ public class GameViewController implements KeyListener, ActionListener {
     public void spawnBasicModeBlock(){
         Block curr = null;
         switch (currentGame.getGameState().getDifficulty()) {
-            case 0:
+            case "easy":
                 curr = getEasyModeRandomBlock();
                 break;
-            case 2:
+            case "hard":
                 curr = getHardModeRandomBlock();
                 break;
             default:
@@ -181,7 +190,7 @@ public class GameViewController implements KeyListener, ActionListener {
         if ("timer".equals(e.getActionCommand())) {
             if (currentGame.getCurr() == null) {
                 // 게임 모드에 따라 분기
-                if (currentGame.getGameState().getGameMode() == 1) {
+                if (currentGame.getGameState().getGameMode().equals("item")) {
                     spawnItemModeBlock();
                 } else {
                     spawnBasicModeBlock();
@@ -197,39 +206,30 @@ public class GameViewController implements KeyListener, ActionListener {
      * @param e 입력 키
      */
     @Override
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e) {
+        // default implementation ignored
+    }
     @Override
     public void keyPressed(KeyEvent e) {
         if(currentGame.getCurr() == null) return;
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_DOWN:
-                if(currentGame.getGameState().isPaused()) break;
-                currentGame.moveDown();
-                break;
-            case KeyEvent.VK_RIGHT:
-                if(currentGame.getGameState().isPaused()) break;
-                currentGame.moveRight();
-                break;
-            case KeyEvent.VK_LEFT:
-                if(currentGame.getGameState().isPaused()) break;
-                currentGame.moveLeft();
-                break;
-            case KeyEvent.VK_UP:
-                if(currentGame.getGameState().isPaused()) break;
-                if(currentGame.canRotate()) {
-                    currentGame.eraseCurr();
-                    currentGame.getCurr().rotate();
-                }
-                break;
-            case KeyEvent.VK_S:
-                if(currentGame.getGameState().isPaused()) break;
-                currentGame.fall();
-                break;
-            case KeyEvent.VK_P:
-                reversePause();
-                break;
+        if(currentGame.getGameState().isPaused()) return;
+        if(e.getKeyCode() == DOWN_KEY) {
+            currentGame.moveDown();
+        } else if(e.getKeyCode() == RIGHT_KEY){
+            currentGame.moveRight();
+        } else if(e.getKeyCode() == LEFT_KEY) {
+            currentGame.moveLeft();
+        } else if(e.getKeyCode() == ROTATE_KEY && currentGame.canRotate()) {
+            currentGame.eraseCurr();
+            currentGame.getCurr().rotate();
+        } else if(e.getKeyCode() == FALL_KEY) {
+            currentGame.fall();
+        } else if(e.getKeyCode() == PAUSE_KEY) {
+            reversePause();
         }
     }
     @Override
-    public void keyReleased(KeyEvent e) { }
+    public void keyReleased(KeyEvent e) {
+        // default implementation ignored
+    }
 }

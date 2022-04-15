@@ -1,5 +1,7 @@
 package Tetris.Model;
 
+import Tetris.Util.JsonReader;
+
 import javax.swing.*;
 import java.util.Observable;
 
@@ -8,6 +10,8 @@ public class StartBoard extends Observable {
     private final int buttonCount = 5;
     private final int buttonWidth = 260;
     private final int buttonHeight = 60;
+    private final int screenWidth = JsonReader.getWidth();
+    private final int screenHeight = JsonReader.getHeight();
 
     private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/start_background_350_700.png");
     private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/start_background_400_800.png");
@@ -26,6 +30,25 @@ public class StartBoard extends Observable {
     private final ImageIcon focusExitBtnImage = new ImageIcon("app/src/main/resources/image/StartView/button_exit_focused.png");
     private final ImageIcon focusStartItemBtnImage = new ImageIcon("app/src/main/resources/image/StartView/button_item_game_start_focused.png");
 
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public int getFontSize() {
+        if(screenWidth == 300 && screenHeight == 600) {
+            return 14;
+        }
+        else if(screenWidth == 350 && screenHeight == 700) {
+            return 16;
+        }
+        else{
+            return 18;
+        }
+    }
 
     public void setIndicator(int indicator) {
         StartBoard.indicator = indicator;
@@ -44,9 +67,15 @@ public class StartBoard extends Observable {
     public int getIndicator() { return indicator; }
 
     public ImageIcon getBackgroundImage() {
-        // setting에 따라 분기해야함.
-
-        return backgroundImage350700;
+        if(JsonReader.getWidth() == 300 && JsonReader.getHeight() == 600) {
+            return backgroundImage300600;
+        }
+        else if(JsonReader.getWidth() == 350 && JsonReader.getHeight() == 700) {
+            return backgroundImage350700;
+        }
+        else{
+            return backgroundImage400800;
+        }
     }
 
     public ImageIcon getDefaultStartBtnImage() {

@@ -8,20 +8,19 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class StartView extends JFrame implements Observer {
-    private StartBoard model = new StartBoard();
-    private JButton basicModeStartBtn = new JButton(model.getFocusStartBtnImage());
-    private JButton itemModeStartBtn = new JButton(model.getDefaultStartItemBtnImage());
-    private JButton settingBtn = new JButton(model.getDefaultSettingBtnImage());
-    private JButton scoreboardBtn = new JButton(model.getDefaultScoreboardBtnImage());
-    private JButton exitBtn = new JButton(model.getDefaultExitBtnImage());
-    private JLabel keyDescribeLabel;
-
-    // 설정가져와서 바꿔야함.
-    private int height = 700;
-    private int width = 350;
+    private final StartBoard model = new StartBoard();
+    private final JButton basicModeStartBtn = new JButton(model.getFocusStartBtnImage());
+    private final JButton itemModeStartBtn = new JButton(model.getDefaultStartItemBtnImage());
+    private final JButton settingBtn = new JButton(model.getDefaultSettingBtnImage());
+    private final JButton scoreboardBtn = new JButton(model.getDefaultScoreboardBtnImage());
+    private final JButton exitBtn = new JButton(model.getDefaultExitBtnImage());
 
     public StartView(int x, int y){
         super("SeoulTech SE Tetris");
+
+        int width = model.getScreenWidth();
+        int height = model.getScreenHeight();
+
         setSize(new Dimension(width, height));
         setPreferredSize(new Dimension(width, height));
         setLocation(x, y);
@@ -97,10 +96,10 @@ public class StartView extends JFrame implements Observer {
         add(blank, gbc[0]);
 
         //사용가능한 키 표시
-        keyDescribeLabel = new JLabel();
+        JLabel keyDescribeLabel = new JLabel();
         keyDescribeLabel.setForeground(Color.WHITE);
-        keyDescribeLabel.setText("current Keysetting");
-        keyDescribeLabel.setFont(keyDescribeLabel.getFont().deriveFont(14.0f));
+        keyDescribeLabel.setText("현재 키세팅 보여주는 부분.");
+        keyDescribeLabel.setFont(new Font("Courier", Font.PLAIN, model.getFontSize()));
         keyDescribeLabel.setVisible(true);
         keyDescribeLabel.setPreferredSize(new Dimension(260, 35));
         keyDescribeLabel.setHorizontalAlignment(SwingConstants.CENTER);
