@@ -63,7 +63,7 @@ public class SettingViewController implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int indicator = model.getIndicator();
+        int indicator = SettingBoard.getIndicator();
         switch(e.getKeyCode()) {
             case KeyEvent.VK_DOWN:
                 indicator++;

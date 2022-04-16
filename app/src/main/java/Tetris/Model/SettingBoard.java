@@ -50,7 +50,7 @@ public class SettingBoard extends Observable {
     public int getButtonHeight() {
         return buttonHeight;
     }
-    public int getIndicator() { return indicator; }
+    public static int getIndicator() { return indicator; }
 
     public ImageIcon getBackgroundImage() {
         int width = JsonReader.getWidth();

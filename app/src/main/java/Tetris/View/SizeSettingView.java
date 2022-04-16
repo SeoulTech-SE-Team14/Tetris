@@ -71,6 +71,7 @@ public class SizeSettingView extends JFrame implements Observer {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setFocusable(true);
+        requestFocus();
         pack();
         setVisible(true);
     }

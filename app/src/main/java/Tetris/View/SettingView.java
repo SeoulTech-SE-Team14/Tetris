@@ -84,6 +84,7 @@ public class SettingView extends JFrame implements Observer {
         add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        requestFocus();
         setFocusable(true);
         pack();
         setVisible(true);
@@ -91,7 +92,7 @@ public class SettingView extends JFrame implements Observer {
 
     @Override
     public void paint(Graphics g) {
-        int indicator = model.getIndicator();
+        int indicator = SettingBoard.getIndicator();
         if(indicator == 0){
             settingSizeBtn.setIcon(model.getFocusSettingSizeBtnImage());
         } else {

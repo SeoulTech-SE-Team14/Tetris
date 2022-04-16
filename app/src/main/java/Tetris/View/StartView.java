@@ -35,50 +35,39 @@ public class StartView extends JFrame implements Observer {
         };
         setContentPane(background);
 
-        Dimension frameSize = getSize();
-        int startX = (frameSize.width - model.getButtonWidth()) / 2;
-        int startY = frameSize.height / 3;
-        int space = model.getButtonHeight() + ((frameSize.height * 2 / 3) - (model.getButtonHeight() * model.getButtonCount())) / model.getButtonCount();
-
         JPanel buttons = new JPanel();
         buttons.setLayout(new GridLayout(model.getButtonCount(), 1));
 
-        basicModeStartBtn.setBounds(startX, startY, model.getButtonWidth(), model.getButtonHeight());
         basicModeStartBtn.setBorderPainted(false);
         basicModeStartBtn.setContentAreaFilled(false);
         basicModeStartBtn.setFocusPainted(false);
         basicModeStartBtn.setOpaque(false);
         buttons.add(basicModeStartBtn);
 
-        itemModeStartBtn.setBounds(startX, basicModeStartBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         itemModeStartBtn.setBorderPainted(false);
         itemModeStartBtn.setContentAreaFilled(false);
         itemModeStartBtn.setFocusPainted(false);
         itemModeStartBtn.setOpaque(false);
         buttons.add(itemModeStartBtn);
 
-        settingBtn.setBounds(startX, itemModeStartBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         settingBtn.setBorderPainted(false);
         settingBtn.setContentAreaFilled(false);
         settingBtn.setFocusPainted(false);
         settingBtn.setOpaque(false);
         buttons.add(settingBtn);
 
-        scoreboardBtn.setBounds(startX, settingBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         scoreboardBtn.setBorderPainted(false);
         scoreboardBtn.setContentAreaFilled(false);
         scoreboardBtn.setFocusPainted(false);
         scoreboardBtn.setOpaque(false);
         buttons.add(scoreboardBtn);
 
-        exitBtn.setBounds(startX, scoreboardBtn.getY() + space, model.getButtonWidth(), model.getButtonHeight());
         exitBtn.setBorderPainted(false);
         exitBtn.setContentAreaFilled(false);
         exitBtn.setFocusPainted(false);
         exitBtn.setOpaque(false);
         buttons.add(exitBtn);
 
-        buttons.setBounds(0, height / 3, width, height * 2/ 3);
         buttons.setOpaque(false);
 
         GridBagConstraints[] gbc = new GridBagConstraints[3];
@@ -107,17 +96,16 @@ public class StartView extends JFrame implements Observer {
         gbc[1].gridx = 0;
         gbc[1].gridy = 1;
         gbc[1].gridheight = 2;
-        gbc[1].fill = GridBagConstraints.BOTH;
         add(keyDescribeLabel, gbc[1]);
 
         gbc[2].gridx = 0;
         gbc[2].gridy = 3;
         gbc[2].gridheight = 2;
-        gbc[2].fill = GridBagConstraints.BOTH;
         add(buttons, gbc[2]);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setFocusable(true);
+        requestFocus();
         pack();
         setVisible(true);
     }

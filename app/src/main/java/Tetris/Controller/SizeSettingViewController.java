@@ -9,8 +9,9 @@ import Tetris.View.SizeSettingView;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-enum SizeType { SMALL, MEDIUM, LARGE }
 public class SizeSettingViewController implements KeyListener {
+    enum SizeType { SMALL, MEDIUM, LARGE }
+
     private SizeSettingBoard model;
     private SizeSettingView sizeSettingView;
 
