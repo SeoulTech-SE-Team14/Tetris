@@ -1,9 +1,11 @@
 package Tetris.Controller;
 
+import Tetris.Model.KeySettingBoard;
 import Tetris.Model.SettingBoard;
 import Tetris.Model.SizeSettingBoard;
 import Tetris.Model.StartBoard;
 import Tetris.Util.JsonWriter;
+import Tetris.View.KeySettingView;
 import Tetris.View.SettingView;
 import Tetris.View.SizeSettingView;
 import Tetris.View.StartView;
@@ -46,6 +48,13 @@ public class SettingViewController implements KeyListener {
     }
     public void navigationKeySettingView(){
         // navigation code
+        KeySettingBoard field = new KeySettingBoard();
+        KeySettingView view = new KeySettingView(settingView.getLocation().x, settingView.getLocation().y);
+        KeySettingViewController controller = new KeySettingViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        view.setVisible(true);
+        settingView.dispose();
     }
     public void navigationPreviousView(){
         StartBoard field = new StartBoard();
