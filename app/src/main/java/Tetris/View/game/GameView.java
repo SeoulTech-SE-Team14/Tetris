@@ -17,11 +17,11 @@ import javax.swing.text.*;
  * @author 김영균
  */
 public class GameView extends JFrame implements Observer {
-    public static final int GAME_HEIGHT = 20;
-    public static final int GAME_WIDTH = 10;
-    public static final String BORDER_STRING = "X";
-    public static final String BLANK_STRING = " ";
-    public static final String ZERO_WIDTH_SPACE = "​";
+    private static final int GAME_HEIGHT = 20;
+    private static final int GAME_WIDTH = 10;
+    private static final String BORDER_STRING = "X";
+    private static final String BLANK_STRING = " ";
+    private static final String ZERO_WIDTH_SPACE = "​";
     private final ColorTheme colorTheme = new ColorTheme();
 
     private JTextPane gamePane;
@@ -102,6 +102,7 @@ public class GameView extends JFrame implements Observer {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setFocusable(true);
+        setVisible(true);
         requestFocus();
     }
     public String getStringBrick(int brickNumber){

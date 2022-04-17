@@ -1,11 +1,14 @@
 package Tetris.Controller.setting;
 
 import Tetris.Controller.home.StartViewController;
+
 import Tetris.Model.setting.KeySettingBoard;
 import Tetris.Model.setting.SettingBoard;
 import Tetris.Model.setting.SizeSettingBoard;
 import Tetris.Model.home.StartBoard;
+
 import Tetris.Util.JsonWriter;
+
 import Tetris.View.setting.KeySettingView;
 import Tetris.View.setting.SettingView;
 import Tetris.View.setting.SizeSettingView;
@@ -15,25 +18,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class SettingViewController implements KeyListener {
-    private SettingBoard model;
-    private SettingView settingView;
+    private final SettingBoard model;
+    private final SettingView settingView;
 
     public SettingViewController(SettingBoard model, SettingView view) {
         this.model = model;
         this.settingView = view;
     }
-    public void navigationSizeSettingView(){
-        SizeSettingBoard field = new SizeSettingBoard();
-        SizeSettingView view = new SizeSettingView(settingView.getLocation().x, settingView.getLocation().y);
-        SizeSettingViewController controller = new SizeSettingViewController(field, view);
-        view.addKeyListener(controller);
-        field.addObserver(view);
-        view.setVisible(true);
-        settingView.dispose();
-    }
-    public void navigationColorSettingView(){
-        // navigation code
-    }
+
     public void resetSetting(){
         JsonWriter.setDefaultSetting();
         SettingBoard field = new SettingBoard();
@@ -41,39 +33,46 @@ public class SettingViewController implements KeyListener {
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
-        view.setVisible(true);
         settingView.dispose();
     }
     public void resetScoreBoard(){
         // reset code
     }
-    public void navigationKeySettingView(){
+    public void navigateSizeSettingView(){
+        SizeSettingBoard field = new SizeSettingBoard();
+        SizeSettingView view = new SizeSettingView(settingView.getLocation().x, settingView.getLocation().y);
+        SizeSettingViewController controller = new SizeSettingViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        settingView.dispose();
+    }
+    public void navigationColorSettingView(){
         // navigation code
+    }
+    public void navigateKeySettingView(){
         KeySettingBoard field = new KeySettingBoard();
         KeySettingView view = new KeySettingView(settingView.getLocation().x, settingView.getLocation().y);
         KeySettingViewController controller = new KeySettingViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
-        view.setVisible(true);
         settingView.dispose();
     }
-    public void navigationPreviousView(){
+    public void navigatePreviousView(){
         StartBoard field = new StartBoard();
-        StartView startView = new StartView(settingView.getLocation().x, settingView.getLocation().y);
-        StartViewController controller = new StartViewController(field, startView);
-        field.addObserver(startView);
-        startView.addKeyListener(controller);
-        startView.setVisible(true);
+        StartView view = new StartView(settingView.getLocation().x, settingView.getLocation().y);
+        StartViewController controller = new StartViewController(field, view);
+        field.addObserver(view);
+        view.addKeyListener(controller);
         settingView.dispose();
     }
+
     @Override
     public void keyTyped(KeyEvent e) {
         // default implementation ignored
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
-        int indicator = SettingBoard.getIndicator();
+        int indicator = model.getIndicator();
         switch(e.getKeyCode()) {
             case KeyEvent.VK_DOWN:
                 indicator++;
@@ -88,7 +87,7 @@ public class SettingViewController implements KeyListener {
             case KeyEvent.VK_ENTER:
                 switch (indicator){
                     case 0:
-                        navigationSizeSettingView();
+                        navigateSizeSettingView();
                         break;
                     case 1:
                         navigationColorSettingView();
@@ -100,10 +99,10 @@ public class SettingViewController implements KeyListener {
                         resetScoreBoard();
                         break;
                     case 4:
-                        navigationKeySettingView();
+                        navigateKeySettingView();
                         break;
                     case 5:
-                        navigationPreviousView();
+                        navigatePreviousView();
                         break;
                     default:
                         break;
@@ -113,7 +112,6 @@ public class SettingViewController implements KeyListener {
                 break;
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
         // default implementation ignored

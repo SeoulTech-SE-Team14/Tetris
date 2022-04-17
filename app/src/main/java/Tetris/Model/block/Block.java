@@ -4,7 +4,7 @@ import java.util.Observable;
 
 public class Block extends Observable {
     protected int x = 3;
-    protected int y= 0;
+    protected int y = 0;
     protected int cx = 1;   // centerX
     protected int cy = 0;   // centerY
     // 0: 빈칸 , 1: 블럭, 2: 블럭 중심. 3: 아이템 위치
@@ -15,9 +15,6 @@ public class Block extends Observable {
 
     Block() { }
 
-    /**
-     * Getter Method
-     */
     public int getX() {
         return x;
     }
@@ -40,22 +37,10 @@ public class Block extends Observable {
     public void setX(int x) {
         this.x = x;
     }
-
     public void setY(int y) {
         this.y = y;
     }
-
-    public void setCx(int cx) {
-        this.cx = cx;
-    }
-
-    public void setCy(int cy) {
-        this.cy = cy;
-    }
-
-    /**
-     * 블럭 중심 기준 회전 메서드
-     */
+    // 블럭 중심 기준 회전 메서드
     public void rotate() {
         // Rotate the block 90 deg. clockwise.
         int height = shape.length;

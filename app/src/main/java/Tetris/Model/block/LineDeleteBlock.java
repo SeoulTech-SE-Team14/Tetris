@@ -17,7 +17,8 @@ public class LineDeleteBlock extends Block {
         itemPositionIndex = rnd.nextInt(4);
         int itemX = itemCordX[itemPositionIndex];
         int itemY = itemCordY[itemPositionIndex];
-        // 3은 아이템 위치!
+
+        // 3은 아이템 위치
         shape[itemY][itemX] = 3;
         if(itemX == 1 && itemY == 0) centerCordOverlappedItemCord = true;
     }

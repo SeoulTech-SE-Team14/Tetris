@@ -7,10 +7,9 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class JsonReader {
-    static final String SETTING_FILEPATH = "app/src/main/java/Tetris/Util/CurrentSetting.json";
+    static final String SETTING_FILEPATH = "app/src/main/resources/json/CurrentSetting.json";
     static JSONParser jsonParser = new JSONParser();
 
     public static Object getJson(JsonType type, String key) {

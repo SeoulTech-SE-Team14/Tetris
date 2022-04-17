@@ -41,15 +41,18 @@ public class KeySettingView extends JFrame implements Observer {
                 super.paintComponent(g);
             }
         };
-        setContentPane(background)
-        ;
+        setContentPane(background);
+
         JPanel buttons = new JPanel();
+        buttons.setOpaque(false);
         buttons.setLayout(new GridLayout(8, 2));
+
         rightKeyBtn.setBorderPainted(false);
         rightKeyBtn.setContentAreaFilled(false);
         rightKeyBtn.setFocusPainted(false);
         rightKeyBtn.setOpaque(false);
         buttons.add(rightKeyBtn);
+
         rightKeyField.setOpaque(false);
         rightKeyField.setText(model.getKeyMap().get("right").toString());
         buttons.add(rightKeyField);
@@ -59,6 +62,7 @@ public class KeySettingView extends JFrame implements Observer {
         leftKeyBtn.setFocusPainted(false);
         leftKeyBtn.setOpaque(false);
         buttons.add(leftKeyBtn);
+
         leftKeyField.setOpaque(false);
         leftKeyField.setText(model.getKeyMap().get("left").toString());
         buttons.add(leftKeyField);
@@ -68,6 +72,7 @@ public class KeySettingView extends JFrame implements Observer {
         downKeyBtn.setFocusPainted(false);
         downKeyBtn.setOpaque(false);
         buttons.add(downKeyBtn);
+
         downKeyField.setOpaque(false);
         downKeyField.setText(model.getKeyMap().get("down").toString());
         buttons.add(downKeyField);
@@ -77,6 +82,7 @@ public class KeySettingView extends JFrame implements Observer {
         fallKeyBtn.setFocusPainted(false);
         fallKeyBtn.setOpaque(false);
         buttons.add(fallKeyBtn);
+
         fallKeyField.setOpaque(false);
         fallKeyField.setText(model.getKeyMap().get("fall").toString());
         buttons.add(fallKeyField);
@@ -86,6 +92,7 @@ public class KeySettingView extends JFrame implements Observer {
         rotateKeyBtn.setFocusPainted(false);
         rotateKeyBtn.setOpaque(false);
         buttons.add(rotateKeyBtn);
+
         rotateKeyField.setOpaque(false);
         rotateKeyField.setText(model.getKeyMap().get("rotate").toString());
         buttons.add(rotateKeyField);
@@ -95,6 +102,7 @@ public class KeySettingView extends JFrame implements Observer {
         pauseKeyBtn.setFocusPainted(false);
         pauseKeyBtn.setOpaque(false);
         buttons.add(pauseKeyBtn);
+
         pauseKeyField.setOpaque(false);
         pauseKeyField.setText(model.getKeyMap().get("pause").toString());
         buttons.add(pauseKeyField);
@@ -103,6 +111,7 @@ public class KeySettingView extends JFrame implements Observer {
         storeBtn.setContentAreaFilled(false);
         storeBtn.setFocusPainted(false);
         storeBtn.setOpaque(false);
+
         storeBtn.setName("storeBtn");
         buttons.add(storeBtn);
 
@@ -110,10 +119,9 @@ public class KeySettingView extends JFrame implements Observer {
         backBtn.setContentAreaFilled(false);
         backBtn.setFocusPainted(false);
         backBtn.setOpaque(false);
+
         backBtn.setName("backBtn");
         buttons.add(backBtn);
-
-        buttons.setOpaque(false);
 
         GridBagConstraints gbc = new GridBagConstraints();
         GridBagLayout gbl = new GridBagLayout();
@@ -125,10 +133,11 @@ public class KeySettingView extends JFrame implements Observer {
         add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setFocusable(true);
+        setVisible(true);
         requestFocus();
         pack();
-        setVisible(true);
     }
     public void setActionListener(ActionListener listener){
         storeBtn.addActionListener(listener);
@@ -136,7 +145,7 @@ public class KeySettingView extends JFrame implements Observer {
     }
     @Override
     public void paint(Graphics g) {
-        int indicator = KeySettingBoard.getIndicator();
+        int indicator = model.getIndicator();
         if(indicator == 0){
             storeBtn.setIcon(model.getFocusStoreBtnImage());
         } else {

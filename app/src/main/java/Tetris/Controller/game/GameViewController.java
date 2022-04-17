@@ -29,24 +29,19 @@ public class GameViewController implements KeyListener, ActionListener {
     private final int FALL_KEY = JsonReader.getKey(KeyEventType.FALL);
     private final int PAUSE_KEY = JsonReader.getKey(KeyEventType.PAUSE);
 
-    /**
-     * INIT_INTERVAL: 시작 timer delay
-     */
+    // INIT_INTERVAL: 시작 timer delay
     private static final int INIT_INTERVAL = 1000;
-    private static final int BLOCK_COUNT = 7;
-    private static final int ITEM_COUNT = 5;
-    /**
-     * Constructor
-     */
+    private static final int NORMAL_BLOCK_COUNT = 7;
+    private static final int ITEM_BLOCK_COUNT = 5;
+
     public GameViewController(GameBoard game) {
         this.currentGame = game;
         timer = new Timer(INIT_INTERVAL, this);
         timer.setActionCommand("timer");
         timer.start();
     }
-    /**
-     * 중지 <-> 재개 바꾸는 메서드
-     */
+
+    // 중지 <-> 게임 중 바꾸는 메서드
     public void reversePause() {
         if(currentGame.getGameState().isPaused()){
             timer.restart();
@@ -109,7 +104,7 @@ public class GameViewController implements KeyListener, ActionListener {
         return blockNumber;
     }
     /**
-     * 일반모드
+     * 일반모드 - 난이도에 따른 블럭생성 메서드
      * @return 난이도에 따른 랜덤 블럭 번호 얻기.
      */
     public Block getEasyModeRandomBlock(){
@@ -134,21 +129,20 @@ public class GameViewController implements KeyListener, ActionListener {
     }
     public Block getBasicModeRandomBlock(){
         Random rnd = new Random(System.nanoTime());
-        int number = rnd.nextInt(BLOCK_COUNT);
+        int number = rnd.nextInt(NORMAL_BLOCK_COUNT);
         return getBlockByNumber(number);
     }
-    /**
-     * 아이템 모드 - 랜덤 블럭 번호 얻기.
-     */
+
+
+    // 아이템 모드 - 랜덤 블럭 번호 얻기.
     public Block getRandomItemBlock() {
         Random rnd = new Random(System.nanoTime());
-        // 아이템의 블럭 넘버는 7번부터이다.
-        int itemNumber = rnd.nextInt(ITEM_COUNT) + BLOCK_COUNT;
-        return new LineDeleteBlock();
+        // 아이템 블럭 넘버를 구하기 위해 일반 블럭 개수를 더해준다.
+        int itemNumber = rnd.nextInt(ITEM_BLOCK_COUNT) + NORMAL_BLOCK_COUNT;
+        return getBlockByNumber(itemNumber);
     }
-    /**
-     * 일반모드 블럭 생성 메서드
-     */
+
+    // 일반모드 블럭 생성 메서드
     public void spawnBasicModeBlock(){
         Block curr = null;
         switch (currentGame.getGameState().getDifficulty()) {
@@ -171,9 +165,7 @@ public class GameViewController implements KeyListener, ActionListener {
             // 게임 종료 모달 띄우기.
         }
     }
-    /**
-     * 아이템 모드 블럭 생성 메서드
-     */
+    // 아이템 모드 블럭 생성 메서드
     public void spawnItemModeBlock(){
         Block curr = null;
         if(GameState.getSpawnedBlockNumber() > 0 && GameState.getSpawnedBlockNumber() % 9 == 0){
@@ -188,9 +180,7 @@ public class GameViewController implements KeyListener, ActionListener {
             // 게임 종료 모달 띄우기.
         }
     }
-    /**
-     * ActionListener 메서드
-     */
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if ("timer".equals(e.getActionCommand())) {
@@ -207,10 +197,6 @@ public class GameViewController implements KeyListener, ActionListener {
             }
         }
     }
-    /**
-     * KeyListener 메서드
-     * @param e 입력 키
-     */
     @Override
     public void keyTyped(KeyEvent e) {
         // default implementation ignored

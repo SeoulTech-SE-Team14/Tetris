@@ -13,9 +13,9 @@ import java.util.Objects;
 
 public class JsonWriter {
     // current setting json file path
-    private static final String CURRENT_SETTING_FILEPATH = "app/src/main/java/Tetris/Util/CurrentSetting.json";
+    private static final String CURRENT_SETTING_FILEPATH = "app/src/main/resources/json/CurrentSetting.json";
     // default setting json file path
-    private static final String DEFAULT_SETTING_FILEPATH = "app/src/main/java/Tetris/Util/DefaultSetting.json";
+    private static final String DEFAULT_SETTING_FILEPATH = "app/src/main/resources/json/defaultSetting.json";
 
     static JSONParser jsonParser = new JSONParser();
     public static void replaceJson(JsonType type, String key, Object value){

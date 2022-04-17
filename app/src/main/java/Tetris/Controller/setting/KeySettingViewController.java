@@ -2,7 +2,9 @@ package Tetris.Controller.setting;
 
 import Tetris.Model.setting.KeySettingBoard;
 import Tetris.Model.setting.SettingBoard;
+
 import Tetris.Util.JsonWriter;
+
 import Tetris.View.setting.KeySettingView;
 import Tetris.View.setting.SettingView;
 
@@ -20,6 +22,7 @@ public class KeySettingViewController implements KeyListener, ActionListener {
         this.keySettingView.setActionListener(this);
         this.keyMap = (HashMap<String, Integer>) model.getKeyMap();
     }
+
     private void changeKey(){
         keyMap.replace("right", Integer.parseInt(keySettingView.rightKeyField.getText()));
         keyMap.replace("left", Integer.parseInt(keySettingView.leftKeyField.getText()));
@@ -29,24 +32,22 @@ public class KeySettingViewController implements KeyListener, ActionListener {
         keyMap.replace("pause", Integer.parseInt(keySettingView.pauseKeyField.getText()));
         JsonWriter.setKey(keyMap);
     }
-    private void navigationPreviousView() {
+    private void navigatePreviousView() {
         SettingBoard field = new SettingBoard();
         SettingView view = new SettingView(keySettingView.getLocation().x, keySettingView.getLocation().y);
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
-        view.setVisible(true);
         keySettingView.dispose();
-    }
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // default implementation ignored
-        System.out.println(e.getKeyCode());
     }
 
     @Override
+    public void keyTyped(KeyEvent e) {
+        // default implementation ignored
+    }
+    @Override
     public void keyPressed(KeyEvent e) {
-        int indicator = KeySettingBoard.getIndicator();
+        int indicator = model.getIndicator();
         switch(e.getKeyCode()) {
             case KeyEvent.VK_RIGHT:
                 indicator++;
@@ -64,7 +65,7 @@ public class KeySettingViewController implements KeyListener, ActionListener {
                         changeKey();
                         break;
                     case 1:
-                        navigationPreviousView();
+                        navigatePreviousView();
                         break;
                     default:
                         break;
@@ -76,18 +77,15 @@ public class KeySettingViewController implements KeyListener, ActionListener {
     }
     @Override
     public void keyReleased(KeyEvent e) {
-
+        // default implementation ignored
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().toString().contains("backBtn")){
-            navigationPreviousView();
-            System.out.println("back");
+        if(e.getSource().toString().contains("button_back.png")){
+            navigatePreviousView();
         }
-        else if(e.getSource().toString().contains("storeBtn")){
+        else if(e.getSource().toString().contains("button_store_focused.png")){
             changeKey();
-            System.out.println("store");
         }
     }
 

@@ -2,7 +2,9 @@ package Tetris.Controller.setting;
 
 import Tetris.Model.setting.SettingBoard;
 import Tetris.Model.setting.SizeSettingBoard;
+
 import Tetris.Util.JsonWriter;
+
 import Tetris.View.setting.SettingView;
 import Tetris.View.setting.SizeSettingView;
 
@@ -12,21 +14,20 @@ import java.awt.event.KeyListener;
 public class SizeSettingViewController implements KeyListener {
     enum SizeType { SMALL, MEDIUM, LARGE }
 
-    private SizeSettingBoard model;
-    private SizeSettingView sizeSettingView;
+    private final SizeSettingBoard model;
+    private final SizeSettingView sizeSettingView;
 
     public SizeSettingViewController(SizeSettingBoard model, SizeSettingView view) {
         this.model = model;
         this.sizeSettingView = view;
     }
 
-    public void navigationPreviousView(){
+    public void navigatePreviousView(){
         SettingBoard field = new SettingBoard();
         SettingView view = new SettingView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y);
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
-        view.setVisible(true);
         sizeSettingView.dispose();
     }
     public void changeScreenSize(SizeType type){
@@ -46,14 +47,13 @@ public class SizeSettingViewController implements KeyListener {
         SizeSettingViewController controller = new SizeSettingViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
-        view.setVisible(true);
         sizeSettingView.dispose();
 
     }
+
     public void keyTyped(KeyEvent e) {
         // default implementation ignored
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         int indicator = model.getIndicator();
@@ -80,7 +80,7 @@ public class SizeSettingViewController implements KeyListener {
                         changeScreenSize(SizeType.LARGE);
                         break;
                     case 3:
-                        navigationPreviousView();
+                        navigatePreviousView();
                         break;
                     default:
                         break;
@@ -90,7 +90,6 @@ public class SizeSettingViewController implements KeyListener {
                 break;
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
         // default implementation ignored

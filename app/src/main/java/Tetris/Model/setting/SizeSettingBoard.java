@@ -8,8 +8,6 @@ import java.util.Observable;
 public class SizeSettingBoard extends Observable {
     private static int indicator = 0;
     private final int buttonCount = 4;
-    private final int buttonWidth = 260;
-    private final int buttonHeight = 60;
     private final int screenWidth = JsonReader.getWidth();
     private final int screenHeight = JsonReader.getHeight();
 
@@ -21,14 +19,13 @@ public class SizeSettingBoard extends Observable {
     private final ImageIcon size300600BtnImage = new ImageIcon("app/src/main/resources/image/size_setting/button_300_600.png");
     private final ImageIcon size350700BtnImage = new ImageIcon("app/src/main/resources/image/size_setting/button_350_700.png");
     private final ImageIcon size400800BtnImage = new ImageIcon("app/src/main/resources/image/size_setting/button_400_800.png");
-    private final ImageIcon defaultBackBtnImage = new ImageIcon("app/src/main/resources/image/button_back.png");
+    private final ImageIcon backBtnImage = new ImageIcon("app/src/main/resources/image/button_back.png");
 
     // focus image
     private final ImageIcon focusSize300600BtnImage = new ImageIcon("app/src/main/resources/image/size_setting/button_300_600_focused.png");
     private final ImageIcon focusSize350700BtnImage = new ImageIcon("app/src/main/resources/image/size_setting/button_350_700_focused.png");
     private final ImageIcon focusSize400800BtnImage = new ImageIcon("app/src/main/resources/image/size_setting/button_400_800_focused.png");
-    private final ImageIcon focusDefaultBackBtnImage = new ImageIcon("app/src/main/resources/image/button_back_focused.png");
-
+    private final ImageIcon focusBackBtnImage = new ImageIcon("app/src/main/resources/image/button_back_focused.png");
 
     public void setIndicator(int indicator) {
         SizeSettingBoard.indicator = indicator;
@@ -36,19 +33,16 @@ public class SizeSettingBoard extends Observable {
         notifyObservers();
     }
 
+    public int getIndicator() { return indicator; }
+    public int getButtonCount() {
+        return buttonCount;
+    }
     public int getScreenWidth() {
         return screenWidth;
     }
     public int getScreenHeight() {
         return screenHeight;
     }
-    public int getButtonWidth() {
-        return buttonWidth;
-    }
-    public int getButtonHeight() {
-        return buttonHeight;
-    }
-    public int getIndicator() { return indicator; }
 
     public ImageIcon getBackgroundImage() {
         int width = JsonReader.getWidth();
@@ -63,7 +57,6 @@ public class SizeSettingBoard extends Observable {
             return backgroundImage400800;
         }
     }
-
     public ImageIcon getSize300600BtnImage() {
         return size300600BtnImage;
     }
@@ -73,8 +66,8 @@ public class SizeSettingBoard extends Observable {
     public ImageIcon getSize400800BtnImage() {
         return size400800BtnImage;
     }
-    public ImageIcon getDefaultBackBtnImage() {
-        return defaultBackBtnImage;
+    public ImageIcon getBackBtnImage() {
+        return backBtnImage;
     }
 
     public ImageIcon getFocusSize300600BtnImage() {
@@ -86,11 +79,7 @@ public class SizeSettingBoard extends Observable {
     public ImageIcon getFocusSize400800BtnImage() {
         return focusSize400800BtnImage;
     }
-    public ImageIcon getFocusDefaultBackBtnImage() {
-        return focusDefaultBackBtnImage;
-    }
-
-    public int getButtonCount() {
-        return buttonCount;
+    public ImageIcon getFocusBackBtnImage() {
+        return focusBackBtnImage;
     }
 }

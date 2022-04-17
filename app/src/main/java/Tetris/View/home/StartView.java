@@ -25,6 +25,7 @@ public class StartView extends JFrame implements Observer {
         setPreferredSize(new Dimension(width, height));
         setLocation(x, y);
         setLayout(null);
+
         JPanel background = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -33,9 +34,16 @@ public class StartView extends JFrame implements Observer {
                 super.paintComponent(g);
             }
         };
+
+        background.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 10, 0);
         setContentPane(background);
 
         JPanel buttons = new JPanel();
+        buttons.setOpaque(false);
         buttons.setLayout(new GridLayout(model.getButtonCount(), 1));
 
         basicModeStartBtn.setBorderPainted(false);
@@ -68,21 +76,11 @@ public class StartView extends JFrame implements Observer {
         exitBtn.setOpaque(false);
         buttons.add(exitBtn);
 
-        buttons.setOpaque(false);
-
-        GridBagConstraints[] gbc = new GridBagConstraints[3];
-        GridBagLayout gbl = new GridBagLayout();
-        for(int i = 0; i < 3; i++){ gbc[i] = new GridBagConstraints(); }
-        background.setLayout(gbl);
-
         // 빈 공백
         JPanel blank = new JPanel();
         blank.setPreferredSize(new Dimension(width, height / 4));
         blank.setOpaque(false);
-
-        gbc[0].gridx = 0;
-        gbc[0].gridy = 0;
-        add(blank, gbc[0]);
+        add(blank, gbc);
 
         //사용가능한 키 표시
         JLabel keyDescribeLabel = new JLabel();
@@ -92,22 +90,15 @@ public class StartView extends JFrame implements Observer {
         keyDescribeLabel.setVisible(true);
         keyDescribeLabel.setPreferredSize(new Dimension(260, 35));
         keyDescribeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        gbc[1].gridx = 0;
-        gbc[1].gridy = 1;
-        gbc[1].gridheight = 2;
-        add(keyDescribeLabel, gbc[1]);
-
-        gbc[2].gridx = 0;
-        gbc[2].gridy = 3;
-        gbc[2].gridheight = 2;
-        add(buttons, gbc[2]);
+        add(keyDescribeLabel, gbc);
+        add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setFocusable(true);
+        setVisible(true);
         requestFocus();
         pack();
-        setVisible(true);
     }
 
     @Override

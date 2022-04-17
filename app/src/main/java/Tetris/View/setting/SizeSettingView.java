@@ -12,7 +12,7 @@ public class SizeSettingView extends JFrame implements Observer {
     private final JButton smallSizeBtn = new JButton(model.getFocusSize300600BtnImage());
     private final JButton defaultSizeBtn = new JButton(model.getFocusSize350700BtnImage());
     private final JButton bigSizeBtn = new JButton(model.getFocusSize400800BtnImage());
-    private final JButton backBtn = new JButton(model.getFocusDefaultBackBtnImage());
+    private final JButton backBtn = new JButton(model.getFocusBackBtnImage());
 
     public SizeSettingView(int x, int y){
         super("SeoulTech SE Tetris");
@@ -29,6 +29,11 @@ public class SizeSettingView extends JFrame implements Observer {
                 super.paintComponent(g);
             }
         };
+        background.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 10, 0);
         setContentPane(background);
 
         JPanel buttons = new JPanel();
@@ -58,22 +63,13 @@ public class SizeSettingView extends JFrame implements Observer {
         buttons.add(backBtn);
 
         buttons.setOpaque(false);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        GridBagLayout gbl = new GridBagLayout();
-        background.setLayout(gbl);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridheight = 1;
-        gbc.fill = GridBagConstraints.BOTH;
         add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setFocusable(true);
+        setVisible(true);
         requestFocus();
         pack();
-        setVisible(true);
     }
 
     @Override
@@ -95,9 +91,9 @@ public class SizeSettingView extends JFrame implements Observer {
             bigSizeBtn.setIcon(model.getSize400800BtnImage());
         }
         if(indicator == 3){
-            backBtn.setIcon(model.getFocusDefaultBackBtnImage());
+            backBtn.setIcon(model.getFocusBackBtnImage());
         } else {
-            backBtn.setIcon(model.getDefaultBackBtnImage());
+            backBtn.setIcon(model.getBackBtnImage());
         }
         pack();
         super.paint(g);

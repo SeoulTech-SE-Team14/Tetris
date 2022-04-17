@@ -13,8 +13,8 @@ public class SettingView extends JFrame implements Observer {
     private final JButton colorBlindnessBtn = new JButton(model.getFocusColorblindnessBtnImage());
     private final JButton resetSettingBtn = new JButton(model.getFocusResetSettingBtnImage());
     private final JButton resetScoreboardBtn = new JButton(model.getFocusResetScoreboardBtnImage());
-    private final JButton settingKeyBtn = new JButton(model.getFocusSettingKeyBtnImage());
-    private final JButton backBtn = new JButton(model.getFocusDefaultBackBtnImage());
+    private final JButton settingKeyBtn = new JButton(model.getFocusSettingBtnImage());
+    private final JButton backBtn = new JButton(model.getFocusBackBtnImage());
 
     public SettingView(int x, int y){
         super("SeoulTech SE Tetris");
@@ -31,6 +31,11 @@ public class SettingView extends JFrame implements Observer {
                 super.paintComponent(g);
             }
         };
+
+        background.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         setContentPane(background);
 
         JPanel buttons = new JPanel();
@@ -72,15 +77,6 @@ public class SettingView extends JFrame implements Observer {
         buttons.add(backBtn);
 
         buttons.setOpaque(false);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        GridBagLayout gbl = new GridBagLayout();
-        background.setLayout(gbl);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridheight = 1;
-        gbc.fill = GridBagConstraints.BOTH;
         add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,7 +88,7 @@ public class SettingView extends JFrame implements Observer {
 
     @Override
     public void paint(Graphics g) {
-        int indicator = SettingBoard.getIndicator();
+        int indicator = model.getIndicator();
         if(indicator == 0){
             settingSizeBtn.setIcon(model.getFocusSettingSizeBtnImage());
         } else {
@@ -114,14 +110,14 @@ public class SettingView extends JFrame implements Observer {
             resetScoreboardBtn.setIcon(model.getResetScoreboardBtnImage());
         }
         if(indicator == 4){
-            settingKeyBtn.setIcon(model.getFocusSettingKeyBtnImage());
+            settingKeyBtn.setIcon(model.getFocusSettingBtnImage());
         } else {
-            settingKeyBtn.setIcon(model.getSettingKeyBtnImage());
+            settingKeyBtn.setIcon(model.getSettingBtnImage());
         }
         if(indicator == 5){
-            backBtn.setIcon(model.getFocusDefaultBackBtnImage());
+            backBtn.setIcon(model.getFocusBackBtnImage());
         } else {
-            backBtn.setIcon(model.getDefaultBackBtnImage());
+            backBtn.setIcon(model.getBackBtnImage());
         }
         pack();
         super.paint(g);

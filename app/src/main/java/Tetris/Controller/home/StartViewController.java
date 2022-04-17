@@ -1,21 +1,26 @@
 package Tetris.Controller.home;
 
 import Tetris.Controller.game.GameViewController;
+import Tetris.Controller.scoreboard.ScoreBoardController;
 import Tetris.Controller.setting.SettingViewController;
+
 import Tetris.Model.game.GameBoard;
 import Tetris.Model.game.GameState;
 import Tetris.Model.home.StartBoard;
+import Tetris.Model.scoreboard.ScoreBoard;
 import Tetris.Model.setting.SettingBoard;
+
 import Tetris.View.game.GameView;
 import Tetris.View.home.StartView;
+import Tetris.View.scoreboard.ScoreBoardView;
 import Tetris.View.setting.SettingView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class StartViewController implements KeyListener {
-    private StartBoard model;
-    private StartView startView;
+    private final StartBoard model;
+    private final StartView startView;
 
     public StartViewController(StartBoard model, StartView view) {
         this.model = model;
@@ -30,7 +35,7 @@ public class StartViewController implements KeyListener {
         view.addKeyListener(controller);
         field.addObserver(view);
         gameState.addObserver(view);
-        view.setVisible(true);
+        startView.dispose();
     }
     public void navigateSettingView(){
         SettingBoard field = new SettingBoard();
@@ -38,17 +43,20 @@ public class StartViewController implements KeyListener {
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
-        view.setVisible(true);
+        startView.dispose();
     }
     public void navigateScoreboardView(){
-        // default implementation ignored.
+        ScoreBoard field = new ScoreBoard();
+        ScoreBoardView view = new ScoreBoardView(startView.getLocation().x, startView.getLocation().y);
+        ScoreBoardController controller = new ScoreBoardController(field, view);
+        view.addKeyListener(controller);
+        startView.dispose();
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         // default implementation ignored.
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         int indicator = model.getIndicator();
@@ -67,17 +75,15 @@ public class StartViewController implements KeyListener {
                 switch (indicator){
                     case 0:
                         navigateGameView("normal" );
-                        startView.dispose();
                         break;
                     case 1:
                         navigateGameView("item");
-                        startView.dispose();
                         break;
                     case 2:
                         navigateSettingView();
-                        startView.dispose();
                         break;
                     case 3:
+                        navigateScoreboardView();
                         break;
                     case 4:
                         System.exit(0);
@@ -90,7 +96,6 @@ public class StartViewController implements KeyListener {
                 break;
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
         // default implementation ignored.

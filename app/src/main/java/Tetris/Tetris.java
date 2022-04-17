@@ -12,6 +12,5 @@ public class Tetris {
         StartViewController controller = new StartViewController(field, startView);
         field.addObserver(startView);
         startView.addKeyListener(controller);
-        startView.setVisible(true);
     }
 }
