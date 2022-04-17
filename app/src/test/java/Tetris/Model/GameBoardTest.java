@@ -1,8 +1,8 @@
 package Tetris.Model;
 
+import Tetris.Model.block.Block;
+import Tetris.Model.block.TBlock;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GameBoardTest {
     Block curr = new TBlock();

@@ -6,6 +6,8 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JsonReader {
     static final String SETTING_FILEPATH = "app/src/main/java/Tetris/Util/CurrentSetting.json";
@@ -43,6 +45,16 @@ public class JsonReader {
     public static int getKey(KeyEventType key){
         JSONObject obj = (JSONObject) getJson(JsonType.SETTING,"key");
         return Integer.parseInt(obj.get(key.toString().toLowerCase()).toString());
+    }
+    public static HashMap<String, Integer> getKeyMap(){
+        JSONObject obj = (JSONObject) getJson(JsonType.SETTING,"key");
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        for(Object keyObj: obj.keySet()){
+            String key = keyObj.toString();
+            int value = Integer.parseInt(obj.get(key).toString());
+            hashMap.put(key, value);
+        }
+        return hashMap;
     }
     public static String getColorMode(){
         return getJson(JsonType.SETTING, "color_mode").toString();

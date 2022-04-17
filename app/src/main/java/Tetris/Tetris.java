@@ -1,8 +1,8 @@
 package Tetris;
 
-import Tetris.Controller.*;
-import Tetris.Model.*;
-import Tetris.View.*;
+import Tetris.Controller.home.StartViewController;
+import Tetris.Model.home.StartBoard;
+import Tetris.View.home.StartView;
 
 public class Tetris {
     public static void main(String[] args) {
