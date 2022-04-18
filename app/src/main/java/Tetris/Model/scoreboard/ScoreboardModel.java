@@ -1,20 +1,22 @@
 package Tetris.Model.scoreboard;
 
 import Tetris.Util.JsonReader;
+import Tetris.Util.ScoreboardJsonKeyType;
 
 import javax.swing.*;
+import java.util.List;
 
-public class ScoreBoard{
+public class ScoreboardModel {
     private final int screenWidth = JsonReader.getWidth();
     private final int screenHeight = JsonReader.getHeight();
-
     private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/default_background_350_700.png");
     private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/default_background_400_800.png");
     private final ImageIcon backgroundImage300600 = new ImageIcon("app/src/main/resources/image/default_background_300_600.png");
 
-    private final ImageIcon titleImage = new ImageIcon("app/src/main/resources/image/scoreboard/scoreboard_title.png");
+    private final ImageIcon basicModeTitleImage = new ImageIcon("app/src/main/resources/image/scoreboard/basic_mode_scoreboard_title.png");
+    private final ImageIcon itemModeTitleImage = new ImageIcon("app/src/main/resources/image/scoreboard/item_mode_scoreboard_title.png");
     private final ImageIcon scoreboardBackground = new ImageIcon("app/src/main/resources/image/scoreboard/scoreboard_background.png");
-    private final ImageIcon focusBackBtnImage = new ImageIcon("app/src/main/resources/image/button_back_focused.png");
+    private final ImageIcon backBtnImage = new ImageIcon("app/src/main/resources/image/scoreboard/button_back.png");
 
     public int getScreenWidth() {
         return screenWidth;
@@ -22,12 +24,17 @@ public class ScoreBoard{
     public int getScreenHeight() {
         return screenHeight;
     }
-
-    public ImageIcon getFocusBackBtnImage() {
-        return focusBackBtnImage;
+    public List<ScoreModel> getScoreboard(ScoreboardJsonKeyType type) {
+        return JsonReader.getScoreBoard(type);
     }
-    public ImageIcon getTitleImage() {
-        return titleImage;
+    public ImageIcon getBackBtnImage() {
+        return backBtnImage;
+    }
+    public ImageIcon getBasicModeTitleImage() {
+        return basicModeTitleImage;
+    }
+    public ImageIcon getItemModeTitleImage() {
+        return itemModeTitleImage;
     }
     public ImageIcon getScoreboardBackground() {
         return scoreboardBackground;
@@ -43,4 +50,5 @@ public class ScoreBoard{
             return backgroundImage400800;
         }
     }
+
 }

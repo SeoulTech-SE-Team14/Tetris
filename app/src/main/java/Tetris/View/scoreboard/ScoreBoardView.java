@@ -1,28 +1,33 @@
 package Tetris.View.scoreboard;
 
-import Tetris.Model.scoreboard.ScoreBoard;
+import Tetris.Model.scoreboard.ScoreModel;
+import Tetris.Model.scoreboard.ScoreboardModel;
+import Tetris.Util.ScoreboardJsonKeyType;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class ScoreBoardView extends JFrame{
+public class ScoreboardView extends JFrame{
     private static final String BLANK_STRING = " ";
     private static final String ZERO_WIDTH_SPACE = "​";
 
-    private final ScoreBoard model;
     private final JButton backBtn;
-    private final JLabel titleImage;
-    private JPanel scoreboard;
-    private List<JLabel> scoreboardList;
+    private final JLabel basicModeTitle;
+    private final JLabel itemModeTitle;
 
-    public ScoreBoardView(int x, int y){
+    private final ScoreboardModel model = new ScoreboardModel();
+    private final int width = model.getScreenWidth();
+    private final int height = model.getScreenHeight();
+
+    private JPanel basicModeScoreboard;
+    private JPanel itemModeScoreboard;
+    private List<ScoreModel> basicModeScoreList;
+    private List<ScoreModel> itemModeScoreList;
+
+    public ScoreboardView(int x, int y){
         super("SeoulTech SE Tetris");
-
-        model = new ScoreBoard();
-        int width = model.getScreenWidth();
-        int height = model.getScreenHeight();
 
         setSize(new Dimension(width, height));
         setPreferredSize(new Dimension(width, height));
@@ -42,14 +47,16 @@ public class ScoreBoardView extends JFrame{
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.insets = new Insets(7, 0, 0, 0);
         setContentPane(background);
 
-        titleImage = new JLabel(model.getTitleImage());
-        titleImage.setPreferredSize(new Dimension(260, 60));
-        add(titleImage, gbc);
+        // 일반 모드 순위표 타이틀
+        basicModeTitle = new JLabel(model.getBasicModeTitleImage());
+        basicModeTitle.setPreferredSize(new Dimension(260, 35));
+        add(basicModeTitle, gbc);
 
-        scoreboard = new JPanel() {
+        // 일반 모드 순위표 보드
+        basicModeScoreboard = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 setOpaque(false);
@@ -57,17 +64,46 @@ public class ScoreBoardView extends JFrame{
                 super.paintComponent(g);
             }
         };
-        for(int i = 0; i < 10; i++){
-            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + "김영균" + BLANK_STRING + "임시 점수" + BLANK_STRING + "임시 모드";
-            scoreboard.add(new JLabel(str,SwingConstants.CENTER));
-        }
-        scoreboard.setLayout(new GridLayout(10, 1));
-        scoreboard.setPreferredSize(new Dimension(260, 350));
-        add(scoreboard,gbc);
+        basicModeScoreboard.setLayout(new GridLayout(10, 1));
+        basicModeScoreboard.setPreferredSize(new Dimension(260, 190));
 
-        backBtn = new JButton(model.getFocusBackBtnImage());
+        basicModeScoreList = model.getScoreboard(ScoreboardJsonKeyType.BASIC_MODE);
+        for(int i = 0; i < basicModeScoreList.size(); i++){
+            ScoreModel scoreInfo = basicModeScoreList.get(i);
+            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() + BLANK_STRING + scoreInfo.getScore() + BLANK_STRING;
+            basicModeScoreboard.add(new JLabel(str,SwingConstants.CENTER));
+        }
+        add(basicModeScoreboard,gbc);
+
+        // 아이템 모드 타이틀
+        itemModeTitle = new JLabel(model.getItemModeTitleImage());
+        itemModeTitle.setPreferredSize(new Dimension(260, 35));
+        add(itemModeTitle, gbc);
+
+        // 아이템 모드 순위표 보드
+        itemModeScoreboard = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                setOpaque(false);
+                g.drawImage(model.getScoreboardBackground().getImage(), 0, 0, null);
+                super.paintComponent(g);
+            }
+        };
+
+        itemModeScoreboard.setLayout(new GridLayout(10, 1));
+        itemModeScoreboard.setPreferredSize(new Dimension(260, 190));
+
+        itemModeScoreList = model.getScoreboard(ScoreboardJsonKeyType.ITEM_MODE);
+        for(int i = 0; i < itemModeScoreList.size(); i++){
+            ScoreModel scoreInfo = itemModeScoreList.get(i);
+            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() + BLANK_STRING + scoreInfo.getScore() + BLANK_STRING;
+            itemModeScoreboard.add(new JLabel(str,SwingConstants.CENTER));
+        }
+        add(itemModeScoreboard,gbc);
+
+        backBtn = new JButton(model.getBackBtnImage());
         backBtn.setOpaque(true);
-        backBtn.setPreferredSize(new Dimension(260, 60));
+        backBtn.setPreferredSize(new Dimension(260, 45));
         backBtn.setBorderPainted(false);
         backBtn.setContentAreaFilled(false);
         backBtn.setFocusPainted(false);
@@ -80,6 +116,7 @@ public class ScoreBoardView extends JFrame{
         requestFocus();
         pack();
     }
+
     public void setActionListener(ActionListener listener){
         backBtn.addActionListener(listener);
     }
