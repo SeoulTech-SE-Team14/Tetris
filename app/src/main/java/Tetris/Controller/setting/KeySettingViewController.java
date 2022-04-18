@@ -1,7 +1,7 @@
 package Tetris.Controller.setting;
 
-import Tetris.Model.setting.KeySettingBoard;
-import Tetris.Model.setting.SettingBoard;
+import Tetris.Model.setting.KeySettingModel;
+import Tetris.Model.setting.SettingModel;
 
 import Tetris.Util.JsonWriter;
 
@@ -12,11 +12,11 @@ import java.awt.event.*;
 import java.util.HashMap;
 
 public class KeySettingViewController implements KeyListener, ActionListener {
-    private final KeySettingBoard model;
+    private final KeySettingModel model;
     private final KeySettingView keySettingView;
     private HashMap<String, Integer> keyMap;
 
-    public KeySettingViewController(KeySettingBoard model, KeySettingView keySettingView) {
+    public KeySettingViewController(KeySettingModel model, KeySettingView keySettingView) {
         this.model = model;
         this.keySettingView = keySettingView;
         this.keySettingView.setActionListener(this);
@@ -33,7 +33,7 @@ public class KeySettingViewController implements KeyListener, ActionListener {
         JsonWriter.setKey(keyMap);
     }
     private void navigatePreviousView() {
-        SettingBoard field = new SettingBoard();
+        SettingModel field = new SettingModel();
         SettingView view = new SettingView(keySettingView.getLocation().x, keySettingView.getLocation().y);
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);

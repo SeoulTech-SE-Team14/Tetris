@@ -1,8 +1,8 @@
 package Tetris.View.game;
 
 import Tetris.Model.block.Block;
-import Tetris.Model.game.GameBoard;
-import Tetris.Model.game.ColorTheme;
+import Tetris.Model.game.GameModel;
+import Tetris.Model.game.BlockColorModel;
 
 import java.awt.*;
 import java.util.Observable;
@@ -22,23 +22,25 @@ public class GameView extends JFrame implements Observer {
     private static final String BORDER_STRING = "X";
     private static final String BLANK_STRING = " ";
     private static final String ZERO_WIDTH_SPACE = "​";
-    private final ColorTheme colorTheme = new ColorTheme();
+
+    private final BlockColorModel colorTheme = new BlockColorModel();
+    private final int width;
+    private final int height;
+    private GameModel currentGame;
 
     private JTextPane gamePane;
     private JTextPane previewPane;
     private JTextPane scorePane;
     private SimpleAttributeSet blockStyleSet;
     private SimpleAttributeSet defaultStyleSet;
-    private GameBoard currentGame;
 
-    /**
-     * Constructor
-     */
-    public GameView(int x, int y, GameBoard game) {
+    public GameView(int x, int y, GameModel game) {
         super("SeoulTech SE Tetris");
         this.currentGame = game;
 
-        setSize(new Dimension(currentGame.getScreenWidth(), currentGame.getScreenHeight()));
+        width = currentGame.getScreenWidth();
+        height = currentGame.getScreenHeight();
+        setSize(new Dimension(width, height));
         setLocation(x, y);
         this.getContentPane().setBackground(Color.BLACK);
         CompoundBorder border = BorderFactory.createCompoundBorder(

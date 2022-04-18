@@ -1,7 +1,7 @@
 package Tetris.Controller.setting;
 
-import Tetris.Model.setting.SettingBoard;
-import Tetris.Model.setting.SizeSettingBoard;
+import Tetris.Model.setting.SettingModel;
+import Tetris.Model.setting.SizeSettingModel;
 
 import Tetris.Util.JsonWriter;
 
@@ -14,16 +14,16 @@ import java.awt.event.KeyListener;
 public class SizeSettingViewController implements KeyListener {
     enum SizeType { SMALL, MEDIUM, LARGE }
 
-    private final SizeSettingBoard model;
+    private final SizeSettingModel model;
     private final SizeSettingView sizeSettingView;
 
-    public SizeSettingViewController(SizeSettingBoard model, SizeSettingView view) {
+    public SizeSettingViewController(SizeSettingModel model, SizeSettingView view) {
         this.model = model;
         this.sizeSettingView = view;
     }
 
     public void navigatePreviousView(){
-        SettingBoard field = new SettingBoard();
+        SettingModel field = new SettingModel();
         SettingView view = new SettingView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y);
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
@@ -42,7 +42,7 @@ public class SizeSettingViewController implements KeyListener {
                 JsonWriter.setSize(400, 800);
                 break;
         }
-        SizeSettingBoard field = new SizeSettingBoard();
+        SizeSettingModel field = new SizeSettingModel();
         SizeSettingView view = new SizeSettingView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y);
         SizeSettingViewController controller = new SizeSettingViewController(field, view);
         view.addKeyListener(controller);

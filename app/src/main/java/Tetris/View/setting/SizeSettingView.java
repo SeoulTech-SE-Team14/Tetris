@@ -1,6 +1,6 @@
 package Tetris.View.setting;
 
-import Tetris.Model.setting.SizeSettingBoard;
+import Tetris.Model.setting.SizeSettingModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,17 +8,20 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class SizeSettingView extends JFrame implements Observer {
-    private final SizeSettingBoard model = new SizeSettingBoard();
+    private final SizeSettingModel model = new SizeSettingModel();
     private final JButton smallSizeBtn = new JButton(model.getFocusSize300600BtnImage());
     private final JButton defaultSizeBtn = new JButton(model.getFocusSize350700BtnImage());
     private final JButton bigSizeBtn = new JButton(model.getFocusSize400800BtnImage());
     private final JButton backBtn = new JButton(model.getFocusBackBtnImage());
 
+    private final int width = model.getScreenWidth();
+    private final int height = model.getScreenHeight();
+
     public SizeSettingView(int x, int y){
         super("SeoulTech SE Tetris");
 
-        setSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
-        setPreferredSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
+        setSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(width, height));
         setLocation(x, y);
         setLayout(null);
         JPanel background = new JPanel() {

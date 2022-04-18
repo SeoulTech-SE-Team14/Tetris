@@ -1,25 +1,26 @@
 package Tetris.View.home;
 
-import Tetris.Model.home.StartBoard;
+import Tetris.Model.home.StartMenuModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
-public class StartView extends JFrame implements Observer {
-    private final StartBoard model = new StartBoard();
+public class StartMenuView extends JFrame implements Observer {
+    private final StartMenuModel model = new StartMenuModel();
     private final JButton basicModeStartBtn = new JButton(model.getFocusStartBtnImage());
     private final JButton itemModeStartBtn = new JButton(model.getDefaultStartItemBtnImage());
     private final JButton settingBtn = new JButton(model.getDefaultSettingBtnImage());
     private final JButton scoreboardBtn = new JButton(model.getDefaultScoreboardBtnImage());
     private final JButton exitBtn = new JButton(model.getDefaultExitBtnImage());
 
-    public StartView(int x, int y){
-        super("SeoulTech SE Tetris");
+    private final int width = model.getScreenWidth();
+    private final int height = model.getScreenHeight();
 
-        int width = model.getScreenWidth();
-        int height = model.getScreenHeight();
+    public StartMenuView(int x, int y){
+        super("SeoulTech SE Tetris");
 
         setSize(new Dimension(width, height));
         setPreferredSize(new Dimension(width, height));
@@ -39,7 +40,7 @@ public class StartView extends JFrame implements Observer {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.insets = new Insets(10, 0, 0, 0);
         setContentPane(background);
 
         JPanel buttons = new JPanel();
@@ -77,10 +78,8 @@ public class StartView extends JFrame implements Observer {
         buttons.add(exitBtn);
 
         // 빈 공백
-        JPanel blank = new JPanel();
-        blank.setPreferredSize(new Dimension(width, height / 4));
-        blank.setOpaque(false);
-        add(blank, gbc);
+        JLabel titleImage = new JLabel(model.getTitleImage());
+        add(titleImage, gbc);
 
         //사용가능한 키 표시
         JLabel keyDescribeLabel = new JLabel();
@@ -88,7 +87,6 @@ public class StartView extends JFrame implements Observer {
         keyDescribeLabel.setText("현재 키세팅 보여주는 부분.");
         keyDescribeLabel.setFont(new Font("Courier", Font.PLAIN, model.getFontSize()));
         keyDescribeLabel.setVisible(true);
-        keyDescribeLabel.setPreferredSize(new Dimension(260, 35));
         keyDescribeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(keyDescribeLabel, gbc);
         add(buttons, gbc);
@@ -100,7 +98,14 @@ public class StartView extends JFrame implements Observer {
         requestFocus();
         pack();
     }
+    public void setActionListener(ActionListener listener){
+        basicModeStartBtn.addActionListener(listener);
+        itemModeStartBtn.addActionListener(listener);
+        settingBtn.addActionListener(listener);
+        scoreboardBtn.addActionListener(listener);
+        exitBtn.addActionListener(listener);
 
+    }
     @Override
     public void paint(Graphics g) {
         int indicator = model.getIndicator();

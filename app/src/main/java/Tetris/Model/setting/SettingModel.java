@@ -5,7 +5,7 @@ import Tetris.Util.JsonReader;
 import javax.swing.*;
 import java.util.Observable;
 
-public class SettingBoard extends Observable {
+public class SettingModel extends Observable {
     private static int indicator = 0;
     private final int buttonCount = 6;
     private final int screenWidth = JsonReader.getWidth();
@@ -32,7 +32,7 @@ public class SettingBoard extends Observable {
     private final ImageIcon focusBackBtnImage = new ImageIcon("app/src/main/resources/image/button_back_focused.png");
 
     public void setIndicator(int indicator) {
-        SettingBoard.indicator = indicator;
+        SettingModel.indicator = indicator;
         setChanged();
         notifyObservers();
     }

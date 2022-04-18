@@ -5,15 +5,18 @@ import Tetris.Util.JsonReader;
 import javax.swing.*;
 import java.util.Observable;
 
-public class StartBoard extends Observable {
+public class StartMenuModel extends Observable {
     private static int indicator = 0;
     private final int buttonCount = 5;
     private final int screenWidth = JsonReader.getWidth();
     private final int screenHeight = JsonReader.getHeight();
 
-    private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/start_background_350_700.png");
-    private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/start_background_400_800.png");
-    private final ImageIcon backgroundImage300600 = new ImageIcon("app/src/main/resources/image/start_background_300_600.png");
+    private final ImageIcon titleImage300600 = new ImageIcon("app/src/main/resources/image/menu/title_300600.png");
+    private final ImageIcon titleImage350700 = new ImageIcon("app/src/main/resources/image/menu/title_350700.png");
+    private final ImageIcon titleImage400800 = new ImageIcon("app/src/main/resources/image/menu/title_400800.png");
+    private final ImageIcon backgroundImage300600 = new ImageIcon("app/src/main/resources/image/default_background_300_600.png");
+    private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/default_background_350_700.png");
+    private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/default_background_400_800.png");
 
     // default image
     private final ImageIcon defaultStartBtnImage = new ImageIcon("app/src/main/resources/image/menu/button_game_start.png");
@@ -31,7 +34,7 @@ public class StartBoard extends Observable {
     private final ImageIcon focusStartItemBtnImage = new ImageIcon("app/src/main/resources/image/menu/button_item_game_start_focused.png");
 
     public void setIndicator(int indicator) {
-        StartBoard.indicator = indicator;
+        StartMenuModel.indicator = indicator;
         setChanged();
         notifyObservers();
     }
@@ -59,16 +62,28 @@ public class StartBoard extends Observable {
     }
 
     public ImageIcon getBackgroundImage() {
-        if(JsonReader.getWidth() == 300 && JsonReader.getHeight() == 600) {
+        if(screenWidth == 300 && screenHeight == 600) {
             return backgroundImage300600;
         }
-        else if(JsonReader.getWidth() == 350 && JsonReader.getHeight() == 700) {
+        else if(screenWidth == 350 && screenHeight == 700) {
             return backgroundImage350700;
         }
         else{
             return backgroundImage400800;
         }
     }
+    public ImageIcon getTitleImage() {
+        if(screenWidth == 300 && screenHeight == 600) {
+            return titleImage300600;
+        }
+        else if(screenWidth == 350 && screenHeight == 700) {
+            return titleImage350700;
+        }
+        else{
+            return titleImage400800;
+        }
+    }
+
     public ImageIcon getDefaultStartBtnImage() {
         return defaultStartBtnImage;
     }

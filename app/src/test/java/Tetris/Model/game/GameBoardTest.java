@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameBoardTest {
 
-    GameState gameState;
-    GameBoard board;
+    GameStateModel gameState;
+    GameModel board;
     Block secondBlock;
 
     @BeforeEach
     void init() {
-        gameState = new GameState("normal");
-        board = new GameBoard(gameState, 20, 10);
+        gameState = new GameStateModel("normal");
+        board = new GameModel(gameState, 20, 10);
     }
 
     @Test

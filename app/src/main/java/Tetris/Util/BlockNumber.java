@@ -1,4 +1,4 @@
-package Tetris.Model.block;
+package Tetris.Util;
 
 public enum BlockNumber {
     IBLOCK(0), JBLOCK(1), LBLOCK(2), OBLOCK(3), SBLOCK(4), TBLOCK(5), ZBLOCK(6), WEIGHT_BLOCK(7), LINE_DELETE_BLOCK(8);

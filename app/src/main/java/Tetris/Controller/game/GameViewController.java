@@ -1,10 +1,11 @@
 package Tetris.Controller.game;
 
-import Tetris.Model.game.GameBoard;
-import Tetris.Model.game.GameState;
+import Tetris.Model.game.GameModel;
+import Tetris.Model.game.GameStateModel;
 import Tetris.Model.block.*;
+import Tetris.Util.BlockNumber;
 import Tetris.Util.JsonReader;
-import Tetris.Util.KeyEventType;
+import Tetris.Util.BlockEventType;
 
 import javax.swing.*;
 
@@ -19,22 +20,22 @@ import java.util.Random;
  * @author 김영균
  */
 public class GameViewController implements KeyListener, ActionListener {
-    private GameBoard currentGame;
+    private GameModel currentGame;
     private Timer timer;
 
-    private final int ROTATE_KEY = JsonReader.getKey(KeyEventType.ROTATE);
-    private final int RIGHT_KEY = JsonReader.getKey(KeyEventType.RIGHT);
-    private final int LEFT_KEY = JsonReader.getKey(KeyEventType.LEFT);
-    private final int DOWN_KEY = JsonReader.getKey(KeyEventType.DOWN);
-    private final int FALL_KEY = JsonReader.getKey(KeyEventType.FALL);
-    private final int PAUSE_KEY = JsonReader.getKey(KeyEventType.PAUSE);
+    private final int ROTATE_KEY = JsonReader.getKey(BlockEventType.ROTATE);
+    private final int RIGHT_KEY = JsonReader.getKey(BlockEventType.RIGHT);
+    private final int LEFT_KEY = JsonReader.getKey(BlockEventType.LEFT);
+    private final int DOWN_KEY = JsonReader.getKey(BlockEventType.DOWN);
+    private final int FALL_KEY = JsonReader.getKey(BlockEventType.FALL);
+    private final int PAUSE_KEY = JsonReader.getKey(BlockEventType.PAUSE);
 
     // INIT_INTERVAL: 시작 timer delay
     private static final int INIT_INTERVAL = 1000;
     private static final int NORMAL_BLOCK_COUNT = 7;
     private static final int ITEM_BLOCK_COUNT = 5;
 
-    public GameViewController(GameBoard game) {
+    public GameViewController(GameModel game) {
         this.currentGame = game;
         timer = new Timer(INIT_INTERVAL, this);
         timer.setActionCommand("timer");
@@ -75,10 +76,8 @@ public class GameViewController implements KeyListener, ActionListener {
             return new ZBlock();
         } else if(blockNumber == BlockNumber.WEIGHT_BLOCK.getBlockNumber()) {
             return new WeightBlock();
-        } else {
-            return new LineDeleteBlock();
         }
-
+        return null;
     }
     /**
      * @param fitness 블럭 별 생성 가중치 배열
@@ -168,7 +167,7 @@ public class GameViewController implements KeyListener, ActionListener {
     // 아이템 모드 블럭 생성 메서드
     public void spawnItemModeBlock(){
         Block curr = null;
-        if(GameState.getSpawnedBlockNumber() > 0 && GameState.getSpawnedBlockNumber() % 9 == 0){
+        if(GameStateModel.getSpawnedBlockNumber() > 0 && GameStateModel.getSpawnedBlockNumber() % 9 == 0){
             curr = getRandomItemBlock();
         } else {
             curr = getBasicModeRandomBlock();

@@ -1,6 +1,6 @@
 package Tetris.View.setting;
 
-import Tetris.Model.setting.KeySettingBoard;
+import Tetris.Model.setting.KeySettingModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class KeySettingView extends JFrame implements Observer {
-    private final KeySettingBoard model = new KeySettingBoard();
+    private final KeySettingModel model = new KeySettingModel();
     private final JButton rightKeyBtn = new JButton(model.getRightKeyImage());
     private final JButton leftKeyBtn = new JButton(model.getLeftKeyImage());
     private final JButton downKeyBtn = new JButton(model.getDownKeyImage());
@@ -26,11 +26,14 @@ public class KeySettingView extends JFrame implements Observer {
     public final JTextField rotateKeyField = new JTextField();
     public final JTextField pauseKeyField = new JTextField();
 
+    private final int width = model.getScreenWidth();
+    private final int height = model.getScreenHeight();
+
     public KeySettingView(int x, int y) {
         super("SeoulTech SE Tetris");
 
-        setSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
-        setPreferredSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
+        setSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(width, height));
         setLocation(x, y);
         setLayout(null);
         JPanel background = new JPanel() {

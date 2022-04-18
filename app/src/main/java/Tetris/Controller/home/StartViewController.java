@@ -1,35 +1,38 @@
 package Tetris.Controller.home;
 
 import Tetris.Controller.game.GameViewController;
-import Tetris.Controller.scoreboard.ScoreBoardController;
+import Tetris.Controller.scoreboard.ScoreboardController;
 import Tetris.Controller.setting.SettingViewController;
 
-import Tetris.Model.game.GameBoard;
-import Tetris.Model.game.GameState;
-import Tetris.Model.home.StartBoard;
-import Tetris.Model.scoreboard.ScoreBoard;
-import Tetris.Model.setting.SettingBoard;
+import Tetris.Model.game.GameModel;
+import Tetris.Model.game.GameStateModel;
+import Tetris.Model.home.StartMenuModel;
+import Tetris.Model.scoreboard.ScoreboardModel;
+import Tetris.Model.setting.SettingModel;
 
 import Tetris.View.game.GameView;
-import Tetris.View.home.StartView;
-import Tetris.View.scoreboard.ScoreBoardView;
+import Tetris.View.home.StartMenuView;
+import Tetris.View.scoreboard.ScoreboardView;
 import Tetris.View.setting.SettingView;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class StartViewController implements KeyListener {
-    private final StartBoard model;
-    private final StartView startView;
+public class StartViewController implements KeyListener, ActionListener {
+    private final StartMenuModel model;
+    private final StartMenuView startView;
 
-    public StartViewController(StartBoard model, StartView view) {
+    public StartViewController(StartMenuModel model, StartMenuView view) {
         this.model = model;
         this.startView = view;
+        this.startView.setActionListener(this);
     }
 
     public void navigateGameView(String gameMode){
-        GameState gameState = new GameState(gameMode);
-        GameBoard field = new GameBoard(gameState,20, 10);
+        GameStateModel gameState = new GameStateModel(gameMode);
+        GameModel field = new GameModel(gameState,20, 10);
         GameView view = new GameView(startView.getLocation().x, startView.getLocation().y, field);
         GameViewController controller = new GameViewController(field);
         view.addKeyListener(controller);
@@ -38,7 +41,7 @@ public class StartViewController implements KeyListener {
         startView.dispose();
     }
     public void navigateSettingView(){
-        SettingBoard field = new SettingBoard();
+        SettingModel field = new SettingModel();
         SettingView view = new SettingView(startView.getLocation().x, startView.getLocation().y);
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
@@ -46,9 +49,9 @@ public class StartViewController implements KeyListener {
         startView.dispose();
     }
     public void navigateScoreboardView(){
-        ScoreBoard field = new ScoreBoard();
-        ScoreBoardView view = new ScoreBoardView(startView.getLocation().x, startView.getLocation().y);
-        ScoreBoardController controller = new ScoreBoardController(field, view);
+        ScoreboardModel field = new ScoreboardModel();
+        ScoreboardView view = new ScoreboardView(startView.getLocation().x, startView.getLocation().y);
+        ScoreboardController controller = new ScoreboardController(field, view);
         view.addKeyListener(controller);
         startView.dispose();
     }
@@ -99,5 +102,21 @@ public class StartViewController implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // default implementation ignored.
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String target = e.getSource().toString();
+        if(target.contains("button_game_start")) {
+            navigateGameView("normal");
+        } else if(target.contains("button_item_game")) {
+            navigateGameView("item");
+        } else if(target.contains("button_setting")) {
+            navigateSettingView();
+        } else if(target.contains("button_scoreboard")) {
+            navigateScoreboardView();
+        } else if(target.contains("button_exit")) {
+            System.exit(0);
+        }
     }
 }

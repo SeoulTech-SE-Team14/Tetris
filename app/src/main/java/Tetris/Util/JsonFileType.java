@@ -1,5 +1,5 @@
 package Tetris.Util;
 
-public enum JsonType {
+public enum JsonFileType {
     SETTING, SCORE_BOARD
 }

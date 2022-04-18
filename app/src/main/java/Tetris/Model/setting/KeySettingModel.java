@@ -3,16 +3,15 @@ package Tetris.Model.setting;
 import Tetris.Util.JsonReader;
 
 import javax.swing.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-public class KeySettingBoard extends Observable {
+public class KeySettingModel extends Observable {
     private static int indicator = 0;
     private final int buttonCount = 2;
     private final int screenWidth = JsonReader.getWidth();
     private final int screenHeight = JsonReader.getHeight();
-    private final HashMap<String, Integer> keyMap = JsonReader.getKeyMap();
+    private final Map<String, Integer> keyMap = JsonReader.getKeyMap();
 
     private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/default_background_350_700.png");
     private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/default_background_400_800.png");
@@ -34,7 +33,7 @@ public class KeySettingBoard extends Observable {
     private final ImageIcon focusBackBtnImage = new ImageIcon("app/src/main/resources/image/key_setting/button_back_focused.png");
 
     public void setIndicator(int indicator) {
-        KeySettingBoard.indicator = indicator;
+        KeySettingModel.indicator = indicator;
         setChanged();
         notifyObservers();
     }

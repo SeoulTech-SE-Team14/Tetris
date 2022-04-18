@@ -1,6 +1,5 @@
 {
-  "font_size": 18,
-  "difficulty": "easy",
+  "difficulty": "normal",
   "color_mode": "normal",
   "key": {
     "rotate": 38,
@@ -10,8 +9,9 @@
     "down": 40,
     "pause": 80
   },
-  "size": {
+  "resolution": {
     "width": 350,
-    "height": 700
+    "height": 700,
+    "font_size": 18
   }
 }

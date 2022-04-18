@@ -1,7 +1,6 @@
 package Tetris.Model.game;
 
 import Tetris.Model.block.Block;
-import Tetris.Model.block.LineDeleteBlock;
 import Tetris.Model.block.WeightBlock;
 import Tetris.Util.JsonReader;
 
@@ -10,16 +9,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 
-import static Tetris.Model.game.GameState.updateDeletedLineNumber;
+import static Tetris.Model.game.GameStateModel.updateDeletedLineNumber;
 
 /**
  * 테트리스 게임 Model
  * @author 김영균
  */
-public class GameBoard extends Observable {
+public class GameModel extends Observable {
     private Block curr = null;
     private Block next = null;
-    private GameState gameState;
+    private GameStateModel gameState;
 
     private int[][] board;
     private int[][] visited;
@@ -30,7 +29,7 @@ public class GameBoard extends Observable {
     /**
      * Constructor
      */
-    public GameBoard(GameState gameState, int row, int col) {
+    public GameModel(GameStateModel gameState, int row, int col) {
         this.gameState = gameState;
         this.height = row;
         this.width = col;
@@ -71,7 +70,7 @@ public class GameBoard extends Observable {
         return next;
     }
 
-    public GameState getGameState() {
+    public GameStateModel getGameState() {
         return gameState;
     }
 
@@ -101,7 +100,7 @@ public class GameBoard extends Observable {
         this.next = cur;
         if(roomExist(cur.getX(), cur.getY())) {
             gameState.setSpawnTime();
-            GameState.updateSpawnedBlockNumber();
+            GameStateModel.updateSpawnedBlockNumber();
             notice();
             return true;
         } else {
@@ -237,7 +236,6 @@ public class GameBoard extends Observable {
             else {
                 visitBlock();
                 eraseLine();
-                if(curr instanceof LineDeleteBlock) { eraseLine(curr.getY() + ((LineDeleteBlock) curr).getItemPositionY()); }
                 gameState.updateScore(1 + gameState.getBonusScore());
                 curr = null;
             }
@@ -283,9 +281,6 @@ public class GameBoard extends Observable {
         while(roomExist(curr.getX(), curr.getY() + 1)) curr.setY(curr.getY() + 1);
         visitBlock();
         eraseLine();
-        if(curr instanceof LineDeleteBlock) {
-            eraseLine(curr.getY() + ((LineDeleteBlock) curr).getItemPositionY());
-        }
         gameState.updateScore(1 + gameState.getBonusScore());
         curr = null;
         notice();

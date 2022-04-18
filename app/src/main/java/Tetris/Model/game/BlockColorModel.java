@@ -3,12 +3,10 @@ package Tetris.Model.game;
 import java.awt.*;
 import java.util.Objects;
 
-public class ColorTheme {
-    public ColorTheme() { /*  */ }
+public class BlockColorModel {
+    public BlockColorModel() { /*  */ }
 
-    /**
-     * 기본모드 컬러 테마
-     */
+    // 기본 컬러 모드
     private final Color[] basicColors = {
             Color.CYAN,
             Color.BLUE,
@@ -19,7 +17,7 @@ public class ColorTheme {
             Color.RED,
             Color.WHITE
     };
-
+    // 색맹 컬러 모드
     private final Color[] blindColors = {
             Color.PINK,
             Color.MAGENTA,
@@ -27,8 +25,10 @@ public class ColorTheme {
             Color.BLACK,
             Color.BLUE,
             Color.GREEN,
-            Color.RED
+            Color.RED,
+            Color.WHITE
     };
+
     public Color getColor(int blockNumber) {
         return basicColors[blockNumber];
     }

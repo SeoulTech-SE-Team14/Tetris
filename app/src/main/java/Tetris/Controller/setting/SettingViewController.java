@@ -2,33 +2,37 @@ package Tetris.Controller.setting;
 
 import Tetris.Controller.home.StartViewController;
 
-import Tetris.Model.setting.KeySettingBoard;
-import Tetris.Model.setting.SettingBoard;
-import Tetris.Model.setting.SizeSettingBoard;
-import Tetris.Model.home.StartBoard;
+import Tetris.Model.setting.KeySettingModel;
+import Tetris.Model.setting.SettingModel;
+import Tetris.Model.setting.SizeSettingModel;
+import Tetris.Model.home.StartMenuModel;
 
 import Tetris.Util.JsonWriter;
 
+import Tetris.Util.ScoreboardJsonKeyType;
 import Tetris.View.setting.KeySettingView;
 import Tetris.View.setting.SettingView;
 import Tetris.View.setting.SizeSettingView;
-import Tetris.View.home.StartView;
+import Tetris.View.home.StartMenuView;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class SettingViewController implements KeyListener {
-    private final SettingBoard model;
+public class SettingViewController implements KeyListener, ActionListener {
+    private final SettingModel model;
     private final SettingView settingView;
 
-    public SettingViewController(SettingBoard model, SettingView view) {
+    public SettingViewController(SettingModel model, SettingView view) {
         this.model = model;
         this.settingView = view;
+        this.settingView.setActionListener(this);
     }
 
     public void resetSetting(){
-        JsonWriter.setDefaultSetting();
-        SettingBoard field = new SettingBoard();
+        JsonWriter.setResetSetting();
+        SettingModel field = new SettingModel();
         SettingView view = new SettingView(settingView.getLocation().x, settingView.getLocation().y);
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
@@ -36,10 +40,11 @@ public class SettingViewController implements KeyListener {
         settingView.dispose();
     }
     public void resetScoreBoard(){
-        // reset code
+        JsonWriter.setResetScoreBoard(ScoreboardJsonKeyType.BASIC_MODE);
+        JsonWriter.setResetScoreBoard(ScoreboardJsonKeyType.ITEM_MODE);
     }
     public void navigateSizeSettingView(){
-        SizeSettingBoard field = new SizeSettingBoard();
+        SizeSettingModel field = new SizeSettingModel();
         SizeSettingView view = new SizeSettingView(settingView.getLocation().x, settingView.getLocation().y);
         SizeSettingViewController controller = new SizeSettingViewController(field, view);
         view.addKeyListener(controller);
@@ -50,7 +55,7 @@ public class SettingViewController implements KeyListener {
         // navigation code
     }
     public void navigateKeySettingView(){
-        KeySettingBoard field = new KeySettingBoard();
+        KeySettingModel field = new KeySettingModel();
         KeySettingView view = new KeySettingView(settingView.getLocation().x, settingView.getLocation().y);
         KeySettingViewController controller = new KeySettingViewController(field, view);
         view.addKeyListener(controller);
@@ -58,8 +63,8 @@ public class SettingViewController implements KeyListener {
         settingView.dispose();
     }
     public void navigatePreviousView(){
-        StartBoard field = new StartBoard();
-        StartView view = new StartView(settingView.getLocation().x, settingView.getLocation().y);
+        StartMenuModel field = new StartMenuModel();
+        StartMenuView view = new StartMenuView(settingView.getLocation().x, settingView.getLocation().y);
         StartViewController controller = new StartViewController(field, view);
         field.addObserver(view);
         view.addKeyListener(controller);
@@ -115,5 +120,23 @@ public class SettingViewController implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // default implementation ignored
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String target = e.getSource().toString();
+        if(target.contains("button_setting_size")) {
+            navigateSizeSettingView();
+        } else if(target.contains("button_colorblindness")) {
+            navigationColorSettingView();
+        } else if(target.contains("button_reset_setting")) {
+            resetSetting();
+        } else if(target.contains("button_reset_scoreboard")) {
+            resetScoreBoard();
+        } else if(target.contains("button_setting_key")) {
+            navigateKeySettingView();
+        } else if(target.contains("button_back")) {
+            navigatePreviousView();
+        }
     }
 }

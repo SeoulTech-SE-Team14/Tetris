@@ -1,14 +1,15 @@
 package Tetris.View.setting;
 
-import Tetris.Model.setting.SettingBoard;
+import Tetris.Model.setting.SettingModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
 public class SettingView extends JFrame implements Observer {
-    private final SettingBoard model = new SettingBoard();
+    private final SettingModel model = new SettingModel();
     private final JButton settingSizeBtn = new JButton(model.getFocusSettingSizeBtnImage());
     private final JButton colorBlindnessBtn = new JButton(model.getFocusColorblindnessBtnImage());
     private final JButton resetSettingBtn = new JButton(model.getFocusResetSettingBtnImage());
@@ -16,11 +17,14 @@ public class SettingView extends JFrame implements Observer {
     private final JButton settingKeyBtn = new JButton(model.getFocusSettingBtnImage());
     private final JButton backBtn = new JButton(model.getFocusBackBtnImage());
 
+    private final int width = model.getScreenWidth();
+    private final int height = model.getScreenHeight();
+
     public SettingView(int x, int y){
         super("SeoulTech SE Tetris");
 
-        setSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
-        setPreferredSize(new Dimension(model.getScreenWidth(), model.getScreenHeight()));
+        setSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(width, height));
         setLocation(x, y);
         setLayout(null);
         JPanel background = new JPanel() {
@@ -85,7 +89,14 @@ public class SettingView extends JFrame implements Observer {
         pack();
         setVisible(true);
     }
-
+    public void setActionListener(ActionListener listener){
+        settingSizeBtn.addActionListener(listener);
+        colorBlindnessBtn.addActionListener(listener);
+        resetSettingBtn.addActionListener(listener);
+        resetScoreboardBtn.addActionListener(listener);
+        settingKeyBtn.addActionListener(listener);
+        backBtn.addActionListener(listener);
+    }
     @Override
     public void paint(Graphics g) {
         int indicator = model.getIndicator();

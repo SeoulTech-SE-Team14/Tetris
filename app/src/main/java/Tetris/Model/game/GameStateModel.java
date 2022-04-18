@@ -8,7 +8,7 @@ import java.util.Observable;
  * 현재 진행 중인 게임 상태 관리 클래스
  * @author 김영균
  */
-public class GameState extends Observable {
+public class GameStateModel extends Observable {
     private static final int MAX_DELAY = 1000;
     private static final int MIN_DELAY = 200;
 
@@ -36,7 +36,7 @@ public class GameState extends Observable {
     private boolean isPaused = false;
     private boolean isEnded = false;
 
-    public GameState(String gameMode) {
+    public GameStateModel(String gameMode) {
         this.colorMode = JsonReader.getColorMode();
         this.gameMode = gameMode;
         this.difficulty = JsonReader.getDifficulty();
