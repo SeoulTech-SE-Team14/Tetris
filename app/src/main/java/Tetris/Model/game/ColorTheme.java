@@ -21,13 +21,15 @@ public class ColorTheme {
     };
 
     private final Color[] blindColors = {
-            Color.PINK,
-            Color.MAGENTA,
-            Color.YELLOW,
-            Color.BLACK,
+            Color.CYAN,
             Color.BLUE,
-            Color.GREEN,
-            Color.RED
+            Color.ORANGE,
+            Color.YELLOW,
+            getColor(0x009E73),
+            //연두 대신 Bluish Green(청록), 적녹/청황 둘다에서 바꿔줄 색
+            Color.MAGENTA,   
+            getColor(0xD55E00)
+            //빨강 대신 Vermillion(다홍), 적녹에서만 바꿔줄 색
     };
     public Color getColor(int blockNumber) {
         return basicColors[blockNumber];
