@@ -1,0 +1,17 @@
+{
+  "difficulty": "normal",
+  "color_mode": "normal",
+  "key": {
+    "rotate": 38,
+    "fall": 83,
+    "left": 37,
+    "right": 39,
+    "down": 40,
+    "pause": 80
+  },
+  "resolution": {
+    "width": 350,
+    "height": 700,
+    "font_size": 18
+  }
+}
