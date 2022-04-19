@@ -3,23 +3,25 @@ package Tetris.Controller.setting;
 import Tetris.Model.setting.SettingModel;
 import Tetris.Model.setting.ColorBlindnessModel;
 
+import Tetris.Util.ColorBlindnessType;
 import Tetris.Util.JsonWriter;
 
 import Tetris.View.setting.SettingView;
 import Tetris.View.setting.ColorBlindnessView;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class ColorBlindnessViewController implements KeyListener {
-    enum ColorBlindnessType { NORMAL, PROTAN, DEUTAN, TRITAN } // 정상, 적색맹, 녹색맹, 청색맹
-
+public class ColorBlindnessViewController implements KeyListener, ActionListener {
     private final ColorBlindnessModel model;
     private final ColorBlindnessView colorBlindnessView;
 
     public ColorBlindnessViewController(ColorBlindnessModel model, ColorBlindnessView view) {
         this.model = model;
         this.colorBlindnessView = view;
+        this.colorBlindnessView.setActionListener(this);
     }
     
     public void navigatePreviousView(){
@@ -32,30 +34,15 @@ public class ColorBlindnessViewController implements KeyListener {
     }
 
     // 각 버튼 클릭되면 블록 색상바꾸기
-    public void changeColor(){
-        
+    public void changeColor(ColorBlindnessType type){
+        JsonWriter.setColorMode(type.getKey());
+        ColorBlindnessModel field = new ColorBlindnessModel();
+        ColorBlindnessView view = new ColorBlindnessView(colorBlindnessView.getLocation().x, colorBlindnessView.getLocation().y);
+        ColorBlindnessViewController controller = new ColorBlindnessViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        colorBlindnessView.dispose();
     }
-
-    // 각 모드에 따라 미리보기이미지 바꾸기
-    public void changePreview(ColorBlindnessType type){
-        switch(type){
-            case NORMAL:
-                //
-                break;
-            case PROTAN: 
-                //
-                break;
-            case DEUTAN:
-                //
-                break;
-            case TRITAN:
-                //
-                break;
-        }
-
-    }
-    
-
     public void keyTyped(KeyEvent e) {
         // default implementation ignored
     }
@@ -76,16 +63,16 @@ public class ColorBlindnessViewController implements KeyListener {
             case KeyEvent.VK_ENTER:
                 switch (indicator){
                     case 0:
-                        changePreview(ColorBlindnessType.NORMAL);
+                        changeColor(ColorBlindnessType.NORMAL);
                         break;
                     case 1:
-                        changePreview(ColorBlindnessType.PROTAN);
+                        changeColor(ColorBlindnessType.PROTAN);
                         break;
                     case 2:
-                        changePreview(ColorBlindnessType.DEUTAN);
+                        changeColor(ColorBlindnessType.DEUTAN);
                         break;
                     case 3:
-                        changePreview(ColorBlindnessType.TRITAN);
+                        changeColor(ColorBlindnessType.TRITAN);
                         break;   
                     case 4:
                         navigatePreviousView();
@@ -101,5 +88,20 @@ public class ColorBlindnessViewController implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // default implementation ignored
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String target = e.getSource().toString();
+        if(target.contains("button_colorblindness_default")) {
+            changeColor(ColorBlindnessType.NORMAL);
+        } else if(target.contains("button_colorblindness_blue")) {
+            changeColor(ColorBlindnessType.TRITAN);
+        } else if(target.contains("button_colorblindness_green")) {
+            changeColor(ColorBlindnessType.DEUTAN);
+        } else if(target.contains("button_colorblindness_red")) {
+            changeColor(ColorBlindnessType.PROTAN);
+        } else if(target.contains("button_back")) {
+            navigatePreviousView();
+        }
     }
 }

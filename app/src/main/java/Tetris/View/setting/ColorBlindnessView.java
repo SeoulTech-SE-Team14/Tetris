@@ -1,9 +1,11 @@
 package Tetris.View.setting;
 
 import Tetris.Model.setting.ColorBlindnessModel;
+import Tetris.Util.ColorBlindnessType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,10 +16,8 @@ public class ColorBlindnessView extends JFrame implements Observer{
     private final JButton colorGreenBtn = new JButton(model.getFocusColorGreenBtnImage());
     private final JButton colorBlueBtn = new JButton(model.getFocusColorBlueBtnImage());
     private final JButton backBtn = new JButton(model.getFocusDefaultBackBtnImage());
-    private JLabel previewDefault;
-    private JLabel previewRed;
-    private JLabel previewGreen;
-    private JLabel previewBlue;
+
+    private JLabel blockPreviewImage = new JLabel(model.getPreviewDefaultImage());
 
     public ColorBlindnessView(int x, int y){
         super("SeoulTech SE Tetris");
@@ -34,10 +34,15 @@ public class ColorBlindnessView extends JFrame implements Observer{
                 super.paintComponent(g);
             }
         };
+        background.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 0, 0);
         setContentPane(background);
 
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(6, 1));
+        buttons.setLayout(new GridLayout(4, 1));
 
         colorDefaultBtn.setBorderPainted(false);
         colorDefaultBtn.setContentAreaFilled(false);
@@ -62,28 +67,17 @@ public class ColorBlindnessView extends JFrame implements Observer{
         colorBlueBtn.setFocusPainted(false);
         colorBlueBtn.setOpaque(false);
         buttons.add(colorBlueBtn);
-        
+
+        buttons.setOpaque(false);
+        add(buttons, gbc);
+
         //블록색상 미리보기
-        previewDefault = new JLabel(model.getPreviewDefaultImage());
-        previewDefault.setPreferredSize(new Dimension(260, 120));
-        buttons.add(previewDefault);
+        add(blockPreviewImage,gbc);
 
         backBtn.setBorderPainted(false);
         backBtn.setContentAreaFilled(false);
         backBtn.setFocusPainted(false);
-        buttons.add(backBtn);
-
-        buttons.setOpaque(false);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        GridBagLayout gbl = new GridBagLayout();
-        background.setLayout(gbl);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridheight = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(buttons, gbc);
+        add(backBtn, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setFocusable(true);
@@ -91,7 +85,13 @@ public class ColorBlindnessView extends JFrame implements Observer{
         pack();
         setVisible(true);
     }
-
+    public void setActionListener(ActionListener listener){
+        colorDefaultBtn.addActionListener(listener);
+        colorBlueBtn.addActionListener(listener);
+        colorGreenBtn.addActionListener(listener);
+        colorRedBtn.addActionListener(listener);
+        backBtn.addActionListener(listener);
+    }
     @Override
     public void paint(Graphics g) {
         int indicator = model.getIndicator();
@@ -119,6 +119,17 @@ public class ColorBlindnessView extends JFrame implements Observer{
             backBtn.setIcon(model.getFocusDefaultBackBtnImage());
         } else {
             backBtn.setIcon(model.getDefaultBackBtnImage());
+        }
+
+        String colorMode = model.getColorMode();
+        if(colorMode.equals(ColorBlindnessType.NORMAL.getKey())) {
+            blockPreviewImage.setIcon(model.getPreviewDefaultImage());
+        } else if(colorMode.equals(ColorBlindnessType.PROTAN.getKey())){
+            blockPreviewImage.setIcon(model.getPreviewRedImage());
+        } else if(colorMode.equals(ColorBlindnessType.DEUTAN.getKey())) {
+            blockPreviewImage.setIcon(model.getPreviewGreenImage());
+        } else if(colorMode.equals(ColorBlindnessType.TRITAN.getKey())) {
+            blockPreviewImage.setIcon(model.getPreviewBlueImage());
         }
         pack();
         super.paint(g);

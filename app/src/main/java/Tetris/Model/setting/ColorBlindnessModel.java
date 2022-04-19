@@ -12,6 +12,7 @@ public class ColorBlindnessModel extends Observable {
     private final int buttonHeight = 60;
     private final int screenWidth = JsonReader.getWidth();
     private final int screenHeight = JsonReader.getHeight();
+    private String colorMode = JsonReader.getColorMode();
 
     private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/default_background_350_700.png");
     private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/default_background_400_800.png");
@@ -43,6 +44,12 @@ public class ColorBlindnessModel extends Observable {
         notifyObservers();
     }
 
+    public void setColorMode(String colorMode) {
+        this.colorMode = colorMode;
+        setChanged();
+        notifyObservers();
+    }
+
     public int getScreenWidth() {
         return screenWidth;
     }
@@ -56,6 +63,9 @@ public class ColorBlindnessModel extends Observable {
         return buttonHeight;
     }
     public int getIndicator() { return indicator; }
+    public String getColorMode() {
+        return colorMode;
+    }
 
     public ImageIcon getBackgroundImage() {
         int width = JsonReader.getWidth();

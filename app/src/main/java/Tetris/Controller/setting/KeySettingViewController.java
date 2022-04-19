@@ -88,5 +88,4 @@ public class KeySettingViewController implements KeyListener, ActionListener {
             changeKey();
         }
     }
-
 }
