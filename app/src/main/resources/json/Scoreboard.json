@@ -1,1 +1,76 @@
-{"item_mode":[],"basic_mode":[]}
+{
+  "item_mode":[
+    {
+      "score": 123,
+      "name": "김영균",
+      "difficulty": "normal"
+    },
+    {
+      "score": 123,
+      "name": "김영균",
+      "difficulty": "normal"
+    },
+    {
+      "score": 123,
+      "name": "김영균",
+      "difficulty": "normal"
+    },
+    {
+      "score": 123,
+      "name": "김영균",
+      "difficulty": "normal"
+    }
+  ],
+  "basic_mode": [
+    {
+      "score": 1232,
+      "name": "홍길동",
+      "difficulty": "normal"
+    },
+    {
+      "score": 12,
+      "name": "이길동",
+      "difficulty": "hard"
+    },
+    {
+      "score": 1232,
+      "name": "홍길동",
+      "difficulty": "normal"
+    },
+    {
+      "score": 12,
+      "name": "이길동",
+      "difficulty": "hard"
+    },
+    {
+      "score": 1232,
+      "name": "홍길동",
+      "difficulty": "normal"
+    },
+    {
+      "score": 12,
+      "name": "이길동",
+      "difficulty": "hard"
+    },
+    {
+      "score": 1232,
+      "name": "홍길동",
+      "difficulty": "normal"
+    },
+    {
+      "score": 12,
+      "name": "이길동",
+      "difficulty": "hard"
+    },
+    {
+      "score": 1232,
+      "name": "홍길동",
+      "difficulty": "normal"
+    },
+    {
+      "score": 12,
+      "name": "이길동",
+      "difficulty": "hard"
+    }
+  ]
+}

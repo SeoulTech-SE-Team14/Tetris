@@ -1,6 +1,7 @@
 package Tetris.Model.game;
 
 import Tetris.Model.block.*;
+import Tetris.Util.GameType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ class GameBoardTest {
 
     @BeforeEach
     void init() {
-        gameState = new GameStateModel("normal");
+        gameState = new GameStateModel(GameType.BASIC_MODE, GameType.NORMAL);
         board = new GameModel(gameState, 20, 10);
     }
 

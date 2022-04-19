@@ -140,7 +140,6 @@ public class KeySettingView extends JFrame implements Observer {
         setFocusable(true);
         setVisible(true);
         requestFocus();
-        pack();
     }
     public void setActionListener(ActionListener listener){
         storeBtn.addActionListener(listener);

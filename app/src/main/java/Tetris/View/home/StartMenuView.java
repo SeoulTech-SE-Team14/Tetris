@@ -77,18 +77,8 @@ public class StartMenuView extends JFrame implements Observer {
         exitBtn.setOpaque(false);
         buttons.add(exitBtn);
 
-        // 빈 공백
         JLabel titleImage = new JLabel(model.getTitleImage());
         add(titleImage, gbc);
-
-        //사용가능한 키 표시
-        JLabel keyDescribeLabel = new JLabel();
-        keyDescribeLabel.setForeground(Color.WHITE);
-        keyDescribeLabel.setText("현재 키세팅 보여주는 부분.");
-        keyDescribeLabel.setFont(new Font("Courier", Font.PLAIN, model.getFontSize()));
-        keyDescribeLabel.setVisible(true);
-        keyDescribeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        add(keyDescribeLabel, gbc);
         add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,7 +86,6 @@ public class StartMenuView extends JFrame implements Observer {
         setFocusable(true);
         setVisible(true);
         requestFocus();
-        pack();
     }
     public void setActionListener(ActionListener listener){
         basicModeStartBtn.addActionListener(listener);

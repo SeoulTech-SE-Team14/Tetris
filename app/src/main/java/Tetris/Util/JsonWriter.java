@@ -106,7 +106,7 @@ public class JsonWriter {
         }
     }
     // 스코어보드 초기화
-    public static void setResetScoreBoard(ScoreboardJsonKeyType type) {
+    public static void setResetScoreBoard(GameType type) {
         try (
                 FileReader fileReader = new FileReader(DEFAULT_SCOREBOARD_FILEPATH);
                 FileWriter fileWriter = new FileWriter(SCOREBOARD_FILEPATH);
@@ -138,14 +138,11 @@ public class JsonWriter {
     public static void setKey(Map<String, Integer> keys){
         replaceJson(JsonFileType.SETTING, SettingJsonKeyType.KEY.getKey(), keys);
     }
-    public static void setDifficulty(String difficulty){
-        replaceJson(JsonFileType.SETTING, SettingJsonKeyType.DIFFICULTY.getKey(), difficulty);
-    }
     /**
      * 스코어보드 입력하는 메서드
      * @param scoreList 정렬된 스코어리스트
      */
-    public static void setScoreBoard(List<Map<String, String>> scoreList, ScoreboardJsonKeyType type) {
+    public static void setScoreBoard(List<Map<String, String>> scoreList, GameType type) {
         replaceJson(JsonFileType.SCORE_BOARD , type.getKey(), scoreList);
     }
 }

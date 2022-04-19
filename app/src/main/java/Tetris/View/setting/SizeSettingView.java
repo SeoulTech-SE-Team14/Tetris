@@ -24,6 +24,7 @@ public class SizeSettingView extends JFrame implements Observer {
         setPreferredSize(new Dimension(width, height));
         setLocation(x, y);
         setLayout(null);
+
         JPanel background = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -69,10 +70,10 @@ public class SizeSettingView extends JFrame implements Observer {
         add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setFocusable(true);
         setVisible(true);
         requestFocus();
-        pack();
     }
 
     @Override

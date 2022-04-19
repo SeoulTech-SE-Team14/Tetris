@@ -2,7 +2,7 @@ package Tetris.View.scoreboard;
 
 import Tetris.Model.scoreboard.ScoreModel;
 import Tetris.Model.scoreboard.ScoreboardModel;
-import Tetris.Util.ScoreboardJsonKeyType;
+import Tetris.Util.GameType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,12 +66,12 @@ public class ScoreboardView extends JFrame{
         };
         basicModeScoreboard.setLayout(new GridLayout(10, 1));
         basicModeScoreboard.setPreferredSize(new Dimension(260, 190));
-
-        basicModeScoreList = model.getScoreboard(ScoreboardJsonKeyType.BASIC_MODE);
+        basicModeScoreList = model.getScoreboard(GameType.BASIC_MODE);
         for(int i = 0; i < basicModeScoreList.size(); i++){
             ScoreModel scoreInfo = basicModeScoreList.get(i);
-            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() + BLANK_STRING + scoreInfo.getScore() + BLANK_STRING;
-            basicModeScoreboard.add(new JLabel(str,SwingConstants.CENTER));
+            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() +
+                    BLANK_STRING + scoreInfo.getScore() + BLANK_STRING + scoreInfo.getDifficulty() + "모드";
+            basicModeScoreboard.add(new JLabel(str, SwingConstants.CENTER));
         }
         add(basicModeScoreboard,gbc);
 
@@ -93,10 +93,10 @@ public class ScoreboardView extends JFrame{
         itemModeScoreboard.setLayout(new GridLayout(10, 1));
         itemModeScoreboard.setPreferredSize(new Dimension(260, 190));
 
-        itemModeScoreList = model.getScoreboard(ScoreboardJsonKeyType.ITEM_MODE);
+        itemModeScoreList = model.getScoreboard(GameType.ITEM_MODE);
         for(int i = 0; i < itemModeScoreList.size(); i++){
             ScoreModel scoreInfo = itemModeScoreList.get(i);
-            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() + BLANK_STRING + scoreInfo.getScore() + BLANK_STRING;
+            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() + BLANK_STRING + scoreInfo.getScore();
             itemModeScoreboard.add(new JLabel(str,SwingConstants.CENTER));
         }
         add(itemModeScoreboard,gbc);
@@ -114,7 +114,6 @@ public class ScoreboardView extends JFrame{
         setFocusable(true);
         setVisible(true);
         requestFocus();
-        pack();
     }
 
     public void setActionListener(ActionListener listener){

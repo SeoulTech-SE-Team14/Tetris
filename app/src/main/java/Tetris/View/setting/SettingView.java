@@ -84,10 +84,10 @@ public class SettingView extends JFrame implements Observer {
         add(buttons, gbc);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        requestFocus();
+        setResizable(false);
         setFocusable(true);
-        pack();
         setVisible(true);
+        requestFocus();
     }
     public void setActionListener(ActionListener listener){
         settingSizeBtn.addActionListener(listener);

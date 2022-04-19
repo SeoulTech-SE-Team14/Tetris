@@ -1,19 +1,19 @@
 package Tetris.Controller.game;
 
-import Tetris.Model.game.GameModel;
-import Tetris.Model.game.GameStateModel;
+import Tetris.Model.game.*;
 import Tetris.Model.block.*;
-import Tetris.Util.BlockNumber;
-import Tetris.Util.JsonReader;
-import Tetris.Util.BlockEventType;
+import Tetris.Model.scoreboard.ScoreModel;
+import Tetris.Util.*;
+import Tetris.View.game.EndDialog;
+import Tetris.View.game.GameView;
+import Tetris.View.game.InputDialog;
+import Tetris.View.game.PauseDialog;
 
 import javax.swing.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.util.Random;
+import java.util.List;
 
 /**
  * 테트리스 게임 View 조작 컨트롤러
@@ -21,7 +21,9 @@ import java.util.Random;
  */
 public class GameViewController implements KeyListener, ActionListener {
     private GameModel currentGame;
+    private GameView gameView;
     private Timer timer;
+    private List<ScoreModel> scoreList;
 
     private final int ROTATE_KEY = JsonReader.getKey(BlockEventType.ROTATE);
     private final int RIGHT_KEY = JsonReader.getKey(BlockEventType.RIGHT);
@@ -35,13 +37,69 @@ public class GameViewController implements KeyListener, ActionListener {
     private static final int NORMAL_BLOCK_COUNT = 7;
     private static final int ITEM_BLOCK_COUNT = 5;
 
-    public GameViewController(GameModel game) {
+    public GameViewController(GameModel game, GameView view) {
         this.currentGame = game;
+        this.gameView = view;
+        scoreList = JsonReader.getScoreBoard(currentGame.getGameState().getGameMode());
         timer = new Timer(INIT_INTERVAL, this);
         timer.setActionCommand("timer");
         timer.start();
-    }
 
+    }
+    private void showPauseDialog() {
+        PauseDialogModel pauseDialogModel = new PauseDialogModel();
+        int x = gameView.getLocation().x + (currentGame.getScreenWidth() -  pauseDialogModel.getWidth()) / 2;
+        int y = gameView.getLocation().y + (currentGame.getScreenHeight() - pauseDialogModel.getHeight()) / 2;
+        PauseDialog dialog = new PauseDialog(gameView, x, y);
+        GameType type = currentGame.getGameState().getGameMode();
+        GameType difficulty = currentGame.getGameState().getDifficulty();
+        PauseDialogController pauseDialogController = new PauseDialogController(pauseDialogModel, dialog, gameView, type, difficulty);
+        dialog.addKeyListener(pauseDialogController);
+        pauseDialogModel.addObserver(dialog);
+        dialog.setVisible(true);
+        // 나중에 수정해야함.
+        dialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosing(e);
+                dialog.dispose();
+                reversePause();
+            }
+        });
+    }
+    private void showEndDialog() {
+        EndDialogModel endDialogModel = new EndDialogModel();
+        int x = gameView.getLocation().x + (currentGame.getScreenWidth() -  endDialogModel.getWidth()) / 2;
+        int y = gameView.getLocation().y + (currentGame.getScreenHeight() - endDialogModel.getHeight()) / 2;
+        EndDialog dialog = new EndDialog(gameView, currentGame, x, y);
+        EndDialogController endDialogController = new EndDialogController(endDialogModel, dialog, gameView);
+        dialog.addKeyListener(endDialogController);
+        endDialogModel.addObserver(dialog);
+        dialog.setVisible(true);
+    }
+    private void showInputDialog() {
+        int x = gameView.getLocation().x + (currentGame.getScreenWidth() -  200) / 2;
+        int y = gameView.getLocation().y + (currentGame.getScreenHeight() - 100) / 2;
+        InputDialog inputDialog = new InputDialog(gameView, currentGame, x, y);
+        inputDialog.setVisible(true);
+    }
+    private boolean isPossibleUpdateScore() {
+        int currentScore = currentGame.getGameState().getScore();
+        return scoreList.get(scoreList.size() - 1).getScore() < currentScore;
+    }
+    private void updateScore() {
+        Player player = currentGame.getGameState().getPlayer();
+        switch (currentGame.getGameState().getGameMode()) {
+            case BASIC_MODE:
+
+                break;
+            case ITEM_MODE:
+
+                break;
+            default:
+                break;
+        }
+    }
     // 중지 <-> 게임 중 바꾸는 메서드
     public void reversePause() {
         if(currentGame.getGameState().isPaused()){
@@ -51,7 +109,7 @@ public class GameViewController implements KeyListener, ActionListener {
         else {
             timer.stop();
             currentGame.getGameState().setPaused(true);
-            // 종료, 재개 모달창 보여줘야함.
+            showPauseDialog();
         }
     }
     /**
@@ -132,7 +190,6 @@ public class GameViewController implements KeyListener, ActionListener {
         return getBlockByNumber(number);
     }
 
-
     // 아이템 모드 - 랜덤 블럭 번호 얻기.
     public Block getRandomItemBlock() {
         Random rnd = new Random(System.nanoTime());
@@ -145,23 +202,29 @@ public class GameViewController implements KeyListener, ActionListener {
     public void spawnBasicModeBlock(){
         Block curr = null;
         switch (currentGame.getGameState().getDifficulty()) {
-            case "easy":
+            case EASY:
                 curr = getEasyModeRandomBlock();
                 break;
-            case "hard":
+            case NORMAL:
+                curr = getBasicModeRandomBlock();
+                break;
+            case HARD:
                 curr = getHardModeRandomBlock();
                 break;
             default:
-                curr = getBasicModeRandomBlock();
                 break;
         }
 
-        boolean gameContinues = currentGame.spawn(curr);
-
+        //boolean gameContinues = currentGame.spawn(curr);
+        boolean gameContinues = false;
         if(!gameContinues) {
             currentGame.getGameState().setEnded(true);
             timer.stop();
-            // 게임 종료 모달 띄우기.
+            if(isPossibleUpdateScore()){
+                showEndDialog();
+                updateScore();
+            }
+            showInputDialog();
         }
     }
     // 아이템 모드 블럭 생성 메서드
@@ -185,10 +248,15 @@ public class GameViewController implements KeyListener, ActionListener {
         if ("timer".equals(e.getActionCommand())) {
             if (currentGame.getCurr() == null) {
                 // 게임 모드에 따라 분기
-                if (currentGame.getGameState().getGameMode().equals("item")) {
-                    spawnItemModeBlock();
-                } else {
-                    spawnBasicModeBlock();
+                switch(currentGame.getGameState().getGameMode()){
+                    case BASIC_MODE:
+                        spawnBasicModeBlock();
+                        break;
+                    case ITEM_MODE:
+                        spawnItemModeBlock();
+                        break;
+                    default:
+                        break;
                 }
                 timer.setDelay(currentGame.getGameState().updateDelay());
             } else {

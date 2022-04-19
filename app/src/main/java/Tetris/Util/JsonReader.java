@@ -74,14 +74,15 @@ public class JsonReader {
     public static String getDifficulty(){
         return getJson(JsonFileType.SETTING, SettingJsonKeyType.DIFFICULTY.getKey()).toString();
     }
-    public static List<ScoreModel> getScoreBoard(ScoreboardJsonKeyType type) {
+    public static List<ScoreModel> getScoreBoard(GameType type) {
         JSONArray jsonArray = (JSONArray) getJson(JsonFileType.SCORE_BOARD, type.getKey());
         List<ScoreModel> scoreboard = new ArrayList<>();
         for(Object obj : jsonArray) {
             JSONObject jsonObject = (JSONObject)obj;
             int score = Integer.parseInt(jsonObject.get(ScoreboardJsonKeyType.SCORE.getKey()).toString());
             String name = jsonObject.get(ScoreboardJsonKeyType.NAME.getKey()).toString();
-            scoreboard.add(new ScoreModel(score, name));
+            String difficulty = jsonObject.get(ScoreboardJsonKeyType.DIFFICULTY.getKey()).toString();
+            scoreboard.add(new ScoreModel(score, name, difficulty));
         }
         return scoreboard;
     }
