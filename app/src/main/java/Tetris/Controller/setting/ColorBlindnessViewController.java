@@ -1,54 +1,60 @@
 package Tetris.Controller.setting;
 
 import Tetris.Model.setting.SettingModel;
-import Tetris.Model.setting.SizeSettingModel;
+import Tetris.Model.setting.ColorBlindnessModel;
 
 import Tetris.Util.JsonWriter;
 
 import Tetris.View.setting.SettingView;
-import Tetris.View.setting.SizeSettingView;
+import Tetris.View.setting.ColorBlindnessView;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class SizeSettingViewController implements KeyListener {
-    enum SizeType { SMALL, MEDIUM, LARGE }
+public class ColorBlindnessViewController implements KeyListener {
+    enum ColorBlindnessType { NORMAL, PROTAN, DEUTAN, TRITAN } // 정상, 적색맹, 녹색맹, 청색맹
 
-    private final SizeSettingModel model;
-    private final SizeSettingView sizeSettingView;
+    private final ColorBlindnessModel model;
+    private final ColorBlindnessView colorBlindnessView;
 
-    public SizeSettingViewController(SizeSettingModel model, SizeSettingView view) {
+    public ColorBlindnessViewController(ColorBlindnessModel model, ColorBlindnessView view) {
         this.model = model;
-        this.sizeSettingView = view;
+        this.colorBlindnessView = view;
     }
-
+    
     public void navigatePreviousView(){
         SettingModel field = new SettingModel();
-        SettingView view = new SettingView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y);
+        SettingView view = new SettingView(colorBlindnessView.getLocation().x, colorBlindnessView.getLocation().y);
         SettingViewController controller = new SettingViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
-        sizeSettingView.dispose();
+        colorBlindnessView.dispose();
     }
-    public void changeScreenSize(SizeType type){
-        switch (type){
-            case SMALL:
-                JsonWriter.setSize(300, 600);
+
+    // 각 버튼 클릭되면 블록 색상바꾸기
+    public void changeColor(){
+        
+    }
+
+    // 각 모드에 따라 미리보기이미지 바꾸기
+    public void changePreview(ColorBlindnessType type){
+        switch(type){
+            case NORMAL:
+                //
                 break;
-            case MEDIUM:
-                JsonWriter.setSize(350, 700);
+            case PROTAN: 
+                //
                 break;
-            case LARGE:
-                JsonWriter.setSize(400, 800);
+            case DEUTAN:
+                //
+                break;
+            case TRITAN:
+                //
                 break;
         }
-        SizeSettingModel field = new SizeSettingModel();
-        SizeSettingView view = new SizeSettingView(sizeSettingView.getLocation().x, sizeSettingView.getLocation().y);
-        SizeSettingViewController controller = new SizeSettingViewController(field, view);
-        view.addKeyListener(controller);
-        field.addObserver(view);
-        sizeSettingView.dispose();
+
     }
+    
 
     public void keyTyped(KeyEvent e) {
         // default implementation ignored
@@ -70,15 +76,18 @@ public class SizeSettingViewController implements KeyListener {
             case KeyEvent.VK_ENTER:
                 switch (indicator){
                     case 0:
-                        changeScreenSize(SizeType.SMALL);
+                        changePreview(ColorBlindnessType.NORMAL);
                         break;
                     case 1:
-                        changeScreenSize(SizeType.MEDIUM);
+                        changePreview(ColorBlindnessType.PROTAN);
                         break;
                     case 2:
-                        changeScreenSize(SizeType.LARGE);
+                        changePreview(ColorBlindnessType.DEUTAN);
                         break;
                     case 3:
+                        changePreview(ColorBlindnessType.TRITAN);
+                        break;   
+                    case 4:
                         navigatePreviousView();
                         break;
                     default:

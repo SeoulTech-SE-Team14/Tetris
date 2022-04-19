@@ -1,7 +1,7 @@
 package Tetris.Controller.setting;
 
 import Tetris.Controller.home.StartViewController;
-
+import Tetris.Model.setting.ColorBlindnessModel;
 import Tetris.Model.setting.KeySettingModel;
 import Tetris.Model.setting.SettingModel;
 import Tetris.Model.setting.SizeSettingModel;
@@ -10,6 +10,7 @@ import Tetris.Model.home.StartMenuModel;
 import Tetris.Util.JsonWriter;
 
 import Tetris.Util.ScoreboardJsonKeyType;
+import Tetris.View.setting.ColorBlindnessView;
 import Tetris.View.setting.KeySettingView;
 import Tetris.View.setting.SettingView;
 import Tetris.View.setting.SizeSettingView;
@@ -53,6 +54,12 @@ public class SettingViewController implements KeyListener, ActionListener {
     }
     public void navigationColorSettingView(){
         // navigation code
+        ColorBlindnessModel field = new ColorBlindnessModel();
+        ColorBlindnessView view = new ColorBlindnessView(settingView. getLocation().x, settingView.getLocation().y);
+        ColorBlindnessViewController controller = new ColorBlindnessViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        settingView.dispose();
     }
     public void navigateKeySettingView(){
         KeySettingModel field = new KeySettingModel();
