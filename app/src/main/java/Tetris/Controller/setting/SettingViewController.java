@@ -1,6 +1,6 @@
 package Tetris.Controller.setting;
 
-import Tetris.Controller.home.StartViewController;
+import Tetris.Controller.home.StartMenuViewController;
 import Tetris.Model.setting.ColorBlindnessModel;
 import Tetris.Model.setting.KeySettingModel;
 import Tetris.Model.setting.SettingModel;
@@ -71,7 +71,7 @@ public class SettingViewController implements KeyListener, ActionListener {
     public void navigatePreviousView(){
         StartMenuModel field = new StartMenuModel();
         StartMenuView view = new StartMenuView(settingView.getLocation().x, settingView.getLocation().y);
-        StartViewController controller = new StartViewController(field, view);
+        StartMenuViewController controller = new StartMenuViewController(field, view);
         field.addObserver(view);
         view.addKeyListener(controller);
         settingView.dispose();
