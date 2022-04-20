@@ -68,24 +68,28 @@ public class EndDialog extends JDialog implements Observer {
         scoreboard.setLayout(new GridBagLayout());
         scoreboardList = model.getScoreboard(gameModel.getGameState().getGameMode());
         scoreboard.setPreferredSize(new Dimension(250, 350));
-        for(int i = 0; i < scoreboardList.size(); i++){
-            ScoreModel scoreInfo = scoreboardList.get(i);
-            String difficulty = ZERO_WIDTH_SPACE;
-            if(gameModel.getGameState().getGameMode() == GameType.BASIC_MODE) difficulty = scoreInfo.getDifficulty()+ "모드";
-            String str = Integer.toString(i + 1) + "등" + "\t" + scoreInfo.getName() + "\t" + scoreInfo.getScore() + "\t" + difficulty;
-            JLabel score = new JLabel(str);
-            if(player.getName() == scoreInfo.getName() && player.getScore() == scoreInfo.getScore()){
-                if(player.getMode() == GameType.ITEM_MODE && Objects.equals(player.getDifficulty().getKey(), scoreInfo.getDifficulty())){
-                    score.setFont(new Font(Font.SERIF, Font.BOLD, 12));
+        try {
+            for(int i = 0; i < scoreboardList.size(); i++){
+                ScoreModel scoreInfo = scoreboardList.get(i);
+                String difficulty = ZERO_WIDTH_SPACE;
+                if(gameModel.getGameState().getGameMode() == GameType.BASIC_MODE) difficulty = scoreInfo.getDifficulty()+ "모드";
+                String str = Integer.toString(i + 1) + "등" + "\t" + scoreInfo.getName() + "\t" + scoreInfo.getScore() + "\t" + difficulty;
+                JLabel score = new JLabel(str);
+                if(Objects.equals(player.getName(), scoreInfo.getName()) && player.getScore() == scoreInfo.getScore()){
+                    if(player.getMode() == GameType.ITEM_MODE || Objects.equals(player.getDifficulty().getKey(), scoreInfo.getDifficulty())){
+                        score.setFont(new Font(Font.SERIF, Font.BOLD, 11));
+                    } else {
+                        score.setFont(new Font(Font.SERIF, Font.PLAIN, 11));
+                    }
                 } else {
-                    score.setForeground(Color.GREEN);
-                    score.setFont(new Font(Font.SERIF, Font.BOLD, 12));
+                    score.setFont(new Font(Font.SERIF, Font.PLAIN, 11));
                 }
-            } else {
-                score.setFont(new Font(Font.SERIF, Font.BOLD, 12));
+                scoreboard.add(score, gbc);
             }
-            scoreboard.add(score, gbc);
+        } catch (NullPointerException e){
+            e.printStackTrace();
         }
+
         background.add(scoreboard, gbc);
 
         JPanel buttons = new JPanel();

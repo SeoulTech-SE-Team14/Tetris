@@ -81,8 +81,12 @@ public class JsonReader {
             JSONObject jsonObject = (JSONObject)obj;
             int score = Integer.parseInt(jsonObject.get(ScoreboardJsonKeyType.SCORE.getKey()).toString());
             String name = jsonObject.get(ScoreboardJsonKeyType.NAME.getKey()).toString();
-            String difficulty = jsonObject.get(ScoreboardJsonKeyType.DIFFICULTY.getKey()).toString();
-            scoreboard.add(new ScoreModel(score, name, difficulty));
+            if(type == GameType.BASIC_MODE) {
+                String difficulty = jsonObject.get(ScoreboardJsonKeyType.DIFFICULTY.getKey()).toString();
+                scoreboard.add(new ScoreModel(score, name, difficulty));
+            } else {
+                scoreboard.add(new ScoreModel(score, name));
+            }
         }
         return scoreboard;
     }

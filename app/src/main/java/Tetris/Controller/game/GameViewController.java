@@ -9,11 +9,10 @@ import Tetris.View.game.GameView;
 import Tetris.View.game.InputDialog;
 import Tetris.View.game.PauseDialog;
 
-import javax.swing.*;
+import javax.swing.Timer;
 
 import java.awt.event.*;
-import java.util.Random;
-import java.util.List;
+import java.util.*;
 
 /**
  * 테트리스 게임 View 조작 컨트롤러
@@ -36,6 +35,15 @@ public class GameViewController implements KeyListener, ActionListener {
     private static final int INIT_INTERVAL = 1000;
     private static final int NORMAL_BLOCK_COUNT = 7;
     private static final int ITEM_BLOCK_COUNT = 5;
+
+    //test용
+    public GameViewController(GameModel currentGame) {
+        this.currentGame = currentGame;
+        scoreList = JsonReader.getScoreBoard(currentGame.getGameState().getGameMode());
+        timer = new Timer(INIT_INTERVAL, this);
+        timer.setActionCommand("timer");
+        timer.start();
+    }
 
     public GameViewController(GameModel game, GameView view) {
         this.currentGame = game;
@@ -77,28 +85,37 @@ public class GameViewController implements KeyListener, ActionListener {
         endDialogModel.addObserver(dialog);
         dialog.setVisible(true);
     }
+    // 사용자 이름 입력받는 창. 입력 받은 이름은 GameState에 Player에 저장된다.
     private void showInputDialog() {
         int x = gameView.getLocation().x + (currentGame.getScreenWidth() -  200) / 2;
         int y = gameView.getLocation().y + (currentGame.getScreenHeight() - 100) / 2;
         InputDialog inputDialog = new InputDialog(gameView, currentGame, x, y);
         inputDialog.setVisible(true);
     }
-    private boolean isPossibleUpdateScore() {
+    public boolean isPossibleUpdateScore() {
         int currentScore = currentGame.getGameState().getScore();
-        return scoreList.get(scoreList.size() - 1).getScore() < currentScore;
+        return scoreList.size() < 10 || scoreList.get(scoreList.size() - 1).getScore() < currentScore;
     }
-    private void updateScore() {
+    public void updateScore() {
         Player player = currentGame.getGameState().getPlayer();
-        switch (currentGame.getGameState().getGameMode()) {
-            case BASIC_MODE:
-
-                break;
-            case ITEM_MODE:
-
-                break;
-            default:
-                break;
+        if (currentGame.getGameState().getGameMode() == GameType.BASIC_MODE) {
+            scoreList.add(new ScoreModel(player.getScore(), player.getName(), player.getDifficulty().getKey()));
+        } else if (currentGame.getGameState().getGameMode() == GameType.ITEM_MODE) {
+            scoreList.add(new ScoreModel(player.getScore(), player.getName()));
         }
+        scoreList.sort(ScoreModel::compareTo);
+        List<Map<String, String>> scoreboardJsonArray = new ArrayList<>();
+        for(int i = 0; i < Math.min(scoreList.size(), 10); i++){
+            ScoreModel scoreModel = scoreList.get(i);
+            Map<String, String> json = new HashMap<>();
+            json.put(ScoreboardJsonKeyType.SCORE.getKey(), Integer.toString(scoreModel.getScore()));
+            json.put(ScoreboardJsonKeyType.NAME.getKey(), scoreModel.getName());
+            if(currentGame.getGameState().getGameMode() == GameType.BASIC_MODE) {
+                json.put(ScoreboardJsonKeyType.DIFFICULTY.getKey(), scoreModel.getDifficulty());
+            }
+            scoreboardJsonArray.add(json);
+        }
+        JsonWriter.setScoreBoard(scoreboardJsonArray, currentGame.getGameState().getGameMode());
     }
     // 중지 <-> 게임 중 바꾸는 메서드
     public void reversePause() {
@@ -111,6 +128,15 @@ public class GameViewController implements KeyListener, ActionListener {
             currentGame.getGameState().setPaused(true);
             showPauseDialog();
         }
+    }
+    public void endGame()  {
+        currentGame.getGameState().setEnded(true);
+        timer.stop();
+        if(isPossibleUpdateScore()){
+            showInputDialog();
+            updateScore();
+        }
+        showEndDialog();
     }
     /**
      * 랜덤 블럭 넘버 -> 블럭으로 바꾸는 메서드
@@ -197,10 +223,9 @@ public class GameViewController implements KeyListener, ActionListener {
         int itemNumber = rnd.nextInt(ITEM_BLOCK_COUNT) + NORMAL_BLOCK_COUNT;
         return getBlockByNumber(itemNumber);
     }
-
     // 일반모드 블럭 생성 메서드
     public void spawnBasicModeBlock(){
-        Block curr = null;
+        Block curr = new Block();
         switch (currentGame.getGameState().getDifficulty()) {
             case EASY:
                 curr = getEasyModeRandomBlock();
@@ -214,17 +239,9 @@ public class GameViewController implements KeyListener, ActionListener {
             default:
                 break;
         }
-
-        //boolean gameContinues = currentGame.spawn(curr);
-        boolean gameContinues = false;
+        boolean gameContinues = currentGame.spawn(curr);
         if(!gameContinues) {
-            currentGame.getGameState().setEnded(true);
-            timer.stop();
-            if(isPossibleUpdateScore()){
-                showEndDialog();
-                updateScore();
-            }
-            showInputDialog();
+            endGame();
         }
     }
     // 아이템 모드 블럭 생성 메서드

@@ -36,20 +36,6 @@ public class ScoreboardController implements KeyListener, ActionListener {
         startView.addKeyListener(controller);
         scoreBoardView.dispose();
     }
-    public void addScore(GameType type, int score, String name, GameType difficulty){
-        List<ScoreModel> scoreboard = model.getScoreboard(type);
-        scoreboard.add(new ScoreModel(score, name));
-        scoreboard.sort(ScoreModel::compareTo);
-        List<Map<String, String>> scoreboardJsonArray = new ArrayList<>();
-        for(ScoreModel scoreObj : scoreboard) {
-            Map<String, String> info = new HashMap<>();
-            info.put(ScoreboardJsonKeyType.SCORE.getKey(), Integer.toString(scoreObj.getScore()));
-            info.put(ScoreboardJsonKeyType.NAME.getKey(), scoreObj.getName());
-            info.put(ScoreboardJsonKeyType.DIFFICULTY.getKey(), difficulty.getKey());
-            scoreboardJsonArray.add(info);
-        }
-        JsonWriter.setScoreBoard(scoreboardJsonArray, type);
-    }
     @Override
     public void keyTyped(KeyEvent e) {
         // default implementation ignored

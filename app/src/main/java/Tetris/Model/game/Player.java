@@ -13,6 +13,9 @@ public class Player {
     private int score;
     private GameType mode;
     private GameType difficulty;
+    public Player() {
+        this.name = "default#user#name";
+    }
 
     public Player(String name, int score, GameType mode, GameType difficulty) {
         this.name = name;
@@ -25,6 +28,7 @@ public class Player {
         this.name = name;
         this.score = score;
         this.mode = mode;
+        this.difficulty = GameType.NORMAL;
     }
 
     public int getScore() {

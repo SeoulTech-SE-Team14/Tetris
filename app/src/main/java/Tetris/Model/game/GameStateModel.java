@@ -37,11 +37,13 @@ public class GameStateModel extends Observable {
         this.colorMode = JsonReader.getColorMode();
         this.gameMode = gameMode;
         this.difficulty = GameType.NORMAL;
+        this.player = new Player();
     }
     public GameStateModel(GameType gameMode, GameType difficulty) {
         this.colorMode = JsonReader.getColorMode();
         this.gameMode = gameMode;
         this.difficulty = difficulty;
+        this.player = new Player();
     }
 
     public Player getPlayer() {
@@ -50,6 +52,10 @@ public class GameStateModel extends Observable {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     /**

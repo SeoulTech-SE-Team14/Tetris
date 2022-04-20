@@ -13,7 +13,7 @@ public class Block extends Observable {
             {1, 1}
     };
 
-    Block() { }
+    public Block() { }
 
     public int getX() {
         return x;

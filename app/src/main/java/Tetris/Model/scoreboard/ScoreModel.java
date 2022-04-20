@@ -1,7 +1,5 @@
 package Tetris.Model.scoreboard;
 
-import Tetris.Util.ScoreboardJsonKeyType;
-
 public class ScoreModel implements Comparable<ScoreModel>{
     private int score;
     private String name;
@@ -29,8 +27,9 @@ public class ScoreModel implements Comparable<ScoreModel>{
         return difficulty;
     }
 
+    // 내림차순
     @Override
     public int compareTo(ScoreModel o) {
-        return Integer.compare(score, o.score);
+        return Integer.compare(o.score,score);
     }
 }
