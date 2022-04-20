@@ -67,7 +67,6 @@ public class PauseDialog extends JDialog implements Observer {
 
         add(buttons, gbc);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setFocusable(true);
         requestFocus();
