@@ -1,5 +1,6 @@
 package Tetris.Model.game;
 
+import Tetris.Util.GameType;
 import Tetris.Util.JsonReader;
 
 import java.util.Observable;
@@ -17,34 +18,50 @@ public class GameStateModel extends Observable {
 
     private long spawnTime = 0; // 블럭이 생성된 시간
     private int score = 0;
-
-    /**
-     * 현재 색맹 모드
-     * normal, 제1 색이상, 제2 색각이상, 제3 색각이상, 전색약
-     */
+    private Player player;
     private String colorMode;
-    /**
-     * 현재 게임 모드
-     * normal mode, item mode;
-     */
-    private String gameMode;
     /**
      * 현재 게임 난이도
      * easy, normal, hard
      */
-    private String difficulty;
+    private GameType difficulty;
+    /**
+     * 현재 게임 모드
+     * basic mode, item mode;
+     */
+    private GameType gameMode;
     private boolean isPaused = false;
     private boolean isEnded = false;
 
-    public GameStateModel(String gameMode) {
+    public GameStateModel(GameType gameMode) {
         this.colorMode = JsonReader.getColorMode();
         this.gameMode = gameMode;
-        this.difficulty = JsonReader.getDifficulty();
+        this.difficulty = GameType.NORMAL;
+        this.player = new Player();
+    }
+    public GameStateModel(GameType gameMode, GameType difficulty) {
+        this.colorMode = JsonReader.getColorMode();
+        this.gameMode = gameMode;
+        this.difficulty = difficulty;
+        this.player = new Player();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     /**
      * 블럭이 생성되는 속도 조절 메서드
      */
+
     public int updateDelay() {
         int standard1 = spawnedBlockNumber / 5;
         int standard2 = deletedLineNumber / 3;
@@ -82,14 +99,14 @@ public class GameStateModel extends Observable {
     /**
      * @return 게임 난이도 easy: 0, normal: 1, hard: 2
      */
-    public String getDifficulty() {
+    public GameType getDifficulty() {
         return difficulty;
     }
 
     /**
      * @return 게임 모드 normal: 0, item: 1
      */
-    public String getGameMode() {
+    public GameType getGameMode() {
         return gameMode;
     }
 
@@ -133,14 +150,5 @@ public class GameStateModel extends Observable {
     }
     public void setEnded(boolean ended) {
         isEnded = ended;
-    }
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
-    }
-    public void setGameMode(String gameMode) {
-        this.gameMode = gameMode;
-    }
-    public void setColorMode(String colorMode) {
-        this.colorMode = colorMode;
     }
 }

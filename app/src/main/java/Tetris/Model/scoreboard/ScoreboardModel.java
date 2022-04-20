@@ -1,5 +1,6 @@
 package Tetris.Model.scoreboard;
 
+import Tetris.Util.GameType;
 import Tetris.Util.JsonReader;
 import Tetris.Util.ScoreboardJsonKeyType;
 
@@ -24,7 +25,7 @@ public class ScoreboardModel {
     public int getScreenHeight() {
         return screenHeight;
     }
-    public List<ScoreModel> getScoreboard(ScoreboardJsonKeyType type) {
+    public List<ScoreModel> getScoreboard(GameType type) {
         return JsonReader.getScoreBoard(type);
     }
     public ImageIcon getBackBtnImage() {

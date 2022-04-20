@@ -1,16 +1,19 @@
 package Tetris.Controller.home;
 
 import Tetris.Controller.game.GameViewController;
+import Tetris.Controller.game.SelectDialogController;
 import Tetris.Controller.scoreboard.ScoreboardController;
 import Tetris.Controller.setting.SettingViewController;
 
 import Tetris.Model.game.GameModel;
 import Tetris.Model.game.GameStateModel;
+import Tetris.Model.game.SelectDialogModel;
 import Tetris.Model.home.StartMenuModel;
 import Tetris.Model.scoreboard.ScoreboardModel;
 import Tetris.Model.setting.SettingModel;
 
-import Tetris.View.game.GameView;
+import Tetris.Util.GameType;
+import Tetris.View.game.SelectDialog;
 import Tetris.View.home.StartMenuView;
 import Tetris.View.scoreboard.ScoreboardView;
 import Tetris.View.setting.SettingView;
@@ -20,24 +23,34 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class StartViewController implements KeyListener, ActionListener {
+public class StartMenuViewController implements KeyListener, ActionListener {
     private final StartMenuModel model;
     private final StartMenuView startView;
 
-    public StartViewController(StartMenuModel model, StartMenuView view) {
+    public StartMenuViewController(StartMenuModel model, StartMenuView view) {
         this.model = model;
         this.startView = view;
         this.startView.setActionListener(this);
     }
-
-    public void navigateGameView(String gameMode){
-        GameStateModel gameState = new GameStateModel(gameMode);
+    public void showDifficultyDialog(){
+        SelectDialogModel selectDialogModel = new SelectDialogModel();
+        int x = startView.getLocation().x + (model.getScreenWidth() -  selectDialogModel.getWidth()) / 2;
+        int y = startView.getLocation().y + (model.getScreenHeight() - selectDialogModel.getHeight()) / 2;
+        SelectDialog dialog = new SelectDialog(startView, x, y);
+        SelectDialogController selectDialogController = new SelectDialogController(selectDialogModel, dialog, startView);
+        dialog.addKeyListener(selectDialogController);
+        selectDialogModel.addObserver(dialog);
+        dialog.setVisible(true);
+    }
+    public void playItemMode(){
+        GameStateModel gameState = new GameStateModel(GameType.ITEM_MODE);
         GameModel field = new GameModel(gameState,20, 10);
-        GameView view = new GameView(startView.getLocation().x, startView.getLocation().y, field);
-        GameViewController controller = new GameViewController(field);
+        Tetris.View.game.GameView view = new Tetris.View.game.GameView(startView.getLocation().x, startView.getLocation().y, field);
+        GameViewController controller = new GameViewController(field, view);
         view.addKeyListener(controller);
         field.addObserver(view);
         gameState.addObserver(view);
+        view.setVisible(true);
         startView.dispose();
     }
     public void navigateSettingView(){
@@ -77,10 +90,10 @@ public class StartViewController implements KeyListener, ActionListener {
             case KeyEvent.VK_ENTER:
                 switch (indicator){
                     case 0:
-                        navigateGameView("normal" );
+                        showDifficultyDialog();
                         break;
                     case 1:
-                        navigateGameView("item");
+                        playItemMode();
                         break;
                     case 2:
                         navigateSettingView();
@@ -108,9 +121,9 @@ public class StartViewController implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         String target = e.getSource().toString();
         if(target.contains("button_game_start")) {
-            navigateGameView("normal");
+            showDifficultyDialog();
         } else if(target.contains("button_item_game")) {
-            navigateGameView("item");
+            playItemMode();
         } else if(target.contains("button_setting")) {
             navigateSettingView();
         } else if(target.contains("button_scoreboard")) {

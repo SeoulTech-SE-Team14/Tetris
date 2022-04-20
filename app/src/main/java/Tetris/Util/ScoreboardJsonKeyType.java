@@ -1,7 +1,7 @@
 package Tetris.Util;
 
 public enum ScoreboardJsonKeyType {
-    BASIC_MODE("basic_mode"), ITEM_MODE("item_mode"), NAME("name"), SCORE("score");
+    NAME("name"), SCORE("score"), DIFFICULTY("difficulty");
 
     private String key;
 

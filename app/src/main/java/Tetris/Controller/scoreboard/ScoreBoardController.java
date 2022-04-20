@@ -1,11 +1,12 @@
 package Tetris.Controller.scoreboard;
 
-import Tetris.Controller.home.StartViewController;
+import Tetris.Controller.home.StartMenuViewController;
 
 import Tetris.Model.home.StartMenuModel;
 import Tetris.Model.scoreboard.ScoreModel;
 import Tetris.Model.scoreboard.ScoreboardModel;
 
+import Tetris.Util.GameType;
 import Tetris.Util.JsonWriter;
 import Tetris.Util.ScoreboardJsonKeyType;
 import Tetris.View.home.StartMenuView;
@@ -30,23 +31,10 @@ public class ScoreboardController implements KeyListener, ActionListener {
     public void navigatePreviousView(){
         StartMenuModel field = new StartMenuModel();
         StartMenuView startView = new StartMenuView(scoreBoardView.getLocation().x, scoreBoardView.getLocation().y);
-        StartViewController controller = new StartViewController(field, startView);
+        StartMenuViewController controller = new StartMenuViewController(field, startView);
         field.addObserver(startView);
         startView.addKeyListener(controller);
         scoreBoardView.dispose();
-    }
-    public void addScore(ScoreboardJsonKeyType type, int score, String name){
-        List<ScoreModel> scoreboard = model.getScoreboard(type);
-        scoreboard.add(new ScoreModel(score, name));
-        scoreboard.sort(ScoreModel::compareTo);
-        List<Map<String, String>> scoreboardJsonArray = new ArrayList<>();
-        for(ScoreModel scoreObj : scoreboard) {
-            Map<String, String> info = new HashMap<>();
-            info.put(ScoreboardJsonKeyType.SCORE.getKey(), Integer.toString(scoreObj.getScore()));
-            info.put(ScoreboardJsonKeyType.NAME.getKey(), scoreObj.getName());
-            scoreboardJsonArray.add(info);
-        }
-        JsonWriter.setScoreBoard(scoreboardJsonArray, type);
     }
     @Override
     public void keyTyped(KeyEvent e) {

@@ -1,12 +1,13 @@
 package Tetris.Controller.setting;
 
-import Tetris.Controller.home.StartViewController;
+import Tetris.Controller.home.StartMenuViewController;
 
 import Tetris.Model.setting.KeySettingModel;
 import Tetris.Model.setting.SettingModel;
 import Tetris.Model.setting.SizeSettingModel;
 import Tetris.Model.home.StartMenuModel;
 
+import Tetris.Util.GameType;
 import Tetris.Util.JsonWriter;
 
 import Tetris.Util.ScoreboardJsonKeyType;
@@ -40,8 +41,8 @@ public class SettingViewController implements KeyListener, ActionListener {
         settingView.dispose();
     }
     public void resetScoreBoard(){
-        JsonWriter.setResetScoreBoard(ScoreboardJsonKeyType.BASIC_MODE);
-        JsonWriter.setResetScoreBoard(ScoreboardJsonKeyType.ITEM_MODE);
+        JsonWriter.setResetScoreBoard(GameType.BASIC_MODE);
+        JsonWriter.setResetScoreBoard(GameType.ITEM_MODE);
     }
     public void navigateSizeSettingView(){
         SizeSettingModel field = new SizeSettingModel();
@@ -65,7 +66,7 @@ public class SettingViewController implements KeyListener, ActionListener {
     public void navigatePreviousView(){
         StartMenuModel field = new StartMenuModel();
         StartMenuView view = new StartMenuView(settingView.getLocation().x, settingView.getLocation().y);
-        StartViewController controller = new StartViewController(field, view);
+        StartMenuViewController controller = new StartMenuViewController(field, view);
         field.addObserver(view);
         view.addKeyListener(controller);
         settingView.dispose();
