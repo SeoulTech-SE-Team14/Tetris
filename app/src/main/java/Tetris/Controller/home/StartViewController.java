@@ -20,11 +20,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class StartMenuViewController implements KeyListener, ActionListener {
+public class StartViewController implements KeyListener, ActionListener {
     private final StartMenuModel model;
     private final StartMenuView startView;
 
-    public StartMenuViewController(StartMenuModel model, StartMenuView view) {
+    public StartViewController(StartMenuModel model, StartMenuView view) {
         this.model = model;
         this.startView = view;
         this.startView.setActionListener(this);

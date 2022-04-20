@@ -1,6 +1,6 @@
 package Tetris.Controller.scoreboard;
 
-import Tetris.Controller.home.StartMenuViewController;
+import Tetris.Controller.home.StartViewController;
 
 import Tetris.Model.home.StartMenuModel;
 import Tetris.Model.scoreboard.ScoreModel;
@@ -30,7 +30,7 @@ public class ScoreboardController implements KeyListener, ActionListener {
     public void navigatePreviousView(){
         StartMenuModel field = new StartMenuModel();
         StartMenuView startView = new StartMenuView(scoreBoardView.getLocation().x, scoreBoardView.getLocation().y);
-        StartMenuViewController controller = new StartMenuViewController(field, startView);
+        StartViewController controller = new StartViewController(field, startView);
         field.addObserver(startView);
         startView.addKeyListener(controller);
         scoreBoardView.dispose();

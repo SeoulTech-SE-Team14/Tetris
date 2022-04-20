@@ -1,16 +1,16 @@
 package Tetris.Controller.setting;
 
 import Tetris.Controller.home.StartMenuViewController;
-import Tetris.Model.setting.ColorBlindnessModel;
+
 import Tetris.Model.setting.KeySettingModel;
 import Tetris.Model.setting.SettingModel;
 import Tetris.Model.setting.SizeSettingModel;
 import Tetris.Model.home.StartMenuModel;
 
+import Tetris.Util.GameType;
 import Tetris.Util.JsonWriter;
 
 import Tetris.Util.ScoreboardJsonKeyType;
-import Tetris.View.setting.ColorBlindnessView;
 import Tetris.View.setting.KeySettingView;
 import Tetris.View.setting.SettingView;
 import Tetris.View.setting.SizeSettingView;
