@@ -1,5 +1,8 @@
 package Tetris.Model.block;
 
+import Tetris.Util.BlockNumber;
+import Tetris.Util.BlockType;
+
 public class WeightBlock extends Block {
     private boolean isOverlapped = false;
     public WeightBlock() {
@@ -8,6 +11,7 @@ public class WeightBlock extends Block {
                 {1, 1, 1, 1}
         };
     }
+    public BlockType getBlockType() { return BlockType.WEIGHT; }
     public void setOverlapped(boolean overlapped) {
         isOverlapped = overlapped;
     }
@@ -15,6 +19,6 @@ public class WeightBlock extends Block {
 
     @Override
     public int getNumber() {
-        return 7;
+        return BlockNumber.WEIGHT_BLOCK.getBlockNumber();
     }
 }

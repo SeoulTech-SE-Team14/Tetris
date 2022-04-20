@@ -2,6 +2,8 @@ package Tetris.Model.game;
 
 import Tetris.Model.block.Block;
 import Tetris.Model.block.WeightBlock;
+import Tetris.Util.BlockNumber;
+import Tetris.Util.BlockType;
 import Tetris.Util.JsonReader;
 
 import java.util.ArrayList;
@@ -20,15 +22,13 @@ public class GameModel extends Observable {
     private Block next = null;
     private GameStateModel gameState;
 
-    private int[][] board;
-    private int[][] visited;
+    private int[][] board; // 떨어지는 블럭 위치 저장
+    private int[][] visited; // 보드에 깔린 블럭 위치 저장
     private final int height;
     private final int width;
     private final int screenWidth;
     private final int screenHeight;
-    /**
-     * Constructor
-     */
+
     public GameModel(GameStateModel gameState, int row, int col) {
         this.gameState = gameState;
         this.height = row;
@@ -69,7 +69,6 @@ public class GameModel extends Observable {
     public Block getNext() {
         return next;
     }
-
     public GameStateModel getGameState() {
         return gameState;
     }
@@ -78,11 +77,11 @@ public class GameModel extends Observable {
      * board 배열에 블럭 위치 표시하는 메서드.
      * @param x board x좌표
      * @param y board y좌표
-     * @param bx block 배열의 x좌표
-     * @param by block 배열의 y좌표
+     * @param cx block 배열의 x좌표
+     * @param cy block 배열의 y좌표
      */
-    public void setBoard(int x, int y, int bx, int by){
-        board[y][x] = curr.getShape(bx, by);
+    public void setBoard(int x, int y, int cx, int cy){
+        board[y][x] = getBlockNumber(cx, cy);
     }
 
     /**
@@ -91,7 +90,7 @@ public class GameModel extends Observable {
      * @return 블럭을 생성할 수 있는지 없는지
      */
     public boolean spawn(Block cur){
-        if(next == null){
+        if(next == null && curr == null){
             next = cur;
             notice();
             return true;
@@ -125,24 +124,41 @@ public class GameModel extends Observable {
     public boolean isNeighborExist(int nx, int ny){
         for(int row = ny, cy = 0; row < ny + curr.height(); row++, cy++) {
             for (int col = nx, cx = 0; col < nx + curr.width(); col++, cx++) {
-                if(curr.getShape(cx, cy) != -1 && visited[row][col] != -1) {
+                if(curr.getShape(cx, cy) != 0 && visited[row][col] != -1) {
                     return true;
                 }
             }
         }
         return false;
     }
+    public int getBlockNumber(int cx, int cy){
+        // 일반 블럭이거나 무게추 블럭이면 그냥 블럭 색 리턴
+        if(curr.getBlockType() == BlockType.NORMAL || curr.getBlockType() == BlockType.WEIGHT) return curr.getNumber();
+        // 아이템 블럭인데 아이템 위치라면 아이템 색 리턴
+        if(cx == curr.getItemXpos() && cy == curr.getItemYpos()) {
+            switch (curr.getBlockType()) {
+                case LINE_DELETE:
+                    return BlockNumber.LINE_DELETE_BLOCK.getBlockNumber();
+                case CLEAR:
+                    return BlockNumber.CLEAR.getBlockNumber();
+                case SLOW:
+                    return BlockNumber.SLOW.getBlockNumber();
+                case BOOST:
+                    return BlockNumber.BOOST.getBlockNumber();
+            }
+        }
+        // 아이템인데 아이템 위치 아니라면 그냥 블럭 색 리턴
+        return curr.getNumber();
+    }
     /**
      * 배치할 블럭 방문 체크하는 메서드
      * 현재 블럭 배열이 1, 2이면 -> 색칠을 위해 블럭 넘버를 저장
-     * 아이템일 경우 예시)
-     * 라인삭제아이템이면 11(아이템 개수) * 아이템 넘버 (3) + 아이템의 블럭 넘버 (8)을 저장
      */
     public void visitBlock() {
         for(int row = curr.getY(), cy = 0; row < curr.getY() + curr.height(); row++, cy++) {
             for(int col = curr.getX(), cx = 0; col < curr.getX() + curr.width(); col++, cx++) {
-                if(curr.getShape(cx, cy) == -1) continue;
-                visited[row][col] = curr.getNumber();
+                if(curr.getShape(cx, cy) == 0) continue;
+                visited[row][col] = getBlockNumber(cx, cy);
             }
         }
     }
@@ -214,31 +230,110 @@ public class GameModel extends Observable {
         updateDeletedLineNumber();
         gameState.updateScore(5);
     }
-    /**
-     * 블럭 이동 메서드
-     */
-    public void moveDown() {
-        eraseCurr();
-        // 무게추 아이템일 때
-        if(curr instanceof WeightBlock) {
+
+    // 블럭이동 메서드
+    public void weightBlockFall(){
+        weightBlockErase();
+        while(curr.getY() + curr.height() < height) {
+            curr.setY(curr.getY() + 1);
             weightBlockErase();
-            if (curr.getY() + curr.height() < height) {
-                curr.setY(curr.getY() + 1);
-            } else {
-                curr = null;
-            }
+        }
+        curr = null;
+    }
+    public void weightBlockMoveDown(){
+        weightBlockErase();
+        if (curr.getY() + curr.height() < height) {
+            curr.setY(curr.getY() + 1);
+        } else {
+            curr = null;
+        }
+    }
+    public void lineDeleteBlockMoveDown(){
+        if(roomExist(curr.getX(), curr.getY() + 1)) {
+            curr.setY(curr.getY() + 1);
         }
         else {
-            // 일반 다른 블럭일 때
-            if(roomExist(curr.getX(), curr.getY() + 1)) {
-                curr.setY(curr.getY() + 1);
+            visitBlock();
+            eraseLine(curr.getItemYpos() + curr.getY());
+            eraseLine();
+            gameState.updateScore(1 + gameState.getBonusScore());
+            curr = null;
+        }
+    }
+    public void clearBlockMoveDown(){
+        if(roomExist(curr.getX(), curr.getY() + 1)) {
+            curr.setY(curr.getY() + 1);
+        }
+        else {
+            visitBlock();
+            for(int y = 0; y < height; y++){
+                Arrays.fill(visited[y], -1);
+                Arrays.fill(board[y], -1);
             }
-            else {
-                visitBlock();
-                eraseLine();
-                gameState.updateScore(1 + gameState.getBonusScore());
-                curr = null;
-            }
+            curr = null;
+        }
+    }
+    public void boostBlockMoveDown(){
+        if(roomExist(curr.getX(), curr.getY() + 1)) {
+            curr.setY(curr.getY() + 1);
+        }
+        else {
+            visitBlock();
+            eraseLine();
+//            int x = curr.getX() + curr.getItemXpos();
+//            int y = curr.getY() + curr.getItemYpos();
+//            visited[y][x] = -1;
+            gameState.setMaxScore(gameState.getMaxScore() + 10);
+            curr = null;
+        }
+    }
+    public void slowBlockMoveDown() {
+        if(roomExist(curr.getX(), curr.getY() + 1)) {
+            curr.setY(curr.getY() + 1);
+        }
+        else {
+            visitBlock();
+            eraseLine();
+//            int x = curr.getX() + curr.getItemXpos();
+//            int y = curr.getY() + curr.getItemYpos();
+//            visited[y][x] = -1;
+            GameStateModel.setSpawnedBlockNumber(0);
+            GameStateModel.setDeletedLineNumber(0);
+            curr = null;
+        }
+    }
+    public void basicBlockMoveDown(){
+        if(roomExist(curr.getX(), curr.getY() + 1)) {
+            curr.setY(curr.getY() + 1);
+        }
+        else {
+            visitBlock();
+            eraseLine();
+            gameState.updateScore(1 + gameState.getBonusScore());
+            curr = null;
+        }
+    }
+    public void moveDown() {
+        eraseCurr();
+        switch (curr.getBlockType()) {
+            case WEIGHT:
+                weightBlockMoveDown();
+                break;
+            case LINE_DELETE:
+                lineDeleteBlockMoveDown();
+                break;
+            case CLEAR:
+                clearBlockMoveDown();
+                break;
+            case SLOW:
+                slowBlockMoveDown();
+                break;
+            case BOOST:
+                boostBlockMoveDown();
+                break;
+            default:
+                basicBlockMoveDown();
+                break;
         }
         notice();
     }
@@ -278,8 +373,33 @@ public class GameModel extends Observable {
     }
     public void fall() {
         eraseCurr();
+        if(curr.getBlockType() == BlockType.WEIGHT) {
+            weightBlockFall();
+            notice();
+            return;
+        }
         while(roomExist(curr.getX(), curr.getY() + 1)) curr.setY(curr.getY() + 1);
         visitBlock();
+        switch (curr.getBlockType()) {
+            case LINE_DELETE:
+                eraseLine(curr.getItemYpos() + curr.getY());
+                break;
+            case CLEAR:
+                for(int y = 0; y < height; y++){
+                    Arrays.fill(visited[y], -1);
+                    Arrays.fill(board[y], -1);
+                }
+                break;
+            case SLOW:
+                GameStateModel.setSpawnedBlockNumber(0);
+                GameStateModel.setDeletedLineNumber(0);
+                break;
+            case BOOST:
+                gameState.setMaxScore(gameState.getMaxScore() + 10);
+                break;
+            default:
+                break;
+        }
         eraseLine();
         gameState.updateScore(1 + gameState.getBonusScore());
         curr = null;
@@ -301,7 +421,7 @@ public class GameModel extends Observable {
         if(afterX < 0 || afterX + afterWidth - 1 >= width) return false;
         for(int row = afterY, cy = 0; row < afterY + afterHeight; row++){
             for(int col = afterX, cx = 0; col < afterX + afterWidth; col++){
-                if(visited[row][col] != -1 && curr.getShape(cy,afterWidth - 1 - cx) != -1){
+                if(visited[row][col] != -1 && curr.getShape(cy,afterWidth - 1 - cx) != 0){
                     return false;
                 }
             }

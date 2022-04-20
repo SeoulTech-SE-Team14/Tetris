@@ -30,6 +30,7 @@ public class BlockColorModel {
     };
 
     public Color getColor(int blockNumber) {
+        if(blockNumber > 7) blockNumber = 7;
         return basicColors[blockNumber];
     }
     public Color getColor(int blockNumber, String colorMode){

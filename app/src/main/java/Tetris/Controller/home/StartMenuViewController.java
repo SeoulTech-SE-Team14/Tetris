@@ -44,6 +44,8 @@ public class StartMenuViewController implements KeyListener, ActionListener {
     }
     public void playItemMode(){
         GameStateModel gameState = new GameStateModel(GameType.ITEM_MODE);
+        GameStateModel.setSpawnedBlockNumber(0);
+        GameStateModel.setDeletedLineNumber(0);
         GameModel field = new GameModel(gameState,20, 10);
         Tetris.View.game.GameView view = new Tetris.View.game.GameView(startView.getLocation().x, startView.getLocation().y, field);
         GameViewController controller = new GameViewController(field, view);
