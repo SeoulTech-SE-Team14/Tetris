@@ -17,16 +17,25 @@ public class BlockColorModel {
             Color.RED,
             Color.WHITE
     };
-    // 색맹 컬러 모드
+    // 색맹 컬러 모드(적,녹색맹)
     private final Color[] blindColors = {
-            Color.PINK,
-            Color.MAGENTA,
-            Color.YELLOW,
-            Color.BLACK,
+            Color.CYAN,
             Color.BLUE,
-            Color.GREEN,
-            Color.RED,
-            Color.WHITE
+            Color.ORANGE,
+            Color.YELLOW,
+            getColor(0x009E73),
+            Color.MAGENTA,   
+            getColor(0xD55E00)
+    };
+    // 색맹 컬러 모드(청색맹)
+    private final Color[] blind2Colors = {
+            Color.CYAN,
+            Color.BLUE,
+            Color.ORANGE,
+            Color.YELLOW,
+            getColor(0x009E73),
+            Color.MAGENTA,   
+            Color.RED
     };
 
     public Color getColor(int blockNumber) {
