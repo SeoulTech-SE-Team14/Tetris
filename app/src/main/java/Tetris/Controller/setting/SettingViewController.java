@@ -53,7 +53,12 @@ public class SettingViewController implements KeyListener, ActionListener {
         settingView.dispose();
     }
     public void navigationColorSettingView(){
-        // navigation code
+        ColorBlindnessModel field = new ColorBlindnessModel();
+        ColorBlindnessView view = new ColorBlindnessView(settingView. getLocation().x, settingView.getLocation().y);
+        ColorBlindnessViewController controller = new ColorBlindnessViewController(field, view);
+        view.addKeyListener(controller);
+        field.addObserver(view);
+        settingView.dispose();
     }
     public void navigateKeySettingView(){
         KeySettingModel field = new KeySettingModel();

@@ -48,7 +48,6 @@ public class SizeSettingViewController implements KeyListener {
         view.addKeyListener(controller);
         field.addObserver(view);
         sizeSettingView.dispose();
-
     }
 
     public void keyTyped(KeyEvent e) {
