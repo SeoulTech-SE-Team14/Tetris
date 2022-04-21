@@ -165,11 +165,12 @@ public class GameView extends JFrame implements Observer {
                     else {
                         if(next.getBlockType() != BlockType.NORMAL && (x == currentGame.getNext().getItemXpos() && y == currentGame.getNext().getItemYpos())) {
                             int blockNumber = currentGame.getNext().getBlockType().getBlockTypeNumber() + 7;
-                            StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(blockNumber));
+                            StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(blockNumber, currentGame.getGameState().getColorMode()));
                             doc.insertString(doc.getLength(), getStringBrick(blockNumber), blockStyleSet);
                         } else {
-                            StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(currentGame.getNext().getNumber()));
-                            doc.insertString(doc.getLength(), getStringBrick(currentGame.getNext().getNumber()), blockStyleSet);
+                            int blockNumber = currentGame.getNext().getNumber();
+                            StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(blockNumber, currentGame.getGameState().getColorMode()));
+                            doc.insertString(doc.getLength(), getStringBrick(blockNumber), blockStyleSet);
                         }
                     }
                 }
@@ -202,7 +203,7 @@ public class GameView extends JFrame implements Observer {
                 for (int j = 0; j < board[i].length; j++) {
                     if (board[i][j] != -1 || visited[i][j] != -1) {
                         int brickNumber = Math.max(board[i][j], visited[i][j]);
-                        StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(brickNumber));
+                        StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(brickNumber, currentGame.getGameState().getColorMode()));
                         doc.insertString(doc.getLength(), getStringBrick(brickNumber), blockStyleSet);
                     } else {
                         doc.insertString(doc.getLength(), BLANK_STRING, defaultStyleSet);

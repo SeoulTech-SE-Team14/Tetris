@@ -1,5 +1,7 @@
 package Tetris.Model.game;
 
+import Tetris.Util.ColorBlindnessType;
+
 import java.awt.*;
 import java.util.Objects;
 
@@ -23,9 +25,10 @@ public class BlockColorModel {
             Color.BLUE,
             Color.ORANGE,
             Color.YELLOW,
-            getColor(0x009E73),
-            Color.MAGENTA,   
-            getColor(0xD55E00)
+            new Color(0, 158, 115),
+            Color.MAGENTA,
+            new Color(213, 94, 0),
+            Color.WHITE
     };
     // 색맹 컬러 모드(청색맹)
     private final Color[] blind2Colors = {
@@ -33,9 +36,10 @@ public class BlockColorModel {
             Color.BLUE,
             Color.ORANGE,
             Color.YELLOW,
-            getColor(0x009E73),
+            new Color(0, 158, 115),
             Color.MAGENTA,   
-            Color.RED
+            Color.RED,
+            Color.WHITE
     };
 
     public Color getColor(int blockNumber) {
@@ -43,9 +47,14 @@ public class BlockColorModel {
         return basicColors[blockNumber];
     }
     public Color getColor(int blockNumber, String colorMode){
-        if (Objects.equals(colorMode, "blind")) {
-            return blindColors[blockNumber];
-        }
-        return basicColors[blockNumber];
+        if(blockNumber > 7) blockNumber = 7;
+       switch (colorMode) {
+           case "deutan": case "protan":
+               return blindColors[blockNumber];
+           case "tritan":
+               return blind2Colors[blockNumber];
+           default:
+               return getColor(blockNumber);
+       }
     }
 }
