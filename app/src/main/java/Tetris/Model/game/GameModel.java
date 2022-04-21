@@ -299,6 +299,7 @@ public class GameModel extends Observable {
 //            visited[y][x] = -1;
             GameStateModel.setSpawnedBlockNumber(0);
             GameStateModel.setDeletedLineNumber(0);
+            gameState.setNextItemThreshold(10);
             curr = null;
         }
     }
