@@ -25,9 +25,9 @@ public class BlockColorModel {
             Color.BLUE,
             Color.ORANGE,
             Color.YELLOW,
-            new Color(0, 158, 115),
+            new Color(46, 166, 122),
             Color.MAGENTA,
-            new Color(213, 94, 0),
+            new Color(217, 82, 4),
             Color.WHITE
     };
     // 색맹 컬러 모드(청색맹)
@@ -36,7 +36,7 @@ public class BlockColorModel {
             Color.BLUE,
             Color.ORANGE,
             Color.YELLOW,
-            new Color(0, 158, 115),
+            new Color(46, 166, 122),
             Color.MAGENTA,   
             Color.RED,
             Color.WHITE
