@@ -75,7 +75,6 @@ public class GameStateModel extends Observable {
     public int updateDelay() {
         int standard1 = spawnedBlockNumber / 5;
         int standard2 = deletedLineNumber / 3;
-        System.out.println(Math.max(MAX_DELAY - 50 * (standard1 + standard2), MIN_DELAY));
         return Math.max(MAX_DELAY - 50 * (standard1 + standard2), MIN_DELAY);
     }
 
