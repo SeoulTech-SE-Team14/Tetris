@@ -1,24 +1,15 @@
 package Tetris;
 
-
-import Tetris.Controller.GameViewController;
-import Tetris.Model.GameState;
-import Tetris.Model.GameBoard;
-import Tetris.View.GameView;
+import Tetris.Controller.home.StartMenuViewController;
+import Tetris.Model.home.StartMenuModel;
+import Tetris.View.home.StartMenuView;
 
 public class Tetris {
     public static void main(String[] args) {
-        GameState gameState = new GameState();
-        GameBoard field = new GameBoard(gameState,20, 10);
-
-        GameView view = new GameView(field);
-
-        GameViewController controller = new GameViewController(field);
-        view.addKeyListener(controller);
-        field.addObserver(view);
-        gameState.addObserver(view);
-
-        view.setSize(400, 800);
-        view.setVisible(true);
+        StartMenuModel field = new StartMenuModel();
+        StartMenuView startView = new StartMenuView(500, 0);
+        StartMenuViewController controller = new StartMenuViewController(field, startView);
+        field.addObserver(startView);
+        startView.addKeyListener(controller);
     }
 }
