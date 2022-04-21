@@ -21,7 +21,7 @@ public class GameModel extends Observable {
     private Block curr = null;
     private Block next = null;
     private GameStateModel gameState;
-
+    
     private int[][] board; // 떨어지는 블럭 위치 저장
     private int[][] visited; // 보드에 깔린 블럭 위치 저장
     private final int height;
@@ -57,6 +57,7 @@ public class GameModel extends Observable {
     }
     public int getScreenWidth() { return screenWidth; }
     public int getScreenHeight() { return screenHeight; }
+
     public int[][] getVisited() {
         return visited;
     }
@@ -84,13 +85,17 @@ public class GameModel extends Observable {
         board[y][x] = getBlockNumber(cx, cy);
     }
 
+    public void setVisited(int[][] visited) {
+        this.visited = visited;
+    }
+
     /**
      * 블럭 생성 가능 여부 확인 후 블럭 생성하는 메서드.
      * @param cur 셍성된 블럭 종류
      * @return 블럭을 생성할 수 있는지 없는지
      */
     public boolean spawn(Block cur){
-        if(next == null && curr == null){
+        if(next == null){
             next = cur;
             notice();
             return true;
@@ -232,7 +237,7 @@ public class GameModel extends Observable {
     }
 
     // 블럭이동 메서드
-    public void weightBlockFall(){
+    private void weightBlockFall(){
         weightBlockErase();
         while(curr.getY() + curr.height() < height) {
             curr.setY(curr.getY() + 1);

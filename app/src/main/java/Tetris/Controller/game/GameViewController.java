@@ -3,6 +3,7 @@ package Tetris.Controller.game;
 import Tetris.Model.game.*;
 import Tetris.Model.block.*;
 import Tetris.Model.scoreboard.ScoreModel;
+import Tetris.Model.scoreboard.ScoreboardModel;
 import Tetris.Util.*;
 import Tetris.View.game.EndDialog;
 import Tetris.View.game.GameView;
@@ -20,6 +21,7 @@ import java.util.*;
  */
 public class GameViewController implements KeyListener, ActionListener {
     private GameModel currentGame;
+    private ScoreboardModel scoreboardModel;
     private GameView gameView;
     private Timer timer;
     private List<ScoreModel> scoreList;
@@ -38,7 +40,8 @@ public class GameViewController implements KeyListener, ActionListener {
 
     public GameViewController(GameModel currentGame) {
         this.currentGame = currentGame;
-        scoreList = JsonReader.getScoreBoard(currentGame.getGameState().getGameMode());
+        this.scoreboardModel = new ScoreboardModel();
+        scoreList = scoreboardModel.getScoreboard(currentGame.getGameState().getGameMode());
         timer = new Timer(INIT_INTERVAL, this);
         timer.setActionCommand("timer");
         timer.start();
@@ -47,7 +50,8 @@ public class GameViewController implements KeyListener, ActionListener {
     public GameViewController(GameModel game, GameView view) {
         this.currentGame = game;
         this.gameView = view;
-        scoreList = JsonReader.getScoreBoard(currentGame.getGameState().getGameMode());
+        this.scoreboardModel = new ScoreboardModel();
+        scoreList = scoreboardModel.getScoreboard(currentGame.getGameState().getGameMode());
         timer = new Timer(INIT_INTERVAL, this);
         timer.setActionCommand("timer");
         timer.start();
@@ -135,7 +139,7 @@ public class GameViewController implements KeyListener, ActionListener {
         }
     }
     // 게임 종료 메서드
-    public void endGame()  {
+    private void endGame()  {
         currentGame.getGameState().setEnded(true);
         timer.stop();
         if(isPossibleUpdateScore()){
@@ -165,7 +169,7 @@ public class GameViewController implements KeyListener, ActionListener {
         } else if(blockNumber == BlockNumber.ZBLOCK.getBlockNumber()) {
             return new ZBlock(blockType);
         } else if(blockNumber == BlockNumber.WEIGHT_BLOCK.getBlockNumber()) {
-            return new WeightBlock();
+            return new WeightBlock(blockType);
         }
         return new IBlock();
     }
@@ -235,6 +239,7 @@ public class GameViewController implements KeyListener, ActionListener {
                 curr = getNormalModeRandomBlock();
                 break;
         }
+        if(curr == null) return;
         boolean gameContinues = currentGame.spawn(curr);
         if(!gameContinues) {
             endGame();

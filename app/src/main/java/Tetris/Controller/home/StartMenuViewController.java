@@ -64,9 +64,8 @@ public class StartMenuViewController implements KeyListener, ActionListener {
         startView.dispose();
     }
     public void navigateScoreboardView(){
-        ScoreboardModel field = new ScoreboardModel();
         ScoreboardView view = new ScoreboardView(startView.getLocation().x, startView.getLocation().y);
-        ScoreboardController controller = new ScoreboardController(field, view);
+        ScoreboardController controller = new ScoreboardController(view);
         view.addKeyListener(controller);
         startView.dispose();
     }

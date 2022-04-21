@@ -3,12 +3,7 @@ package Tetris.Controller.scoreboard;
 import Tetris.Controller.home.StartMenuViewController;
 
 import Tetris.Model.home.StartMenuModel;
-import Tetris.Model.scoreboard.ScoreModel;
 import Tetris.Model.scoreboard.ScoreboardModel;
-
-import Tetris.Util.GameType;
-import Tetris.Util.JsonWriter;
-import Tetris.Util.ScoreboardJsonKeyType;
 import Tetris.View.home.StartMenuView;
 import Tetris.View.scoreboard.ScoreboardView;
 
@@ -16,14 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
 
 public class ScoreboardController implements KeyListener, ActionListener {
-    private final ScoreboardModel model;
     private final ScoreboardView scoreBoardView;
 
-    public ScoreboardController(ScoreboardModel model, ScoreboardView view) {
-        this.model = model;
+    public ScoreboardController(ScoreboardView view) {
         this.scoreBoardView = view;
         this.scoreBoardView.setActionListener(this);
     }

@@ -98,6 +98,10 @@ public class GameStateModel extends Observable {
         GameStateModel.deletedLineNumber = deletedLineNumber;
     }
 
+    public void setDifficulty(GameType difficulty) {
+        this.difficulty = difficulty;
+    }
+
     /**
      * 점수 업데이트 메서드
      * @param point 추가할 점수

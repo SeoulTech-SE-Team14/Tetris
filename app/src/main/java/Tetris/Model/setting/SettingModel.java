@@ -10,7 +10,7 @@ public class SettingModel extends Observable {
     private final int buttonCount = 6;
     private final int screenWidth = JsonReader.getWidth();
     private final int screenHeight = JsonReader.getHeight();
-
+    
     private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/default_background_350_700.png");
     private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/default_background_400_800.png");
     private final ImageIcon backgroundImage300600 = new ImageIcon("app/src/main/resources/image/default_background_300_600.png");

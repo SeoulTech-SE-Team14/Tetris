@@ -22,18 +22,6 @@ public class JsonWriter {
 
     private static JSONParser jsonParser = new JSONParser();
 
-    static class ValueName<E> {
-        private E value;
-
-        public E getValue() {
-            return value;
-        }
-
-        public void setValue(E value) {
-            this.value = value;
-        }
-
-    }
     private static void replaceJson(JsonFileType type, String key, Object value){
         FileReader fileReader;
         FileWriter fileWriter;
