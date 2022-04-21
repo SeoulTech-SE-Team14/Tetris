@@ -2,7 +2,6 @@ package Tetris.Model.scoreboard;
 
 import Tetris.Util.GameType;
 import Tetris.Util.JsonReader;
-import Tetris.Util.ScoreboardJsonKeyType;
 
 import javax.swing.*;
 import java.util.List;
@@ -10,6 +9,8 @@ import java.util.List;
 public class ScoreboardModel {
     private final int screenWidth = JsonReader.getWidth();
     private final int screenHeight = JsonReader.getHeight();
+    private final List<ScoreModel> basicModeScoreList = JsonReader.getScoreBoard(GameType.BASIC_MODE);
+    private final List<ScoreModel> itemModeScoreList = JsonReader.getScoreBoard(GameType.ITEM_MODE);
     private final ImageIcon backgroundImage350700 = new ImageIcon("app/src/main/resources/image/default_background_350_700.png");
     private final ImageIcon backgroundImage400800 = new ImageIcon("app/src/main/resources/image/default_background_400_800.png");
     private final ImageIcon backgroundImage300600 = new ImageIcon("app/src/main/resources/image/default_background_300_600.png");
@@ -26,7 +27,8 @@ public class ScoreboardModel {
         return screenHeight;
     }
     public List<ScoreModel> getScoreboard(GameType type) {
-        return JsonReader.getScoreBoard(type);
+        if(type == GameType.BASIC_MODE) return basicModeScoreList;
+        return itemModeScoreList;
     }
     public ImageIcon getBackBtnImage() {
         return backBtnImage;

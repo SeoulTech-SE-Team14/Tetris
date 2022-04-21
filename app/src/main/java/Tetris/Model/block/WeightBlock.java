@@ -5,13 +5,21 @@ import Tetris.Util.BlockType;
 
 public class WeightBlock extends Block {
     private boolean isOverlapped = false;
+
     public WeightBlock() {
         shape = new int[][] {
                 {0, 1, 1, 0},
                 {1, 1, 1, 1}
         };
     }
-    public BlockType getBlockType() { return BlockType.WEIGHT; }
+    public WeightBlock(BlockType type) {
+        shape = new int[][] {
+                {0, 1, 1, 0},
+                {1, 1, 1, 1}
+        };
+        blockType = type;
+
+    }
     public void setOverlapped(boolean overlapped) {
         isOverlapped = overlapped;
     }
