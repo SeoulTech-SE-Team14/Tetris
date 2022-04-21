@@ -1,8 +1,8 @@
 package Tetris.Util;
 
 public enum BlockNumber {
-    IBLOCK(0), JBLOCK(1), LBLOCK(2), OBLOCK(3), SBLOCK(4), TBLOCK(5), ZBLOCK(6), WEIGHT_BLOCK(7), LINE_DELETE_BLOCK(8);
-
+    IBLOCK(0), JBLOCK(1), LBLOCK(2), OBLOCK(3), SBLOCK(4), TBLOCK(5),
+    ZBLOCK(6), WEIGHT_BLOCK(7), LINE_DELETE_BLOCK(8), CLEAR(9), SLOW(10), BOOST(11);
     private final int blockNumber;
 
     BlockNumber(int number) {

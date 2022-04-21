@@ -29,6 +29,8 @@ public class PauseDialogController extends WindowAdapter implements KeyListener,
     }
     public void restartGame(){
         GameStateModel restartGameStateModel = new GameStateModel(type, difficulty);
+        GameStateModel.setDeletedLineNumber(0);
+        GameStateModel.setSpawnedBlockNumber(0);
         GameModel restartGameModel = new GameModel(restartGameStateModel,20, 10);
         GameView restartGameView = new GameView(gameView.getLocation().x, gameView.getLocation().y, restartGameModel);
         GameViewController restartGameViewController = new GameViewController(restartGameModel, restartGameView);
@@ -103,9 +105,9 @@ public class PauseDialogController extends WindowAdapter implements KeyListener,
     public void actionPerformed(ActionEvent e) {
         String target = e.getSource().toString();
         if(target.contains("dialog_button_resume")) {
-            restartGame();
-        } else if(target.contains("dialog_button_restart")) {
             dialog.dispose();
+        } else if(target.contains("dialog_button_restart")) {
+            restartGame();
         } else if(target.contains("dialog_button_back_menu")) {
             navigateMenuView();
         }

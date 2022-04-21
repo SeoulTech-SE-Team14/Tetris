@@ -36,7 +36,6 @@ public class GameViewController implements KeyListener, ActionListener {
     private static final int NORMAL_BLOCK_COUNT = 7;
     private static final int ITEM_BLOCK_COUNT = 5;
 
-    //test용
     public GameViewController(GameModel currentGame) {
         this.currentGame = currentGame;
         scoreList = JsonReader.getScoreBoard(currentGame.getGameState().getGameMode());
@@ -54,6 +53,8 @@ public class GameViewController implements KeyListener, ActionListener {
         timer.start();
 
     }
+
+    // 일시정지 창 보여주는 메서드
     private void showPauseDialog() {
         PauseDialogModel pauseDialogModel = new PauseDialogModel();
         int x = gameView.getLocation().x + (currentGame.getScreenWidth() -  pauseDialogModel.getWidth()) / 2;
@@ -75,6 +76,7 @@ public class GameViewController implements KeyListener, ActionListener {
             }
         });
     }
+    // 게임 종료 창 보여주는 메서드
     private void showEndDialog() {
         EndDialogModel endDialogModel = new EndDialogModel();
         int x = gameView.getLocation().x + (currentGame.getScreenWidth() -  endDialogModel.getWidth()) / 2;
@@ -92,10 +94,12 @@ public class GameViewController implements KeyListener, ActionListener {
         InputDialog inputDialog = new InputDialog(gameView, currentGame, x, y);
         inputDialog.setVisible(true);
     }
+    // 스코어보드 업데이트 가능 여부 체크하는 메서드
     public boolean isPossibleUpdateScore() {
         int currentScore = currentGame.getGameState().getScore();
         return scoreList.size() < 10 || scoreList.get(scoreList.size() - 1).getScore() < currentScore;
     }
+    // 게임 모드에 따라 스코어보드에 현재 점수를 업데이트하는 메서드
     public void updateScore() {
         Player player = currentGame.getGameState().getPlayer();
         if (currentGame.getGameState().getGameMode() == GameType.BASIC_MODE) {
@@ -103,6 +107,7 @@ public class GameViewController implements KeyListener, ActionListener {
         } else if (currentGame.getGameState().getGameMode() == GameType.ITEM_MODE) {
             scoreList.add(new ScoreModel(player.getScore(), player.getName()));
         }
+        // 기존 스코어보드 리스트에 새로운 점수를 넣고 정렬 후 상위 10개 이하 추출
         scoreList.sort(ScoreModel::compareTo);
         List<Map<String, String>> scoreboardJsonArray = new ArrayList<>();
         for(int i = 0; i < Math.min(scoreList.size(), 10); i++){
@@ -129,6 +134,7 @@ public class GameViewController implements KeyListener, ActionListener {
             showPauseDialog();
         }
     }
+    // 게임 종료 메서드
     public void endGame()  {
         currentGame.getGameState().setEnded(true);
         timer.stop();
@@ -143,25 +149,25 @@ public class GameViewController implements KeyListener, ActionListener {
      * @param blockNumber 블럭 숫자
      * @return 랜덤 블럭
      */
-    public Block getBlockByNumber(int blockNumber){
+    public Block getBasicBlock(int blockNumber, BlockType blockType){
         if(blockNumber == BlockNumber.IBLOCK.getBlockNumber()) {
-            return new IBlock();
+            return new IBlock(blockType);
         } else if(blockNumber == BlockNumber.JBLOCK.getBlockNumber()) {
-            return new JBlock();
+            return new JBlock(blockType);
         } else if(blockNumber == BlockNumber.LBLOCK.getBlockNumber()) {
-            return new LBlock();
+            return new LBlock(blockType);
         } else if(blockNumber == BlockNumber.OBLOCK.getBlockNumber()) {
-            return new OBlock();
+            return new OBlock(blockType);
         } else if(blockNumber == BlockNumber.SBLOCK.getBlockNumber()) {
-            return new SBlock();
+            return new SBlock(blockType);
         } else if(blockNumber == BlockNumber.TBLOCK.getBlockNumber()) {
-            return new TBlock();
+            return new TBlock(blockType);
         } else if(blockNumber == BlockNumber.ZBLOCK.getBlockNumber()) {
-            return new ZBlock();
+            return new ZBlock(blockType);
         } else if(blockNumber == BlockNumber.WEIGHT_BLOCK.getBlockNumber()) {
             return new WeightBlock();
         }
-        return null;
+        return new IBlock();
     }
     /**
      * @param fitness 블럭 별 생성 가중치 배열
@@ -198,7 +204,12 @@ public class GameViewController implements KeyListener, ActionListener {
          */
         double[] fitness = {12, 10, 10, 10, 10, 10, 10};
         int blockNumber = rouletteWheelSelection(fitness);
-        return getBlockByNumber(blockNumber);
+        return getBasicBlock(blockNumber, BlockType.NORMAL);
+    }
+    public Block getNormalModeRandomBlock(){
+        Random rnd = new Random(System.nanoTime());
+        int number = rnd.nextInt(NORMAL_BLOCK_COUNT);
+        return getBasicBlock(number, BlockType.NORMAL);
     }
     public Block getHardModeRandomBlock(){
         /*
@@ -206,37 +217,22 @@ public class GameViewController implements KeyListener, ActionListener {
          * J, L, O, S, T, Z : 10
          * I : 8
          */
-        double[] fitness = {8,  10, 10, 10, 10, 10, 10};
+        double[] fitness = {8, 10, 10, 10, 10, 10, 10};
         int blockNumber = rouletteWheelSelection(fitness);
-        return getBlockByNumber(blockNumber);
+        return getBasicBlock(blockNumber, BlockType.NORMAL);
     }
-    public Block getBasicModeRandomBlock(){
-        Random rnd = new Random(System.nanoTime());
-        int number = rnd.nextInt(NORMAL_BLOCK_COUNT);
-        return getBlockByNumber(number);
-    }
-
-    // 아이템 모드 - 랜덤 블럭 번호 얻기.
-    public Block getRandomItemBlock() {
-        Random rnd = new Random(System.nanoTime());
-        // 아이템 블럭 넘버를 구하기 위해 일반 블럭 개수를 더해준다.
-        int itemNumber = rnd.nextInt(ITEM_BLOCK_COUNT) + NORMAL_BLOCK_COUNT;
-        return getBlockByNumber(itemNumber);
-    }
-    // 일반모드 블럭 생성 메서드
+    // 일반모드 - 블럭 생성 메서드
     public void spawnBasicModeBlock(){
-        Block curr = new Block();
+        Block curr;
         switch (currentGame.getGameState().getDifficulty()) {
             case EASY:
                 curr = getEasyModeRandomBlock();
-                break;
-            case NORMAL:
-                curr = getBasicModeRandomBlock();
                 break;
             case HARD:
                 curr = getHardModeRandomBlock();
                 break;
             default:
+                curr = getNormalModeRandomBlock();
                 break;
         }
         boolean gameContinues = currentGame.spawn(curr);
@@ -244,19 +240,49 @@ public class GameViewController implements KeyListener, ActionListener {
             endGame();
         }
     }
-    // 아이템 모드 블럭 생성 메서드
-    public void spawnItemModeBlock(){
-        Block curr = null;
-        if(GameStateModel.getSpawnedBlockNumber() > 0 && GameStateModel.getSpawnedBlockNumber() % 9 == 0){
-            curr = getRandomItemBlock();
-        } else {
-            curr = getBasicModeRandomBlock();
+    // 아이템모드 - 랜덤 블럭 번호 얻기.
+
+    public Block getRandomItemBlock() {
+        Random rnd = new Random(System.nanoTime());
+        // 화면에 나오는 블럭 개수는 기본 블럭 7개에 무게추 블럭 1개
+        int number = rnd.nextInt(NORMAL_BLOCK_COUNT + 1);
+        // weight 블럭
+        if(number == BlockNumber.WEIGHT_BLOCK.getBlockNumber()) return getBasicBlock(number, BlockType.WEIGHT);
+
+        Block itemBlock;
+        // 무게추 제외한 아이템 4개
+        int type = rnd.nextInt(ITEM_BLOCK_COUNT - 1);
+        switch (type) {
+            case 1:
+                itemBlock = getBasicBlock(number, BlockType.LINE_DELETE);
+                break;
+            case 2:
+                itemBlock = getBasicBlock(number, BlockType.CLEAR);
+                break;
+            case 3:
+                itemBlock = getBasicBlock(number, BlockType.SLOW);
+                break;
+            default:
+                itemBlock = getBasicBlock(number, BlockType.BOOST);
+                break;
         }
+        // 아이템 위치 정해주기
+        itemBlock.setItemIndex(rnd.nextInt(4));
+        return itemBlock;
+    }
+    // 아이템모드 - 블럭 생성 메서드
+    public void spawnItemModeBlock(){
+        Block curr;
+        if(GameStateModel.getDeletedLineNumber() >= currentGame.getGameState().getNextItemThreshold()){
+            curr = getRandomItemBlock();
+            currentGame.getGameState().setNextItemThreshold(currentGame.getGameState().getNextItemThreshold() + 10);
+        } else {
+            curr = getNormalModeRandomBlock();
+        }
+        if(curr == null) return;
         boolean gameContinues = currentGame.spawn(curr);
         if(!gameContinues) {
-            currentGame.getGameState().setEnded(true);
-            timer.stop();
-            // 게임 종료 모달 띄우기.
+            endGame();
         }
     }
 

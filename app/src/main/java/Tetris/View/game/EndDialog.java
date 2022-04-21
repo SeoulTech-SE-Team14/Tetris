@@ -73,16 +73,16 @@ public class EndDialog extends JDialog implements Observer {
                 ScoreModel scoreInfo = scoreboardList.get(i);
                 String difficulty = ZERO_WIDTH_SPACE;
                 if(gameModel.getGameState().getGameMode() == GameType.BASIC_MODE) difficulty = scoreInfo.getDifficulty()+ "모드";
-                String str = Integer.toString(i + 1) + "등" + "\t" + scoreInfo.getName() + "\t" + scoreInfo.getScore() + "\t" + difficulty;
+                String str = Integer.toString(i + 1) + "등" + "\t" + scoreInfo.getName() + "\t" + scoreInfo.getScore() + "점\t" + difficulty;
                 JLabel score = new JLabel(str);
                 if(Objects.equals(player.getName(), scoreInfo.getName()) && player.getScore() == scoreInfo.getScore()){
                     if(player.getMode() == GameType.ITEM_MODE || Objects.equals(player.getDifficulty().getKey(), scoreInfo.getDifficulty())){
-                        score.setFont(new Font(Font.SERIF, Font.BOLD, 11));
+                        score.setFont(new Font("Courier", Font.BOLD, 12));
                     } else {
-                        score.setFont(new Font(Font.SERIF, Font.PLAIN, 11));
+                        score.setFont(new Font("Courier", Font.PLAIN, 12));
                     }
                 } else {
-                    score.setFont(new Font(Font.SERIF, Font.PLAIN, 11));
+                    score.setFont(new Font("Courier", Font.PLAIN, 12));
                 }
                 scoreboard.add(score, gbc);
             }

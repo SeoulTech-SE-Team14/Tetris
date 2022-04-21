@@ -12,11 +12,13 @@ import java.util.Observable;
 public class GameStateModel extends Observable {
     private static final int MAX_DELAY = 1000;
     private static final int MIN_DELAY = 200;
+    private int maxScore = 11;
 
     private static int spawnedBlockNumber = 0; // 생성된 블럭 수
     private static int deletedLineNumber = 0;  // 삭제된 라인 수
 
     private long spawnTime = 0; // 블럭이 생성된 시간
+    private int nextItemThreshold = 10;
     private int score = 0;
     private Player player;
     private String colorMode;
@@ -50,6 +52,14 @@ public class GameStateModel extends Observable {
         return player;
     }
 
+    public int getNextItemThreshold() {
+        return nextItemThreshold;
+    }
+
+    public void setNextItemThreshold(int nextItemThreshold) {
+        this.nextItemThreshold = nextItemThreshold;
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -65,6 +75,7 @@ public class GameStateModel extends Observable {
     public int updateDelay() {
         int standard1 = spawnedBlockNumber / 5;
         int standard2 = deletedLineNumber / 3;
+        System.out.println(Math.max(MAX_DELAY - 50 * (standard1 + standard2), MIN_DELAY));
         return Math.max(MAX_DELAY - 50 * (standard1 + standard2), MIN_DELAY);
     }
 
@@ -79,6 +90,14 @@ public class GameStateModel extends Observable {
      * 삭제된 라인 +1 하는 메서드
      */
     public static void updateDeletedLineNumber() { deletedLineNumber++; }
+
+    public static void setSpawnedBlockNumber(int spawnedBlockNumber) {
+        GameStateModel.spawnedBlockNumber = spawnedBlockNumber;
+    }
+
+    public static void setDeletedLineNumber(int deletedLineNumber) {
+        GameStateModel.deletedLineNumber = deletedLineNumber;
+    }
 
     /**
      * 점수 업데이트 메서드
@@ -110,8 +129,14 @@ public class GameStateModel extends Observable {
         return gameMode;
     }
 
+    public int getMaxScore() {
+        return maxScore;
+    }
+
+
+
     /**
-     * 보너스 점수 = max(0, 11 - 10 * 걸린 초)
+     * 보너스 점수 = max(0, maxScore - 10 * 걸린 초)
      * @return 보너스 점수
      */
     public int getBonusScore() {
@@ -119,7 +144,7 @@ public class GameStateModel extends Observable {
         double secondPer10s = (double)(placeTime - spawnTime) / 1000;
         int bonusScore = (int)(10.0 * secondPer10s);
         spawnTime = 0;
-        return Math.max(0, 11 - bonusScore);
+        return Math.max(0, maxScore - bonusScore);
     }
 
     public static int getSpawnedBlockNumber() {
@@ -150,5 +175,8 @@ public class GameStateModel extends Observable {
     }
     public void setEnded(boolean ended) {
         isEnded = ended;
+    }
+    public void setMaxScore(int maxScore) {
+        this.maxScore = maxScore;
     }
 }

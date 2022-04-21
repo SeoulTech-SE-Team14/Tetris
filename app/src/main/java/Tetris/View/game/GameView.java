@@ -3,6 +3,8 @@ package Tetris.View.game;
 import Tetris.Model.block.Block;
 import Tetris.Model.game.GameModel;
 import Tetris.Model.game.BlockColorModel;
+import Tetris.Util.BlockNumber;
+import Tetris.Util.BlockType;
 
 import java.awt.*;
 import java.util.Observable;
@@ -107,14 +109,16 @@ public class GameView extends JFrame implements Observer {
         setVisible(true);
         requestFocus();
     }
-    public String getStringBrick(int brickNumber){
-        switch (brickNumber){
-            case 3:
+    public String getStringBrick(int blockNumber){
+        switch (blockNumber){
+            case 8:
                 return "L";
-            case 4:
+            case 9:
+                return "C";
+            case 10:
                 return "S";
-            case 5:
-                return "D";
+            case 11:
+                return "B";
             default:
                 return "O";
         }
@@ -129,6 +133,7 @@ public class GameView extends JFrame implements Observer {
         int y = curr.getY();
         for(int row = y, cy = 0; row < y + curr.height(); row++, cy++){
             for(int col = x, cx = 0; col < x + curr.width(); col++, cx++){
+                if(curr.getShape(cx, cy) == 0) continue;
                 currentGame.setBoard(col, row, cx, cy);
             }
         }
@@ -153,12 +158,19 @@ public class GameView extends JFrame implements Observer {
             doc.insertString(doc.getLength(), "NEXT\n", defaultStyleSet);
             for(int y = 0; y < currentGame.getNext().height(); y++){
                 for(int x = 0; x < currentGame.getNext().width(); x++){
-                    if(currentGame.getNext().getShape(x, y) != -1){
-                        StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(currentGame.getNext().getNumber()));
-                        doc.insertString(doc.getLength(), "O", blockStyleSet);
+                    Block next = currentGame.getNext();
+                    if(next.getShape(x, y) == 0) {
+                        doc.insertString(doc.getLength(), BLANK_STRING, defaultStyleSet);
                     }
                     else {
-                        doc.insertString(doc.getLength(), BLANK_STRING, defaultStyleSet);
+                        if(next.getBlockType() != BlockType.NORMAL && (x == currentGame.getNext().getItemXpos() && y == currentGame.getNext().getItemYpos())) {
+                            int blockNumber = currentGame.getNext().getBlockType().getBlockTypeNumber() + 7;
+                            StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(blockNumber));
+                            doc.insertString(doc.getLength(), getStringBrick(blockNumber), blockStyleSet);
+                        } else {
+                            StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(currentGame.getNext().getNumber()));
+                            doc.insertString(doc.getLength(), getStringBrick(currentGame.getNext().getNumber()), blockStyleSet);
+                        }
                     }
                 }
                 doc.insertString(doc.getLength(), "\n", defaultStyleSet);
@@ -191,7 +203,7 @@ public class GameView extends JFrame implements Observer {
                     if (board[i][j] != -1 || visited[i][j] != -1) {
                         int brickNumber = Math.max(board[i][j], visited[i][j]);
                         StyleConstants.setForeground(blockStyleSet, colorTheme.getColor(brickNumber));
-                        doc.insertString(doc.getLength(), "O", blockStyleSet);
+                        doc.insertString(doc.getLength(), getStringBrick(brickNumber), blockStyleSet);
                     } else {
                         doc.insertString(doc.getLength(), BLANK_STRING, defaultStyleSet);
                     }

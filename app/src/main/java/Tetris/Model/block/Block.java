@@ -1,5 +1,8 @@
 package Tetris.Model.block;
 
+import Tetris.Util.BlockNumber;
+import Tetris.Util.BlockType;
+
 import java.util.Observable;
 
 public class Block extends Observable {
@@ -7,13 +10,16 @@ public class Block extends Observable {
     protected int y = 0;
     protected int cx = 1;   // centerX
     protected int cy = 0;   // centerY
-    // 0: 빈칸 , 1: 블럭, 2: 블럭 중심. 3: 아이템 위치
+    protected BlockType blockType = BlockType.NORMAL;
+
+    protected int[] itemXposition = {0, 1, 0, 1};
+    protected int[] itemYposition = {0, 0, 1, 1};
+    protected int itemXpos;
+    protected int itemYpos;
     protected int[][] shape = new int[][]{
             {1, 1},
             {1, 1}
     };
-
-    public Block() { }
 
     public int getX() {
         return x;
@@ -28,12 +34,29 @@ public class Block extends Observable {
         return cy;
     }
     public int getShape(int x, int y) {
-        if(shape[y][x] == 0) return -1;
-        return getNumber();
+        return shape[y][x];
     }
     public int getNumber(){
-        return 0;
+        return BlockNumber.IBLOCK.getBlockNumber();
     }
+
+
+    public int getItemXpos(){
+        return itemXpos;
+    }
+    public int getItemYpos(){
+        return itemYpos;
+    }
+    public BlockType getBlockType() {
+        return blockType;
+    }
+
+    public void setItemIndex(int itemIndex) {
+        itemXpos = itemXposition[itemIndex];
+        itemYpos = itemYposition[itemIndex];
+
+    }
+
     public void setX(int x) {
         this.x = x;
     }
@@ -48,9 +71,14 @@ public class Block extends Observable {
         int dx = 0;
         int dy = 0;
         int[][] ret = new int[width][height];
+
         for(int row = 0; row < height; row++){
             for(int col = 0; col < width; col++){
                 ret[col][height - 1 - row] = shape[row][col];
+                if(row == itemYpos && col == itemXpos){
+                    itemXpos = height - 1 - row;
+                    itemYpos = col;
+                }
                 if(shape[row][col] == 2){
                     dx = height - 1 - row - col;
                     dy = col - row;

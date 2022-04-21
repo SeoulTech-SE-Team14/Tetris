@@ -70,8 +70,10 @@ public class ScoreboardView extends JFrame{
         for(int i = 0; i < basicModeScoreList.size(); i++){
             ScoreModel scoreInfo = basicModeScoreList.get(i);
             String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() +
-                    BLANK_STRING + scoreInfo.getScore() + BLANK_STRING + scoreInfo.getDifficulty() + "모드";
-            basicModeScoreboard.add(new JLabel(str, SwingConstants.CENTER));
+                    BLANK_STRING + scoreInfo.getScore() + "점" + BLANK_STRING + scoreInfo.getDifficulty() + "모드";
+            JLabel label = new JLabel(str, SwingConstants.CENTER);
+            label.setFont(new Font("Courier", Font.PLAIN, 12));
+            basicModeScoreboard.add(label);
         }
         add(basicModeScoreboard,gbc);
 
@@ -96,8 +98,10 @@ public class ScoreboardView extends JFrame{
         itemModeScoreList = model.getScoreboard(GameType.ITEM_MODE);
         for(int i = 0; i < itemModeScoreList.size(); i++){
             ScoreModel scoreInfo = itemModeScoreList.get(i);
-            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() + BLANK_STRING + scoreInfo.getScore();
-            itemModeScoreboard.add(new JLabel(str,SwingConstants.CENTER));
+            String str = Integer.toString(i + 1) + "등" + BLANK_STRING + scoreInfo.getName() + BLANK_STRING + scoreInfo.getScore() +"점";
+            JLabel label = new JLabel(str, SwingConstants.CENTER);
+            label.setFont(new Font("Courier", Font.PLAIN, 12));
+            itemModeScoreboard.add(label);
         }
         add(itemModeScoreboard,gbc);
 
